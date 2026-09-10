@@ -9,175 +9,87 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-
-/* GLOBAL */
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
-  height:100vh;
-  background: linear-gradient(135deg,#0f0c29,#302b63,#24243e);
-  display:flex;
-  justify-content:center;
-  align-items:center;
+  background:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
 }
 
-/* CONTAINER */
-.container{
-  width:360px;
-  padding:30px;
-  border-radius:20px;
-  background:rgba(255,255,255,0.05);
-  backdrop-filter:blur(20px);
-  box-shadow:0 10px 40px rgba(0,0,0,0.5);
+/* 🔥 5 LAYER WAVE */
+.wave{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  z-index:-1;
 }
 
-/* ================= LOGO FINAL ================= */
-.logo{
-  display:flex;
-  justify-content:center;
-  margin-bottom:15px;
+.wave svg{width:100%;height:260px;display:block;}
+
+/* WRAPPER */
+.wrapper{
+  max-width:400px;
+  margin:auto;
+  padding:30px 20px 200px;
 }
 
-.logo-box{
-  padding:12px;
-  border-radius:20px;
-
-  /* 🔥 LEBIH TERANG (INI KUNCINYA) */
-  background: linear-gradient(
-    145deg,
-    rgba(255,255,255,1),
-    rgba(255,255,255,0.6)
-  );
-
-  /* glow luar */
-  box-shadow:
-    0 8px 25px rgba(0,0,0,0.5),
-    0 0 25px rgba(255,255,255,0.6);
-
-}
-
-.logo-box img{
-  width:80px;
-  display:block;
-}
+/* LOGO */
+.logo{text-align:center;margin-bottom:15px;}
+.logo img{width:80px;}
 
 /* TEXT */
-h2{
-  color:#fff;
-  text-align:center;
-  margin-bottom:5px;
-}
-
-.sub{
-  text-align:center;
-  color:#ddd;
-  font-size:12px;
-  margin-bottom:15px;
-}
-
-/* PROGRESS */
-.progress{
-  height:4px;
-  background:#333;
-  border-radius:5px;
-  overflow:hidden;
-  margin-bottom:20px;
-}
-
-.bar{
-  height:100%;
-  width:33%;
-  background:linear-gradient(90deg,#00c6ff,#0072ff);
-  transition:0.3s;
-}
-
-/* STEP */
-.step{
-  display:none;
-  animation:fade 0.4s;
-}
-
-.step.active{
-  display:block;
-}
-
-@keyframes fade{
-  from{opacity:0;transform:translateX(20px);}
-  to{opacity:1;transform:translateX(0);}
-}
+h2{text-align:center;color:#111;}
+.sub{text-align:center;color:#666;font-size:13px;margin-bottom:20px;}
 
 /* INPUT */
-input, select{
+input,select{
   width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:10px;
+  padding:14px 5px;
+  margin:15px 0;
   border:none;
+  border-bottom:2px solid #ddd;
+}
+
+input:focus,select:focus{
+  border-bottom:2px solid #ff0000;
   outline:none;
-  background:rgba(255,255,255,0.08);
-  color:#fff;
-}
-
-/* placeholder jelas */
-::placeholder{
-  color:#ddd;
-}
-
-/* tanggal fix HP */
-input[type="date"]{
-  color:#fff;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator{
-  filter: invert(1);
-}
-
-/* dropdown */
-select option{
-  color:#000;
-  background:#fff;
 }
 
 /* BUTTON */
 button{
   width:100%;
   padding:14px;
-  margin-top:10px;
   border:none;
-  border-radius:10px;
-  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  border-radius:12px;
+  background:#ff0000;
   color:#fff;
   font-weight:600;
-  cursor:pointer;
-  transition:0.3s;
 }
 
-button:hover{
-  transform:scale(1.05);
+/* SWITCH */
+.switch{
+  margin-top:15px;
+  text-align:center;
+  font-size:13px;
 }
+.switch a{color:red;cursor:pointer;}
 
-/* NAV */
-.nav{
-  display:flex;
-  gap:10px;
-}
+/* STEP */
+.step{display:none;}
+.step.active{display:block;}
 
-.nav button{
-  flex:1;
-}
+.nav{display:flex;gap:10px;}
+.nav button{flex:1;}
+
+.error{border-bottom:2px solid red !important;}
 
 /* POPUP */
 .popup{
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  top:0;left:0;
+  width:100%;height:100%;
   background:rgba(0,0,0,0.6);
   display:none;
   justify-content:center;
@@ -186,81 +98,150 @@ button:hover{
 
 .popup-box{
   background:#fff;
-  padding:20px;
-  border-radius:10px;
+  padding:30px;
+  border-radius:20px;
   text-align:center;
+  transform:scale(0.7);
+  animation:pop 0.4s forwards;
 }
 
+@keyframes pop{
+  to{transform:scale(1);}
+}
+
+/* ICON */
+.success-icon{
+  font-size:70px;
+  animation:bounce 1s infinite;
+}
+
+@keyframes bounce{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-20px);}
+  100%{transform:translateY(0);}
+}
+
+/* CONFETTI */
+.confetti{
+  position:fixed;
+  width:8px;
+  height:8px;
+  top:-10px;
+  animation:fall 3s linear;
+}
+@keyframes fall{
+  to{transform:translateY(100vh) rotate(360deg);}
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<!-- 🔥 WAVE 5 LAYER -->
+<div class="wave">
+<svg viewBox="0 0 1440 320">
 
-<!-- 🔥 LOGO FINAL -->
+<path fill="#ff0000" fill-opacity="0.15">
+<animate attributeName="d" dur="12s" repeatCount="indefinite"
+values="M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z;
+M0,160 C500,260 900,80 1440,160 L1440,320 L0,320 Z;
+M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.25">
+<animate attributeName="d" dur="10s" repeatCount="indefinite"
+values="M0,220 C400,120 1000,260 1440,220 L1440,320 L0,320 Z;
+M0,180 C300,260 1100,80 1440,180 L1440,320 L0,320 Z;
+M0,220 C400,120 1000,260 1440,220 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.4">
+<animate attributeName="d" dur="8s" repeatCount="indefinite"
+values="M0,240 C500,140 900,260 1440,240 L1440,320 L0,320 Z;
+M0,200 C400,260 1100,100 1440,200 L1440,320 L0,320 Z;
+M0,240 C500,140 900,260 1440,240 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.6">
+<animate attributeName="d" dur="6s" repeatCount="indefinite"
+values="M0,250 C400,150 1000,260 1440,250 L1440,320 L0,320 Z;
+M0,210 C300,260 1100,120 1440,210 L1440,320 L0,320 Z;
+M0,250 C400,150 1000,260 1440,250 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000">
+<animate attributeName="d" dur="4s" repeatCount="indefinite"
+values="M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z;
+M0,230 C400,260 1100,150 1440,230 L1440,320 L0,320 Z;
+M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
+</path>
+
+</svg>
+</div>
+
+<div class="wrapper">
+
 <div class="logo">
-  <div class="logo-box">
-    <img src="jelas.png">
+  <img src="jelas.png">
+</div>
+
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2>Login</h2>
+  <div class="sub">LPK Gyokai Batam</div>
+
+  <input id="loginUser" placeholder="Username">
+  <input id="loginPass" type="password" placeholder="Password">
+
+  <button onclick="login()">LOGIN</button>
+
+  <div class="switch">
+    Belum punya akun? <a onclick="showRegister()">Registrasi</a>
   </div>
 </div>
 
-<h2>Registrasi</h2>
-<div class="sub">LPK Gyokai Cabang Batam</div>
+<!-- REGISTER -->
+<div id="registerBox" style="display:none;">
 
-<div class="progress"><div class="bar" id="bar"></div></div>
+  <h2>Registrasi</h2>
 
-<!-- STEP 1 -->
-<div class="step active">
-  <input id="username" placeholder="Username">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="next()">Lanjut</button>
-</div>
-
-<!-- STEP 2 -->
-<div class="step">
-  <input id="nik" placeholder="NIK">
-  <input id="nama" placeholder="Nama Lengkap">
-  <input id="tempat" placeholder="Tempat Lahir">
-
-  <input type="date" id="tgl" onchange="hitungUmur()">
-  <input id="umur" placeholder="Umur otomatis" readonly>
-
-  <div class="nav">
-    <button onclick="prev()">Kembali</button>
+  <div class="step active">
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
     <button onclick="next()">Lanjut</button>
   </div>
-</div>
 
-<!-- STEP 3 -->
-<div class="step">
-  <select id="jk">
-    <option value="">Jenis Kelamin</option>
-    <option>Laki-laki</option>
-    <option>Perempuan</option>
-  </select>
+  <div class="step">
+    <input id="nik" placeholder="NIK">
+    <input id="nama" placeholder="Nama">
+    <input type="date" id="tgl">
 
-  <input id="alamat" placeholder="Alamat">
-
-  <select id="status">
-    <option value="">Status Perkawinan</option>
-    <option>Belum Menikah</option>
-    <option>Menikah</option>
-  </select>
-
-  <select id="zona">
-    <option value="">Zona Area</option>
-    <option>Zona A Kota Batam</option>
-    <option>Zona B Kepulauan Riau</option>
-    <option>Zona C Luar Kepulauan Riau</option>
-  </select>
-
-  <input id="referral" placeholder="Kode Referral (Opsional)">
-
-  <div class="nav">
-    <button onclick="prev()">Kembali</button>
-    <button onclick="submitForm()">Daftar</button>
+    <div class="nav">
+      <button onclick="prev()">Kembali</button>
+      <button onclick="next()">Lanjut</button>
+    </div>
   </div>
+
+  <div class="step">
+    <select id="jk">
+      <option value="">Jenis Kelamin</option>
+      <option>Laki-laki</option>
+      <option>Perempuan</option>
+    </select>
+
+    <input id="alamat" placeholder="Alamat">
+    <input id="referral" placeholder="Referral (Opsional)">
+
+    <div class="nav">
+      <button onclick="prev()">Kembali</button>
+      <button onclick="submitForm()">Daftar</button>
+    </div>
+  </div>
+
+  <div class="switch">
+    Sudah punya akun? <a onclick="showLogin()">Login</a>
+  </div>
+
 </div>
 
 </div>
@@ -268,47 +249,77 @@ button:hover{
 <!-- POPUP -->
 <div class="popup" id="popup">
   <div class="popup-box">
-    <h3>Berhasil!</h3>
-    <p>Data berhasil dikirim</p>
-    <button onclick="closePopup()">OK</button>
+    <div class="success-icon">👍</div>
+    <h3>REGISTRASI BERHASIL</h3>
   </div>
 </div>
 
 <script>
 
+/* SWITCH */
+function showRegister(){
+  loginBox.style.display="none";
+  registerBox.style.display="block";
+}
+
+function showLogin(){
+  loginBox.style.display="block";
+  registerBox.style.display="none";
+}
+
+/* STEP */
 let step=0;
 let steps=document.querySelectorAll(".step");
-let bar=document.getElementById("bar");
 
-function show(){
+function showStep(){
   steps.forEach(s=>s.classList.remove("active"));
   steps[step].classList.add("active");
-  bar.style.width=((step+1)/steps.length*100)+"%";
 }
 
-function next(){step++;show();}
-function prev(){step--;show();}
+function next(){step++;showStep();}
+function prev(){step--;showStep();}
 
-function hitungUmur(){
-  let t=new Date(document.getElementById("tgl").value);
-  let n=new Date();
-
-  let umur=n.getFullYear()-t.getFullYear();
-  let m=n.getMonth()-t.getMonth();
-
-  if(m<0 || (m===0 && n.getDate()<t.getDate())){
-    umur--;
-  }
-
-  document.getElementById("umur").value=umur+" Tahun";
-}
-
+/* REGISTER */
 function submitForm(){
+
+  localStorage.setItem("user", JSON.stringify({
+    username:username.value,
+    password:password.value
+  }));
+
   document.getElementById("popup").style.display="flex";
+
+  confetti();
+
+  setTimeout(()=>{
+    document.getElementById("popup").style.display="none";
+    showLogin(); // 🔥 balik ke login
+  },2000);
 }
 
-function closePopup(){
-  document.getElementById("popup").style.display="none";
+/* LOGIN */
+function login(){
+  let u=loginUser.value;
+  let p=loginPass.value;
+  let data=JSON.parse(localStorage.getItem("user"));
+
+  if(data && u===data.username && p===data.password){
+    alert("Login berhasil");
+  }else{
+    alert("Salah");
+  }
+}
+
+/* CONFETTI */
+function confetti(){
+  for(let i=0;i<40;i++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"%";
+    c.style.background=["red","yellow","blue"][Math.floor(Math.random()*3)];
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
 }
 
 </script>
