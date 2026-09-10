@@ -1,1 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App LPK Gyokai</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* GLOBAL */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  background:#fff;
+  overflow-x:hidden;
+}
+
+/* ===== OMBak ===== */
+.wave{
+  position:fixed;
+  bottom:-50px;
+  left:0;
+  width:200%;
+  height:220px;
+  border-radius:45%;
+  animation:waveMove 12s linear infinite;
+  z-index:0;
+}
+
+.wave:nth-child(1){background:#ff0000;opacity:0.9;}
+.wave:nth-child(2){background:#ff1a1a;opacity:0.7;animation-duration:14s;}
+.wave:nth-child(3){background:#ff3333;opacity:0.5;animation-duration:16s;}
+.wave:nth-child(4){background:#ff6666;opacity:0.35;animation-duration:18s;}
+.wave:nth-child(5){background:#ff9999;opacity:0.25;animation-duration:20s;}
+
+@keyframes waveMove{
+  0%{transform:translateX(0);}
+  100%{transform:translateX(-50%);}
+}
+
+/* PAGE SYSTEM */
+.page{
+  display:none;
+  padding:80px 20px 90px;
+  position:relative;
+  z-index:2;
+  animation:fade 0.3s;
+}
+
+.page.active{
+  display:block;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+/* LOGO */
+.logo{
+  position:absolute;
+  top:15px;
+  left:15px;
+}
+
+.logo img{
+  width:45px;
+}
+
+/* HEADER */
+.header h3{
+  font-size:13px;
+  color:#888;
+}
+
+.header h2{
+  font-size:22px;
+  margin-bottom:20px;
+}
+
+/* GRID */
+.menu{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  text-align:center;
+  transition:0.2s;
+}
+
+.card:active{
+  transform:scale(0.95);
+}
+
+/* BUTTON */
+.logout{
+  margin-top:20px;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:15px;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  font-weight:600;
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:65px;
+  background:#fff;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -5px 20px rgba(0,0,0,0.08);
+  z-index:3;
+}
+
+.nav-item{
+  text-align:center;
+  font-size:12px;
+  color:#888;
+  cursor:pointer;
+}
+
+.nav-item.active{
+  color:#ff0000;
+}
+
+.nav-icon{
+  font-size:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- WAVES -->
+<div class="wave"></div>
+<div class="wave"></div>
+<div class="wave"></div>
+<div class="wave"></div>
+<div class="wave"></div>
+
+<!-- ===== PAGE HOME ===== -->
+<div class="page active" id="home">
+
+  <div class="logo">
+    <img src="jelas.png">
+  </div>
+
+  <div class="header">
+    <h3>Selamat Datang 👋</h3>
+    <h2>User LPK Gyokai</h2>
+  </div>
+
+  <div class="menu">
+    <div class="card">⏳ Lama Bekerja (Hari)</div>
+    <div class="card">👷 Posisi</div>
+    <div class="card">🏢 Nama Perusahaan</div>
+    <div class="card">📅 Sisa Kontrak</div>
+  </div>
+
+  <!-- 🔥 TOMBOL ABSEN -->
+  <button id="absenBtn" class="logout" onclick="handleAbsen()">ABSEN MASUK</button>
+
+</div>
+
+<!-- ===== PAGE LEMBUR ===== -->
+<div class="page" id="jadwal">
+  <div class="logo">
+    <img src="jelas.png">
+  </div>
+
+  <h2>Lembur</h2>
+  <p>Mode lembur aktif (tidak auto keluar)</p>
+</div>
+
+<!-- ===== PAGE PROFILE ===== -->
+<div class="page" id="profile">
+  <div class="logo">
+    <img src="jelas.png">
+  </div>
+
+  <h2>Profile</h2>
+  <p>Data user akan tampil di sini</p>
+</div>
+
+<!-- NAV -->
+<div class="bottom-nav">
+  <div class="nav-item active" onclick="goPage('home', this)">
+    <div class="nav-icon">🏠</div>Home
+  </div>
+
+  <div class="nav-item" onclick="goPage('jadwal', this)">
+    <div class="nav-icon">🔥</div>Lembur
+  </div>
+
+  <div class="nav-item" onclick="goPage('profile', this)">
+    <div class="nav-icon">👤</div>Profile
+  </div>
+</div>
+
+<script>
+
+// ===== NAVIGATION =====
+function goPage(id, el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ===== ABSEN SYSTEM =====
+let status = "KELUAR";
+let lastMasuk = 0;
+let lastKeluar = 0;
+
+// jam kerja
+let jamPulang = 17;
+
+function now(){
+  return new Date().getTime();
+}
+
+function updateButton(){
+  let btn = document.getElementById("absenBtn");
+  let sekarang = now();
+
+  let jam = new Date().getHours();
+  let menit = new Date().getMinutes();
+
+  // AUTO KELUAR (+15 menit)
+  if(status === "MASUK" && (jam > jamPulang || (jam === jamPulang && menit >= 15))){
+    status = "KELUAR";
+    lastKeluar = sekarang;
+    alert("Auto keluar karena lewat jam kerja");
+  }
+
+  if(status === "KELUAR"){
+    btn.innerText = "ABSEN MASUK";
+  }else{
+    btn.innerText = "ABSEN KELUAR";
+  }
+}
+
+function handleAbsen(){
+  let sekarang = now();
+
+  // MASUK
+  if(status === "KELUAR"){
+
+    if(sekarang - lastKeluar < 600000){
+      alert("Tunggu 10 menit setelah keluar!");
+      return;
+    }
+
+    status = "MASUK";
+    lastMasuk = sekarang;
+    alert("Berhasil Absen MASUK");
+
+  } 
+  // KELUAR
+  else{
+
+    if(sekarang - lastMasuk < 3600000){
+      alert("Minimal kerja 1 jam dulu!");
+      return;
+    }
+
+    status = "KELUAR";
+    lastKeluar = sekarang;
+    alert("Berhasil Absen KELUAR");
+
+  }
+
+  updateButton();
+}
+
+// auto refresh status
+setInterval(updateButton,1000);
+updateButton();
+
+</script>
+
+</body>
+</html>
