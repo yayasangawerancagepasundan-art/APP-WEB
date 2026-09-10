@@ -10,7 +10,7 @@
 
 <style>
 
-/* ================= GLOBAL ================= */
+/* GLOBAL */
 *{
   margin:0;
   padding:0;
@@ -26,7 +26,7 @@ body{
   align-items:center;
 }
 
-/* ================= CONTAINER ================= */
+/* CONTAINER */
 .container{
   width:360px;
   padding:30px;
@@ -36,32 +36,37 @@ body{
   box-shadow:0 10px 40px rgba(0,0,0,0.5);
 }
 
-/* ================= LOGO (INI BAGIAN PENTING) ================= */
+/* ================= LOGO FINAL ================= */
 .logo{
-  text-align:center;
+  display:flex;
+  justify-content:center;
   margin-bottom:15px;
 }
 
-.logo img{
-  width:90px;
-  padding:10px;
-  border-radius:15px;
+.logo-box{
+  padding:12px;
+  border-radius:20px;
 
-  /* 🔥 GRADASI PUTIH */
+  /* 🔥 LEBIH TERANG (INI KUNCINYA) */
   background: linear-gradient(
     145deg,
-    rgba(255,255,255,0.9),
-    rgba(255,255,255,0.2)
+    rgba(255,255,255,1),
+    rgba(255,255,255,0.6)
   );
 
-  backdrop-filter: blur(10px);
-
+  /* glow luar */
   box-shadow:
-    0 4px 15px rgba(0,0,0,0.3),
-    0 0 15px rgba(255,255,255,0.4);
+    0 8px 25px rgba(0,0,0,0.5),
+    0 0 25px rgba(255,255,255,0.6);
+
 }
 
-/* ================= TEXT ================= */
+.logo-box img{
+  width:80px;
+  display:block;
+}
+
+/* TEXT */
 h2{
   color:#fff;
   text-align:center;
@@ -70,12 +75,12 @@ h2{
 
 .sub{
   text-align:center;
-  color:#aaa;
+  color:#ddd;
   font-size:12px;
   margin-bottom:15px;
 }
 
-/* ================= PROGRESS ================= */
+/* PROGRESS */
 .progress{
   height:4px;
   background:#333;
@@ -91,7 +96,7 @@ h2{
   transition:0.3s;
 }
 
-/* ================= STEP ================= */
+/* STEP */
 .step{
   display:none;
   animation:fade 0.4s;
@@ -106,7 +111,7 @@ h2{
   to{opacity:1;transform:translateX(0);}
 }
 
-/* ================= INPUT ================= */
+/* INPUT */
 input, select{
   width:100%;
   padding:12px;
@@ -118,13 +123,27 @@ input, select{
   color:#fff;
 }
 
-/* dropdown fix */
+/* placeholder jelas */
+::placeholder{
+  color:#ddd;
+}
+
+/* tanggal fix HP */
+input[type="date"]{
+  color:#fff;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator{
+  filter: invert(1);
+}
+
+/* dropdown */
 select option{
   color:#000;
   background:#fff;
 }
 
-/* ================= BUTTON ================= */
+/* BUTTON */
 button{
   width:100%;
   padding:14px;
@@ -142,7 +161,7 @@ button:hover{
   transform:scale(1.05);
 }
 
-/* ================= NAV ================= */
+/* NAV */
 .nav{
   display:flex;
   gap:10px;
@@ -152,7 +171,7 @@ button:hover{
   flex:1;
 }
 
-/* ================= POPUP ================= */
+/* POPUP */
 .popup{
   position:fixed;
   top:0;
@@ -179,9 +198,11 @@ button:hover{
 
 <div class="container">
 
-<!-- ================= LOGO (DI SINI LETAKNYA) ================= -->
+<!-- 🔥 LOGO FINAL -->
 <div class="logo">
-  <img src="jelas.png">
+  <div class="logo-box">
+    <img src="jelas.png">
+  </div>
 </div>
 
 <h2>Registrasi</h2>
@@ -255,7 +276,6 @@ button:hover{
 
 <script>
 
-/* STEP CONTROL */
 let step=0;
 let steps=document.querySelectorAll(".step");
 let bar=document.getElementById("bar");
@@ -269,7 +289,6 @@ function show(){
 function next(){step++;show();}
 function prev(){step--;show();}
 
-/* HITUNG UMUR */
 function hitungUmur(){
   let t=new Date(document.getElementById("tgl").value);
   let n=new Date();
@@ -284,30 +303,10 @@ function hitungUmur(){
   document.getElementById("umur").value=umur+" Tahun";
 }
 
-/* SUBMIT */
 function submitForm(){
-
-  let data={
-    username:username.value,
-    password:password.value,
-    nik:nik.value,
-    nama:nama.value,
-    tempat:tempat.value,
-    tgl_lahir:tgl.value,
-    umur:umur.value,
-    jk:jk.value,
-    alamat:alamat.value,
-    status:status.value,
-    zona:zona.value,
-    referral:referral.value
-  };
-
-  console.log(data);
-
   document.getElementById("popup").style.display="flex";
 }
 
-/* POPUP */
 function closePopup(){
   document.getElementById("popup").style.display="none";
 }
