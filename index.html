@@ -9,6 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
+
+/* ================= GLOBAL ================= */
 *{
   margin:0;
   padding:0;
@@ -24,6 +26,7 @@ body{
   align-items:center;
 }
 
+/* ================= CONTAINER ================= */
 .container{
   width:360px;
   padding:30px;
@@ -33,16 +36,32 @@ body{
   box-shadow:0 10px 40px rgba(0,0,0,0.5);
 }
 
-/* LOGO */
+/* ================= LOGO (INI BAGIAN PENTING) ================= */
 .logo{
   text-align:center;
-  margin-bottom:10px;
-}
-.logo img{
-  width:90px;
-  filter: drop-shadow(0 0 10px rgba(0,198,255,0.7));
+  margin-bottom:15px;
 }
 
+.logo img{
+  width:90px;
+  padding:10px;
+  border-radius:15px;
+
+  /* 🔥 GRADASI PUTIH */
+  background: linear-gradient(
+    145deg,
+    rgba(255,255,255,0.9),
+    rgba(255,255,255,0.2)
+  );
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 4px 15px rgba(0,0,0,0.3),
+    0 0 15px rgba(255,255,255,0.4);
+}
+
+/* ================= TEXT ================= */
 h2{
   color:#fff;
   text-align:center;
@@ -56,7 +75,7 @@ h2{
   margin-bottom:15px;
 }
 
-/* progress */
+/* ================= PROGRESS ================= */
 .progress{
   height:4px;
   background:#333;
@@ -72,7 +91,7 @@ h2{
   transition:0.3s;
 }
 
-/* step */
+/* ================= STEP ================= */
 .step{
   display:none;
   animation:fade 0.4s;
@@ -87,7 +106,7 @@ h2{
   to{opacity:1;transform:translateX(0);}
 }
 
-/* input */
+/* ================= INPUT ================= */
 input, select{
   width:100%;
   padding:12px;
@@ -105,7 +124,7 @@ select option{
   background:#fff;
 }
 
-/* button */
+/* ================= BUTTON ================= */
 button{
   width:100%;
   padding:14px;
@@ -123,7 +142,7 @@ button:hover{
   transform:scale(1.05);
 }
 
-/* nav */
+/* ================= NAV ================= */
 .nav{
   display:flex;
   gap:10px;
@@ -133,7 +152,7 @@ button:hover{
   flex:1;
 }
 
-/* popup */
+/* ================= POPUP ================= */
 .popup{
   position:fixed;
   top:0;
@@ -152,6 +171,7 @@ button:hover{
   border-radius:10px;
   text-align:center;
 }
+
 </style>
 </head>
 
@@ -159,7 +179,7 @@ button:hover{
 
 <div class="container">
 
-<!-- LOGO -->
+<!-- ================= LOGO (DI SINI LETAKNYA) ================= -->
 <div class="logo">
   <img src="jelas.png">
 </div>
@@ -235,6 +255,7 @@ button:hover{
 
 <script>
 
+/* STEP CONTROL */
 let step=0;
 let steps=document.querySelectorAll(".step");
 let bar=document.getElementById("bar");
@@ -248,7 +269,7 @@ function show(){
 function next(){step++;show();}
 function prev(){step--;show();}
 
-/* hitung umur */
+/* HITUNG UMUR */
 function hitungUmur(){
   let t=new Date(document.getElementById("tgl").value);
   let n=new Date();
@@ -263,7 +284,7 @@ function hitungUmur(){
   document.getElementById("umur").value=umur+" Tahun";
 }
 
-/* submit */
+/* SUBMIT */
 function submitForm(){
 
   let data={
@@ -286,7 +307,7 @@ function submitForm(){
   document.getElementById("popup").style.display="flex";
 }
 
-/* popup */
+/* POPUP */
 function closePopup(){
   document.getElementById("popup").style.display="none";
 }
