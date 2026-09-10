@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>LPK Gyokai Batam</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
@@ -15,52 +14,47 @@ body{
   background:#fff;
   min-height:100vh;
   overflow-x:hidden;
+  position:relative;
 }
 
-/* 🔥 FIX WAVE */
+/* WAVE */
 .wave{
-  position:fixed;
-  bottom:-40px;
+  position:absolute;
+  bottom:0;
   left:0;
   width:100%;
-  height:180px;
-  overflow:hidden;
-  z-index:0;
+  z-index:-1;
 }
 
-.wave svg{
-  width:100%;
-  height:100%;
-}
+.wave svg{width:100%;height:260px;}
 
-/* WRAPPER */
 .wrapper{
   max-width:400px;
   margin:auto;
-  padding:30px 20px 200px;
+  padding:30px 20px 300px;
   position:relative;
   z-index:2;
 }
 
 /* LOGO */
-.logo{text-align:center;margin-bottom:15px;}
-.logo img{width:80px;}
+.logo{text-align:center;margin-bottom:10px;}
+.logo img{width:120px;}
 
 /* TEXT */
-h2{text-align:center;color:#111;}
-.sub{text-align:center;color:#666;font-size:13px;margin-bottom:20px;}
+h2{text-align:center;}
+.sub{text-align:center;color:#777;font-size:13px;margin-bottom:20px;}
 
 /* INPUT */
+label{font-size:12px;color:#777;}
 input,select{
   width:100%;
   padding:14px 5px;
-  margin:15px 0;
+  margin:10px 0;
   border:none;
   border-bottom:2px solid #ddd;
 }
-
 input:focus,select:focus{
-  border-bottom:2px solid #ff0000;
+  border-bottom:2px solid red;
   outline:none;
 }
 
@@ -70,27 +64,19 @@ button{
   padding:14px;
   border:none;
   border-radius:12px;
-  background:#ff0000;
+  background:red;
   color:#fff;
   font-weight:600;
 }
 
-/* SWITCH */
-.switch{
-  margin-top:15px;
-  text-align:center;
-  font-size:13px;
-}
-.switch a{color:red;cursor:pointer;}
-
-/* STEP */
-.step{display:none;}
-.step.active{display:block;}
-
 .nav{display:flex;gap:10px;}
 .nav button{flex:1;}
 
-.error{border-bottom:2px solid red !important;}
+.switch{text-align:center;margin-top:15px;font-size:13px;}
+.switch a{color:red;cursor:pointer;}
+
+.step{display:none;}
+.step.active{display:block;}
 
 /* POPUP */
 .popup{
@@ -102,49 +88,29 @@ button{
   justify-content:center;
   align-items:center;
 }
-
 .popup-box{
   background:#fff;
   padding:30px;
   border-radius:20px;
   text-align:center;
-  transform:scale(0.7);
-  animation:pop 0.4s forwards;
-}
-
-@keyframes pop{
-  to{transform:scale(1);}
 }
 
 /* ICON */
 .success-icon{
-  font-size:70px;
+  font-size:60px;
   animation:bounce 1s infinite;
 }
-
 @keyframes bounce{
   0%{transform:translateY(0);}
-  50%{transform:translateY(-20px);}
+  50%{transform:translateY(-15px);}
   100%{transform:translateY(0);}
-}
-
-/* CONFETTI */
-.confetti{
-  position:fixed;
-  width:8px;
-  height:8px;
-  top:-10px;
-  animation:fall 3s linear;
-}
-@keyframes fall{
-  to{transform:translateY(100vh) rotate(360deg);}
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🔥 5 LAYER WAVE -->
+<!-- WAVE -->
 <div class="wave">
 <svg viewBox="0 0 1440 320">
 
@@ -197,8 +163,11 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
   <h2>Login</h2>
   <div class="sub">LPK Gyokai Batam</div>
 
-  <input id="loginUser" placeholder="Username">
-  <input id="loginPass" type="password" placeholder="Password">
+  <label>Username</label>
+  <input id="loginUser">
+
+  <label>Password</label>
+  <input type="password" id="loginPass">
 
   <button onclick="login()">LOGIN</button>
 
@@ -213,14 +182,23 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
   <h2>Registrasi</h2>
 
   <div class="step active">
-    <input id="username" placeholder="Username">
-    <input id="password" type="password" placeholder="Password">
+    <label>Username</label>
+    <input id="username">
+
+    <label>Password</label>
+    <input type="password" id="password">
+
     <button onclick="next()">Lanjut</button>
   </div>
 
   <div class="step">
-    <input id="nik" placeholder="NIK">
-    <input id="nama" placeholder="Nama">
+    <label>NIK</label>
+    <input id="nik">
+
+    <label>Nama</label>
+    <input id="nama">
+
+    <label>Tanggal Lahir</label>
     <input type="date" id="tgl">
 
     <div class="nav">
@@ -230,23 +208,23 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
   </div>
 
   <div class="step">
+    <label>Jenis Kelamin</label>
     <select id="jk">
-      <option value="">Jenis Kelamin</option>
+      <option value="">Pilih</option>
       <option>Laki-laki</option>
       <option>Perempuan</option>
     </select>
 
-    <input id="alamat" placeholder="Alamat">
-    <input id="referral" placeholder="Referral (Opsional)">
+    <label>Alamat</label>
+    <input id="alamat">
+
+    <label>Referral</label>
+    <input id="referral">
 
     <div class="nav">
       <button onclick="prev()">Kembali</button>
       <button onclick="submitForm()">Daftar</button>
     </div>
-  </div>
-
-  <div class="switch">
-    Sudah punya akun? <a onclick="showLogin()">Login</a>
   </div>
 
 </div>
@@ -257,76 +235,81 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
 <div class="popup" id="popup">
   <div class="popup-box">
     <div class="success-icon">👍</div>
-    <h3>REGISTRASI BERHASIL</h3>
+    <h3>Registrasi Berhasil</h3>
   </div>
 </div>
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbyYF0eRDBsxl8Nyg9L0fEFlJj8KCUF-KZVLp5xqVtd00NT8kn401gGrbAZfboUaj3YF/exec";
+/* SWITCH */
+function showRegister(){
+  loginBox.style.display="none";
+  registerBox.style.display="block";
+}
+function showLogin(){
+  loginBox.style.display="block";
+  registerBox.style.display="none";
+}
 
-function showRegister(){loginBox.style.display="none";registerBox.style.display="block";}
-function showLogin(){loginBox.style.display="block";registerBox.style.display="none";}
-
+/* STEP */
 let step=0;
 let steps=document.querySelectorAll(".step");
 
-function showStep(){steps.forEach(s=>s.classList.remove("active"));steps[step].classList.add("active");}
+function showStep(){
+  steps.forEach(s=>s.classList.remove("active"));
+  steps[step].classList.add("active");
+}
 function next(){step++;showStep();}
 function prev(){step--;showStep();}
 
+/* REGISTER */
 function submitForm(){
-fetch(API_URL,{
-method:"POST",
-body:JSON.stringify({
-action:"register",
-username:username.value,
-password:password.value,
-nik:nik.value,
-nama:nama.value,
-tgl_lahir:tgl.value,
-jk:jk.value,
-alamat:alamat.value,
-referral:referral.value
-})
-})
-.then(res=>res.json())
-.then(res=>{
-if(res.status==="success"){
-popup.style.display="flex";
-confetti();
-setTimeout(()=>{popup.style.display="none";showLogin();},2000);
-}else alert(res.message);
-});
+
+  let data={
+    action:"register",
+    username:username.value,
+    password:password.value,
+    nik:nik.value,
+    nama:nama.value,
+    tgl: tgl.value,
+    jk:jk.value,
+    alamat:alamat.value,
+    referral:referral.value
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbyYF0eRDBsxl8Nyg9L0fEFlJj8KCUF-KZVLp5xqVtd00NT8kn401gGrbAZfboUaj3YF/exec",{
+    method:"POST",
+    body:JSON.stringify(data)
+  });
+
+  popup.style.display="flex";
+
+  setTimeout(()=>{
+    popup.style.display="none";
+    showLogin();
+  },2000);
 }
 
+/* LOGIN */
 function login(){
-fetch(API_URL,{
-method:"POST",
-body:JSON.stringify({
-action:"login",
-username:loginUser.value,
-password:loginPass.value
-})
-})
-.then(res=>res.json())
-.then(res=>{
-if(res.status==="success"){
-localStorage.setItem("user",JSON.stringify(res.user));
-window.location.href="dashboard-user.html";
-}else alert("Salah");
-});
-}
+  let data={
+    action:"login",
+    username:loginUser.value,
+    password:loginPass.value
+  };
 
-function confetti(){
-for(let i=0;i<40;i++){
-let c=document.createElement("div");
-c.className="confetti";
-c.style.left=Math.random()*100+"%";
-c.style.background=["red","yellow","blue"][Math.floor(Math.random()*3)];
-document.body.appendChild(c);
-setTimeout(()=>c.remove(),3000);
-}
+  fetch("https://script.google.com/macros/s/AKfycbyYF0eRDBsxl8Nyg9L0fEFlJj8KCUF-KZVLp5xqVtd00NT8kn401gGrbAZfboUaj3YF/exec",{
+    method:"POST",
+    body:JSON.stringify(data)
+  })
+  .then(res=>res.text())
+  .then(res=>{
+    if(res==="LOGIN_OK"){
+      window.location.href="dashboard-user.html";
+    }else{
+      alert("Login gagal");
+    }
+  });
 }
 
 </script>
