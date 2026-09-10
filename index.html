@@ -17,22 +17,29 @@ body{
   overflow-x:hidden;
 }
 
-/* 🔥 5 LAYER WAVE */
+/* 🔥 FIX WAVE */
 .wave{
   position:fixed;
-  bottom:0;
+  bottom:-40px;
   left:0;
   width:100%;
-  z-index:-1;
+  height:180px;
+  overflow:hidden;
+  z-index:0;
 }
 
-.wave svg{width:100%;height:260px;display:block;}
+.wave svg{
+  width:100%;
+  height:100%;
+}
 
 /* WRAPPER */
 .wrapper{
   max-width:400px;
   margin:auto;
   padding:30px 20px 200px;
+  position:relative;
+  z-index:2;
 }
 
 /* LOGO */
@@ -137,7 +144,7 @@ button{
 
 <body>
 
-<!-- 🔥 WAVE 5 LAYER -->
+<!-- 🔥 5 LAYER WAVE -->
 <div class="wave">
 <svg viewBox="0 0 1440 320">
 
@@ -256,70 +263,70 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
 
 <script>
 
-/* SWITCH */
-function showRegister(){
-  loginBox.style.display="none";
-  registerBox.style.display="block";
-}
+const API_URL="https://script.google.com/macros/s/AKfycbyYF0eRDBsxl8Nyg9L0fEFlJj8KCUF-KZVLp5xqVtd00NT8kn401gGrbAZfboUaj3YF/exec";
 
-function showLogin(){
-  loginBox.style.display="block";
-  registerBox.style.display="none";
-}
+function showRegister(){loginBox.style.display="none";registerBox.style.display="block";}
+function showLogin(){loginBox.style.display="block";registerBox.style.display="none";}
 
-/* STEP */
 let step=0;
 let steps=document.querySelectorAll(".step");
 
-function showStep(){
-  steps.forEach(s=>s.classList.remove("active"));
-  steps[step].classList.add("active");
-}
-
+function showStep(){steps.forEach(s=>s.classList.remove("active"));steps[step].classList.add("active");}
 function next(){step++;showStep();}
 function prev(){step--;showStep();}
 
-/* REGISTER */
 function submitForm(){
-
-  localStorage.setItem("user", JSON.stringify({
-    username:username.value,
-    password:password.value
-  }));
-
-  document.getElementById("popup").style.display="flex";
-
-  confetti();
-
-  setTimeout(()=>{
-    document.getElementById("popup").style.display="none";
-    showLogin(); // 🔥 balik ke login
-  },2000);
+fetch(API_URL,{
+method:"POST",
+body:JSON.stringify({
+action:"register",
+username:username.value,
+password:password.value,
+nik:nik.value,
+nama:nama.value,
+tgl_lahir:tgl.value,
+jk:jk.value,
+alamat:alamat.value,
+referral:referral.value
+})
+})
+.then(res=>res.json())
+.then(res=>{
+if(res.status==="success"){
+popup.style.display="flex";
+confetti();
+setTimeout(()=>{popup.style.display="none";showLogin();},2000);
+}else alert(res.message);
+});
 }
 
-/* LOGIN */
 function login(){
-  let u=loginUser.value;
-  let p=loginPass.value;
-  let data=JSON.parse(localStorage.getItem("user"));
-
-  if(data && u===data.username && p===data.password){
-    alert("Login berhasil");
-  }else{
-    alert("Salah");
-  }
+fetch(API_URL,{
+method:"POST",
+body:JSON.stringify({
+action:"login",
+username:loginUser.value,
+password:loginPass.value
+})
+})
+.then(res=>res.json())
+.then(res=>{
+if(res.status==="success"){
+localStorage.setItem("user",JSON.stringify(res.user));
+window.location.href="dashboard-user.html";
+}else alert("Salah");
+});
 }
 
-/* CONFETTI */
 function confetti(){
-  for(let i=0;i<40;i++){
-    let c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"%";
-    c.style.background=["red","yellow","blue"][Math.floor(Math.random()*3)];
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
-  }
+for(let i=0;i<40;i++){
+let c=document.createElement("div");
+c.className="confetti";
+c.style.left=Math.random()*100+"%";
+c.style.background=["red","yellow","blue"][Math.floor(Math.random()*3)];
+document.body.appendChild(c);
+setTimeout(()=>c.remove(),3000);
+}
 }
 
 </script>
