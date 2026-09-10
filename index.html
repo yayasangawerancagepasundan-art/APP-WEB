@@ -1,10 +1,297 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<title>SPPG</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LPK Gyokai Batam</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  height:100vh;
+  background: linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.container{
+  width:360px;
+  padding:30px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.05);
+  backdrop-filter:blur(20px);
+  box-shadow:0 10px 40px rgba(0,0,0,0.5);
+}
+
+/* LOGO */
+.logo{
+  text-align:center;
+  margin-bottom:10px;
+}
+.logo img{
+  width:90px;
+  filter: drop-shadow(0 0 10px rgba(0,198,255,0.7));
+}
+
+h2{
+  color:#fff;
+  text-align:center;
+  margin-bottom:5px;
+}
+
+.sub{
+  text-align:center;
+  color:#aaa;
+  font-size:12px;
+  margin-bottom:15px;
+}
+
+/* progress */
+.progress{
+  height:4px;
+  background:#333;
+  border-radius:5px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.bar{
+  height:100%;
+  width:33%;
+  background:linear-gradient(90deg,#00c6ff,#0072ff);
+  transition:0.3s;
+}
+
+/* step */
+.step{
+  display:none;
+  animation:fade 0.4s;
+}
+
+.step.active{
+  display:block;
+}
+
+@keyframes fade{
+  from{opacity:0;transform:translateX(20px);}
+  to{opacity:1;transform:translateX(0);}
+}
+
+/* input */
+input, select{
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:10px;
+  border:none;
+  outline:none;
+  background:rgba(255,255,255,0.08);
+  color:#fff;
+}
+
+/* dropdown fix */
+select option{
+  color:#000;
+  background:#fff;
+}
+
+/* button */
+button{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:none;
+  border-radius:10px;
+  background:linear-gradient(135deg,#00c6ff,#0072ff);
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.05);
+}
+
+/* nav */
+.nav{
+  display:flex;
+  gap:10px;
+}
+
+.nav button{
+  flex:1;
+}
+
+/* popup */
+.popup{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.popup-box{
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  text-align:center;
+}
+</style>
 </head>
-<body style="background:black;color:white;text-align:center;padding-top:100px;">
-<h1>SPPG ABSENSI</h1>
-<p>Berhasil jalan</p>
+
+<body>
+
+<div class="container">
+
+<!-- LOGO -->
+<div class="logo">
+  <img src="jelas.png">
+</div>
+
+<h2>Registrasi</h2>
+<div class="sub">LPK Gyokai Cabang Batam</div>
+
+<div class="progress"><div class="bar" id="bar"></div></div>
+
+<!-- STEP 1 -->
+<div class="step active">
+  <input id="username" placeholder="Username">
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="next()">Lanjut</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="step">
+  <input id="nik" placeholder="NIK">
+  <input id="nama" placeholder="Nama Lengkap">
+  <input id="tempat" placeholder="Tempat Lahir">
+
+  <input type="date" id="tgl" onchange="hitungUmur()">
+  <input id="umur" placeholder="Umur otomatis" readonly>
+
+  <div class="nav">
+    <button onclick="prev()">Kembali</button>
+    <button onclick="next()">Lanjut</button>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="step">
+  <select id="jk">
+    <option value="">Jenis Kelamin</option>
+    <option>Laki-laki</option>
+    <option>Perempuan</option>
+  </select>
+
+  <input id="alamat" placeholder="Alamat">
+
+  <select id="status">
+    <option value="">Status Perkawinan</option>
+    <option>Belum Menikah</option>
+    <option>Menikah</option>
+  </select>
+
+  <select id="zona">
+    <option value="">Zona Area</option>
+    <option>Zona A Kota Batam</option>
+    <option>Zona B Kepulauan Riau</option>
+    <option>Zona C Luar Kepulauan Riau</option>
+  </select>
+
+  <input id="referral" placeholder="Kode Referral (Opsional)">
+
+  <div class="nav">
+    <button onclick="prev()">Kembali</button>
+    <button onclick="submitForm()">Daftar</button>
+  </div>
+</div>
+
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <h3>Berhasil!</h3>
+    <p>Data berhasil dikirim</p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+</div>
+
+<script>
+
+let step=0;
+let steps=document.querySelectorAll(".step");
+let bar=document.getElementById("bar");
+
+function show(){
+  steps.forEach(s=>s.classList.remove("active"));
+  steps[step].classList.add("active");
+  bar.style.width=((step+1)/steps.length*100)+"%";
+}
+
+function next(){step++;show();}
+function prev(){step--;show();}
+
+/* hitung umur */
+function hitungUmur(){
+  let t=new Date(document.getElementById("tgl").value);
+  let n=new Date();
+
+  let umur=n.getFullYear()-t.getFullYear();
+  let m=n.getMonth()-t.getMonth();
+
+  if(m<0 || (m===0 && n.getDate()<t.getDate())){
+    umur--;
+  }
+
+  document.getElementById("umur").value=umur+" Tahun";
+}
+
+/* submit */
+function submitForm(){
+
+  let data={
+    username:username.value,
+    password:password.value,
+    nik:nik.value,
+    nama:nama.value,
+    tempat:tempat.value,
+    tgl_lahir:tgl.value,
+    umur:umur.value,
+    jk:jk.value,
+    alamat:alamat.value,
+    status:status.value,
+    zona:zona.value,
+    referral:referral.value
+  };
+
+  console.log(data);
+
+  document.getElementById("popup").style.display="flex";
+}
+
+/* popup */
+function closePopup(){
+  document.getElementById("popup").style.display="none";
+}
+
+</script>
+
 </body>
 </html>
