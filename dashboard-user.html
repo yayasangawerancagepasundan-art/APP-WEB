@@ -8,8 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-
-/* GLOBAL */
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
 
 body{
@@ -17,7 +15,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ===== OMBak ===== */
+/* WAVES */
 .wave{
   position:fixed;
   bottom:-50px;
@@ -40,7 +38,7 @@ body{
   100%{transform:translateX(-50%);}
 }
 
-/* PAGE SYSTEM */
+/* PAGE */
 .page{
   display:none;
   padding:80px 20px 90px;
@@ -64,23 +62,15 @@ body{
   top:15px;
   left:15px;
 }
-
 .logo img{
   width:45px;
 }
 
 /* HEADER */
-.header h3{
-  font-size:13px;
-  color:#888;
-}
+.header h3{font-size:13px;color:#888;}
+.header h2{font-size:22px;margin-bottom:20px;}
 
-.header h2{
-  font-size:22px;
-  margin-bottom:20px;
-}
-
-/* GRID */
+/* MENU */
 .menu{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -93,11 +83,11 @@ body{
   border-radius:20px;
   box-shadow:0 10px 25px rgba(0,0,0,0.08);
   text-align:center;
-  transition:0.2s;
 }
 
-.card:active{
-  transform:scale(0.95);
+.card b{
+  display:block;
+  margin-top:5px;
 }
 
 /* BUTTON */
@@ -112,7 +102,7 @@ body{
   font-weight:600;
 }
 
-/* BOTTOM NAV */
+/* NAV */
 .bottom-nav{
   position:fixed;
   bottom:0;
@@ -133,14 +123,9 @@ body{
   cursor:pointer;
 }
 
-.nav-item.active{
-  color:#ff0000;
-}
+.nav-item.active{color:#ff0000;}
 
-.nav-icon{
-  font-size:20px;
-}
-
+.nav-icon{font-size:20px;}
 </style>
 </head>
 
@@ -153,7 +138,7 @@ body{
 <div class="wave"></div>
 <div class="wave"></div>
 
-<!-- ===== PAGE HOME ===== -->
+<!-- HOME -->
 <div class="page active" id="home">
 
   <div class="logo">
@@ -166,132 +151,160 @@ body{
   </div>
 
   <div class="menu">
-    <div class="card">⏳ Lama Bekerja (Hari)</div>
-    <div class="card">👷 Posisi</div>
-    <div class="card">🏢 Nama Perusahaan</div>
-    <div class="card">📅 Sisa Kontrak</div>
+    <div class="card">⏳ <b id="lama">0 Hari</b></div>
+    <div class="card">👷 <b id="posisi">-</b></div>
+    <div class="card">🏢 <b id="perusahaan">-</b></div>
+    <div class="card">📅 <b id="kontrak">-</b></div>
   </div>
 
-  <!-- 🔥 TOMBOL ABSEN -->
   <button id="absenBtn" class="logout" onclick="handleAbsen()">ABSEN MASUK</button>
 
 </div>
 
-<!-- ===== PAGE LEMBUR ===== -->
+<!-- LEMBUR -->
 <div class="page" id="jadwal">
-  <div class="logo">
-    <img src="jelas.png">
-  </div>
-
+  <div class="logo"><img src="jelas.png"></div>
   <h2>Lembur</h2>
-  <p>Mode lembur aktif (tidak auto keluar)</p>
+  <p>Tidak memaksa keluar</p>
 </div>
 
-<!-- ===== PAGE PROFILE ===== -->
+<!-- PROFILE -->
 <div class="page" id="profile">
-  <div class="logo">
-    <img src="jelas.png">
-  </div>
-
+  <div class="logo"><img src="jelas.png"></div>
   <h2>Profile</h2>
-  <p>Data user akan tampil di sini</p>
 </div>
 
 <!-- NAV -->
 <div class="bottom-nav">
-  <div class="nav-item active" onclick="goPage('home', this)">
+  <div class="nav-item active" onclick="goPage('home',this)">
     <div class="nav-icon">🏠</div>Home
   </div>
-
-  <div class="nav-item" onclick="goPage('jadwal', this)">
+  <div class="nav-item" onclick="goPage('jadwal',this)">
     <div class="nav-icon">🔥</div>Lembur
   </div>
-
-  <div class="nav-item" onclick="goPage('profile', this)">
+  <div class="nav-item" onclick="goPage('profile',this)">
     <div class="nav-icon">👤</div>Profile
   </div>
 </div>
 
 <script>
 
-// ===== NAVIGATION =====
-function goPage(id, el){
+// ===== NAV =====
+function goPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
 }
 
-// ===== ABSEN SYSTEM =====
-let status = "KELUAR";
-let lastMasuk = 0;
-let lastKeluar = 0;
+// ===== DATA USER SIMULASI =====
+let user = {
+  posisi:"Operator",
+  perusahaan:"PT Epson Batam",
+  mulai:"2026-09-01",
+  kontrak:"2026-12-01"
+};
 
-// jam kerja
-let jamPulang = 17;
-
-function now(){
-  return new Date().getTime();
+// ===== HITUNG HARI =====
+function hari(t){
+  return Math.floor((new Date()-new Date(t))/(1000*60*60*24));
 }
 
-function updateButton(){
-  let btn = document.getElementById("absenBtn");
-  let sekarang = now();
-
-  let jam = new Date().getHours();
-  let menit = new Date().getMinutes();
-
-  // AUTO KELUAR (+15 menit)
-  if(status === "MASUK" && (jam > jamPulang || (jam === jamPulang && menit >= 15))){
-    status = "KELUAR";
-    lastKeluar = sekarang;
-    alert("Auto keluar karena lewat jam kerja");
-  }
-
-  if(status === "KELUAR"){
-    btn.innerText = "ABSEN MASUK";
-  }else{
-    btn.innerText = "ABSEN KELUAR";
-  }
+function updateDashboard(){
+  document.getElementById("lama").innerText = hari(user.mulai)+" Hari";
+  document.getElementById("posisi").innerText = user.posisi;
+  document.getElementById("perusahaan").innerText = user.perusahaan;
+  document.getElementById("kontrak").innerText = hari(user.kontrak)+" Hari";
 }
 
+updateDashboard();
+
+// ===== ABSEN + GPS =====
+let kantor={lat:1.1305,lng:104.0530,radius:200};
+
+let status="KELUAR";
+let lastMasuk=0;
+let lastKeluar=0;
+let jamPulang=17;
+let proses=false;
+
+// JARAK
+function jarak(a,b,c,d){
+  let R=6371e3;
+  let dLat=(c-a)*Math.PI/180;
+  let dLon=(d-b)*Math.PI/180;
+  let x=Math.sin(dLat/2)**2+
+        Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*
+        Math.sin(dLon/2)**2;
+  return R*(2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x)));
+}
+
+// UPDATE BUTTON
+function updateBtn(){
+  let btn=document.getElementById("absenBtn");
+  let now=new Date();
+  if(status==="MASUK" && (now.getHours()>17 || (now.getHours()==17 && now.getMinutes()>=15))){
+    status="KELUAR";
+    alert("Auto keluar");
+  }
+  btn.innerText = status==="KELUAR"?"ABSEN MASUK":"ABSEN KELUAR";
+}
+
+setInterval(updateBtn,1000);
+
+// HANDLE ABSEN
 function handleAbsen(){
-  let sekarang = now();
 
-  // MASUK
-  if(status === "KELUAR"){
+  if(proses) return;
+  proses=true;
 
-    if(sekarang - lastKeluar < 600000){
-      alert("Tunggu 10 menit setelah keluar!");
-      return;
+  let btn=document.getElementById("absenBtn");
+  btn.innerText="⏳ Memproses...";
+  btn.disabled=true;
+
+  navigator.geolocation.getCurrentPosition(pos=>{
+
+    let acc=pos.coords.accuracy;
+    let j=jarak(pos.coords.latitude,pos.coords.longitude,kantor.lat,kantor.lng);
+
+    // ANTI FAKE
+    if(acc>100){
+      alert("GPS tidak valid!");
+      return reset();
     }
 
-    status = "MASUK";
-    lastMasuk = sekarang;
-    alert("Berhasil Absen MASUK");
-
-  } 
-  // KELUAR
-  else{
-
-    if(sekarang - lastMasuk < 3600000){
-      alert("Minimal kerja 1 jam dulu!");
-      return;
+    if(j>kantor.radius){
+      alert("Diluar area!");
+      return reset();
     }
 
-    status = "KELUAR";
-    lastKeluar = sekarang;
-    alert("Berhasil Absen KELUAR");
+    let now=Date.now();
 
-  }
+    if(status==="KELUAR"){
+      if(now-lastKeluar<600000) return alert("Tunggu 10 menit"),reset();
+      status="MASUK"; lastMasuk=now;
+      alert("MASUK berhasil");
+    }else{
+      if(now-lastMasuk<3600000) return alert("Minimal 1 jam"),reset();
+      status="KELUAR"; lastKeluar=now;
+      alert("KELUAR berhasil");
+    }
 
-  updateButton();
+    reset();
+
+  },()=>{
+    alert("GPS gagal");
+    reset();
+  },{enableHighAccuracy:true});
+
 }
 
-// auto refresh status
-setInterval(updateButton,1000);
-updateButton();
+function reset(){
+  proses=false;
+  let btn=document.getElementById("absenBtn");
+  btn.disabled=false;
+  updateBtn();
+}
 
 </script>
 
