@@ -3,19 +3,27 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>App LPK Gyokai</title>
+<title>Dashboard User</title>
 
+<!-- FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+/* ================= GLOBAL ================= */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
 
 body{
   background:#fff;
   overflow-x:hidden;
 }
 
-/* WAVES */
+/* ================= WAVE BACKGROUND ================= */
 .wave{
   position:fixed;
   bottom:-50px;
@@ -27,6 +35,7 @@ body{
   z-index:0;
 }
 
+/* 5 LAYER */
 .wave:nth-child(1){background:#ff0000;opacity:0.9;}
 .wave:nth-child(2){background:#ff1a1a;opacity:0.7;animation-duration:14s;}
 .wave:nth-child(3){background:#ff3333;opacity:0.5;animation-duration:16s;}
@@ -38,39 +47,40 @@ body{
   100%{transform:translateX(-50%);}
 }
 
-/* PAGE */
+/* ================= PAGE ================= */
 .page{
   display:none;
   padding:80px 20px 90px;
   position:relative;
   z-index:2;
-  animation:fade 0.3s;
 }
 
 .page.active{
   display:block;
 }
 
-@keyframes fade{
-  from{opacity:0;transform:translateY(20px);}
-  to{opacity:1;transform:translateY(0);}
-}
-
-/* LOGO */
+/* ================= HEADER ================= */
 .logo{
   position:absolute;
   top:15px;
   left:15px;
 }
+
 .logo img{
-  width:45px;
+  width:170px;
 }
 
-/* HEADER */
-.header h3{font-size:13px;color:#888;}
-.header h2{font-size:22px;margin-bottom:20px;}
+.header h3{
+  font-size:13px;
+  color:#888;
+}
 
-/* MENU */
+.header h2{
+  font-size:22px;
+  margin-bottom:20px;
+}
+
+/* ================= DASHBOARD ================= */
 .menu{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -85,13 +95,8 @@ body{
   text-align:center;
 }
 
-.card b{
-  display:block;
-  margin-top:5px;
-}
-
-/* BUTTON */
-.logout{
+/* ================= BUTTON ================= */
+.btn{
   margin-top:20px;
   width:100%;
   padding:15px;
@@ -102,7 +107,7 @@ body{
   font-weight:600;
 }
 
-/* NAV */
+/* ================= NAV ================= */
 .bottom-nav{
   position:fixed;
   bottom:0;
@@ -123,33 +128,37 @@ body{
   cursor:pointer;
 }
 
-.nav-item.active{color:#ff0000;}
+.nav-item.active{
+  color:#ff0000;
+}
 
-.nav-icon{font-size:20px;}
 </style>
 </head>
 
 <body>
 
-<!-- WAVES -->
+<!-- ================= WAVE ================= -->
 <div class="wave"></div>
 <div class="wave"></div>
 <div class="wave"></div>
 <div class="wave"></div>
 <div class="wave"></div>
 
-<!-- HOME -->
+<!-- ================= HOME ================= -->
 <div class="page active" id="home">
 
+  <!-- LOGO -->
   <div class="logo">
     <img src="jelas.png">
   </div>
 
+  <!-- HEADER -->
   <div class="header">
     <h3>Selamat Datang 👋</h3>
-    <h2>User LPK Gyokai</h2>
+    <h2 id="namaUser">-</h2>
   </div>
 
+  <!-- DASHBOARD -->
   <div class="menu">
     <div class="card">⏳ <b id="lama">0 Hari</b></div>
     <div class="card">👷 <b id="posisi">-</b></div>
@@ -157,153 +166,91 @@ body{
     <div class="card">📅 <b id="kontrak">-</b></div>
   </div>
 
-  <button id="absenBtn" class="logout" onclick="handleAbsen()">ABSEN MASUK</button>
+  <!-- BUTTON ABSEN -->
+  <button class="btn" onclick="handleAbsen()">ABSEN</button>
 
 </div>
 
-<!-- LEMBUR -->
-<div class="page" id="jadwal">
-  <div class="logo"><img src="jelas.png"></div>
-  <h2>Lembur</h2>
-  <p>Tidak memaksa keluar</p>
-</div>
-
-<!-- PROFILE -->
-<div class="page" id="profile">
-  <div class="logo"><img src="jelas.png"></div>
-  <h2>Profile</h2>
-</div>
-
-<!-- NAV -->
+<!-- ================= NAV ================= -->
 <div class="bottom-nav">
-  <div class="nav-item active" onclick="goPage('home',this)">
-    <div class="nav-icon">🏠</div>Home
-  </div>
-  <div class="nav-item" onclick="goPage('jadwal',this)">
-    <div class="nav-icon">🔥</div>Lembur
-  </div>
-  <div class="nav-item" onclick="goPage('profile',this)">
-    <div class="nav-icon">👤</div>Profile
-  </div>
+  <div class="nav-item active" onclick="goPage('home',this)">🏠 Home</div>
 </div>
 
 <script>
 
-// ===== NAV =====
+/* ================= CONFIG ================= */
+const URL = "https://script.google.com/macros/s/AKfycbyYF0eRDBsxl8Nyg9L0fEFlJj8KCUF-KZVLp5xqVtd00NT8kn401gGrbAZfboUaj3YF/exec";
+
+/* ================= CEK LOGIN ================= */
+let user = JSON.parse(localStorage.getItem("userLogin"));
+
+if(!user){
+  alert("Silahkan login dulu!");
+  window.location.href = "index.html";
+}
+
+/* ================= NAVIGASI ================= */
 function goPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
+
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   el.classList.add('active');
 }
 
-// ===== DATA USER SIMULASI =====
-let user = {
-  posisi:"Operator",
-  perusahaan:"PT Epson Batam",
-  mulai:"2026-09-01",
-  kontrak:"2026-12-01"
-};
-
-// ===== HITUNG HARI =====
-function hari(t){
-  return Math.floor((new Date()-new Date(t))/(1000*60*60*24));
+/* ================= HITUNG HARI ================= */
+function hari(tanggal){
+  return Math.floor((new Date()-new Date(tanggal))/(1000*60*60*24));
 }
 
+/* ================= UPDATE DASHBOARD ================= */
 function updateDashboard(){
-  document.getElementById("lama").innerText = hari(user.mulai)+" Hari";
-  document.getElementById("posisi").innerText = user.posisi;
-  document.getElementById("perusahaan").innerText = user.perusahaan;
-  document.getElementById("kontrak").innerText = hari(user.kontrak)+" Hari";
+
+  // ambil dari login Apps Script
+  document.getElementById("namaUser").innerText = user.nama || "-";
+  document.getElementById("posisi").innerText = user.posisi || "-";
+  document.getElementById("perusahaan").innerText = user.perusahaan || "-";
+
+  // kalau belum ada tanggal
+  document.getElementById("lama").innerText = "0 Hari";
+  document.getElementById("kontrak").innerText = "-";
 }
 
 updateDashboard();
 
-// ===== ABSEN + GPS =====
-let kantor={lat:1.1305,lng:104.0530,radius:200};
-
-let status="KELUAR";
-let lastMasuk=0;
-let lastKeluar=0;
-let jamPulang=17;
-let proses=false;
-
-// JARAK
-function jarak(a,b,c,d){
-  let R=6371e3;
-  let dLat=(c-a)*Math.PI/180;
-  let dLon=(d-b)*Math.PI/180;
-  let x=Math.sin(dLat/2)**2+
-        Math.cos(a*Math.PI/180)*Math.cos(c*Math.PI/180)*
-        Math.sin(dLon/2)**2;
-  return R*(2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x)));
-}
-
-// UPDATE BUTTON
-function updateBtn(){
-  let btn=document.getElementById("absenBtn");
-  let now=new Date();
-  if(status==="MASUK" && (now.getHours()>17 || (now.getHours()==17 && now.getMinutes()>=15))){
-    status="KELUAR";
-    alert("Auto keluar");
-  }
-  btn.innerText = status==="KELUAR"?"ABSEN MASUK":"ABSEN KELUAR";
-}
-
-setInterval(updateBtn,1000);
-
-// HANDLE ABSEN
+/* ================= ABSEN ================= */
 function handleAbsen(){
-
-  if(proses) return;
-  proses=true;
-
-  let btn=document.getElementById("absenBtn");
-  btn.innerText="⏳ Memproses...";
-  btn.disabled=true;
 
   navigator.geolocation.getCurrentPosition(pos=>{
 
-    let acc=pos.coords.accuracy;
-    let j=jarak(pos.coords.latitude,pos.coords.longitude,kantor.lat,kantor.lng);
+    fetch(URL,{
+      method:"POST",
+      body:JSON.stringify({
+        action:"absen",
+        username:user.username,
+        lat:pos.coords.latitude,
+        lng:pos.coords.longitude
+      })
+    })
+    .then(res=>res.json())
+    .then(res=>{
 
-    // ANTI FAKE
-    if(acc>100){
-      alert("GPS tidak valid!");
-      return reset();
-    }
+      if(res.status=="masuk"){
+        alert("Absen MASUK berhasil");
+      }
+      else if(res.status=="keluar"){
+        alert("Absen KELUAR berhasil");
+      }
+      else{
+        alert(res.msg);
+      }
 
-    if(j>kantor.radius){
-      alert("Diluar area!");
-      return reset();
-    }
-
-    let now=Date.now();
-
-    if(status==="KELUAR"){
-      if(now-lastKeluar<600000) return alert("Tunggu 10 menit"),reset();
-      status="MASUK"; lastMasuk=now;
-      alert("MASUK berhasil");
-    }else{
-      if(now-lastMasuk<3600000) return alert("Minimal 1 jam"),reset();
-      status="KELUAR"; lastKeluar=now;
-      alert("KELUAR berhasil");
-    }
-
-    reset();
+    });
 
   },()=>{
     alert("GPS gagal");
-    reset();
   },{enableHighAccuracy:true});
 
-}
-
-function reset(){
-  proses=false;
-  let btn=document.getElementById("absenBtn");
-  btn.disabled=false;
-  updateBtn();
 }
 
 </script>
