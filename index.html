@@ -412,15 +412,16 @@ function login(){
   })
   .then(res=>res.json())
   .then(res=>{
-    if(res.status=="success"){
-      localStorage.setItem("userLogin",JSON.stringify(res.data));
+    console.log(res); // WAJIB BIAR KELIHATAN
+
+    if(res.status=="ok"){
+      localStorage.setItem("userLogin",JSON.stringify(res));
       window.location.href="dashboard-user.html";
     }else{
-      alert("Salah");
+      alert(res.msg || "Username / Password salah");
     }
   });
 }
-
 /* CONFETTI */
 function confetti(){
   for(let i=0;i<40;i++){
