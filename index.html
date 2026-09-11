@@ -26,6 +26,10 @@ label{
   color:#000;
   margin-top:10px;
 }
+  .popup{
+  transition:0.3s;
+  opacity:1;
+}
   
 /* 🔥 5 LAYER WAVE (TIDAK DIUBAH) */
 .wave{
@@ -265,6 +269,22 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
     <label>Referral (Opsional)</label>
     <input id="referral">
 
+    <label>Status Perkawinan</label>
+<select id="status_perkawinan">
+  <option value="">Pilih Status</option>
+  <option>Belum Menikah</option>
+  <option>Menikah</option>
+  <option>Cerai</option>
+</select>
+
+<label>Zona Penempatan</label>
+<select id="zona">
+  <option value="">Pilih Zona</option>
+  <option>Zona 1 (Kota Batam)</option>
+  <option>Zona 2 (Provinsi Kepulauan Riau)</option>
+  <option>Zona 3 (Luar Provinsi Kepulauan Riau)</option>
+</select>
+
     <div class="nav">
       <button onclick="prev()">Kembali</button>
       <button onclick="submitForm()">Daftar</button>
@@ -335,18 +355,49 @@ function submitForm(){
       password:password.value,
       nik:nik.value,
       nama:nama.value,
-      tempat_lahir:tempat.value,
+      tempat:tempat.value,
       tgl_lahir:tgl.value,
       jk:jk.value,
       alamat:alamat.value,
+      status_perkawinan:status_perkawinan.value,
+      zona:zona.value,
       referral:referral.value
     })
+  })
+  .then(res=>res.json())
+  .then(res=>{
+
+    if(res.status === "ok"){ // ✅ SESUAI APPS SCRIPT
+
+      popup.style.display="flex";
+      confetti();
+
+      setTimeout(()=>{
+
+        document.querySelectorAll(".confetti").forEach(e=>e.remove());
+
+        let pop = document.getElementById("popup");
+
+        pop.style.opacity = "0";
+        pop.style.pointerEvents = "none";
+
+        setTimeout(()=>{
+          pop.style.display = "none";
+          pop.style.opacity = "1";
+        },300);
+
+        showLogin();
+
+      },2000);
+
+    }else{
+      alert("Registrasi gagal");
+    }
+
+  })
+  .catch(()=>{
+    alert("Koneksi gagal");
   });
-
-  popup.style.display="flex";
-  confetti();
-
-  setTimeout(()=>{showLogin();},2000);
 }
 
 /* LOGIN */
