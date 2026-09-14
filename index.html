@@ -409,7 +409,6 @@ function validateStep(){
 function next(){if(!validateStep())return;step++;showStep();}
 function prev(){step--;showStep();}
 
-/* REGISTER */
 function submitForm(){
   if(!validateStep()) return;
 
@@ -417,12 +416,10 @@ function submitForm(){
 
   fetch(URL,{
     method:"POST",
-
-    // 🔥 TAMBAHAN DI SINI (PENTING)
+    mode:"no-cors",
     headers:{
       "Content-Type":"application/json"
     },
-
     body:JSON.stringify({
       action:"register",
       username:username.value,
@@ -438,36 +435,29 @@ function submitForm(){
       referral:referral.value
     })
   })
-  .then(res=>res.json())
-  .then(res=>{
+  .then(()=>{
 
-    hideLoading(); // 🔥 SUDAH BENAR
+    hideLoading();
 
-    if(res.status === "ok"){
+    popup.style.display="flex";
+    confetti();
 
-      popup.style.display="flex";
-      confetti();
+    setTimeout(()=>{
+      document.querySelectorAll(".confetti").forEach(e=>e.remove());
+
+      let pop = document.getElementById("popup");
+
+      pop.style.opacity = "0";
+      pop.style.pointerEvents = "none";
 
       setTimeout(()=>{
-        document.querySelectorAll(".confetti").forEach(e=>e.remove());
+        pop.style.display = "none";
+        pop.style.opacity = "1";
+      },300);
 
-        let pop = document.getElementById("popup");
+      showLogin();
 
-        pop.style.opacity = "0";
-        pop.style.pointerEvents = "none";
-
-        setTimeout(()=>{
-          pop.style.display = "none";
-          pop.style.opacity = "1";
-        },300);
-
-        showLogin();
-
-      },2000);
-
-    }else{
-      alert("Registrasi gagal");
-    }
+    },2000);
 
   })
   .catch(()=>{
@@ -475,8 +465,6 @@ function submitForm(){
     hideLoading();
   });
 }
-
-  
 /* LOGIN */
 function login(){ 
 
