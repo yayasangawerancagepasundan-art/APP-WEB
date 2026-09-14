@@ -156,6 +156,60 @@ button{
   to{transform:translateY(100vh) rotate(360deg);}
 }
 
+.loading{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(255,255,255,0.95);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  text-align:center;
+}
+
+.loading-box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.loading-logo{
+  width:120px;
+  margin-bottom:15px;
+}
+
+.loading-text span{
+  display:inline-block;
+  font-weight:600;
+  color:#ff0000;
+  font-size:16px;
+  opacity:0;
+  animation:fadeSlide 1.5s infinite;
+}
+
+.loading-text span:nth-child(1){animation-delay:0s;}
+.loading-text span:nth-child(2){animation-delay:0.1s;}
+.loading-text span:nth-child(3){animation-delay:0.2s;}
+.loading-text span:nth-child(4){animation-delay:0.3s;}
+.loading-text span:nth-child(5){animation-delay:0.4s;}
+.loading-text span:nth-child(6){animation-delay:0.5s;}
+.loading-text span:nth-child(7){animation-delay:0.6s;}
+.loading-text span:nth-child(8){animation-delay:0.7s;}
+.loading-text span:nth-child(9){animation-delay:0.8s;}
+.loading-text span:nth-child(10){animation-delay:0.9s;}
+.loading-text span:nth-child(11){animation-delay:1s;}
+.loading-text span:nth-child(12){animation-delay:1.1s;}
+
+@keyframes fadeSlide{
+  0%{opacity:0; transform:translateX(20px);}
+  50%{opacity:1; transform:translateX(0);}
+  100%{opacity:0; transform:translateX(-10px);}
+}
+
 </style>
 </head>
 
@@ -306,6 +360,18 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
   </div>
 </div>
 
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <div class="loading-box">
+    <img src="jelas.png" class="loading-logo">
+    <div class="loading-text">
+      <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span>
+      <span>&nbsp;</span>
+      <span>T</span><span>U</span><span>N</span><span>G</span><span>G</span><span>U</span>
+    </div>
+  </div>
+</div>
+
 <script>
 
 const URL="https://script.google.com/macros/s/AKfycbyYF0eRDBsxl8Nyg9L0fEFlJj8KCUF-KZVLp5xqVtd00NT8kn401gGrbAZfboUaj3YF/exec";
@@ -347,62 +413,65 @@ function prev(){step--;showStep();}
 function submitForm(){
   if(!validateStep()) return;
 
-  fetch(URL,{
-    method:"POST",
-    body:JSON.stringify({
-      action:"register",
-      username:username.value,
-      password:password.value,
-      nik:nik.value,
-      nama:nama.value,
-      tempat:tempat.value,
-      tgl_lahir:tgl.value,
-      jk:jk.value,
-      alamat:alamat.value,
-      status_perkawinan:status_perkawinan.value,
-      zona:zona.value,
-      referral:referral.value
-    })
+  showLoading();
+fetch(URL,{
+  method:"POST",
+  body:JSON.stringify({
+    action:"register",
+    username:username.value,
+    password:password.value,
+    nik:nik.value,
+    nama:nama.value,
+    tempat:tempat.value,
+    tgl_lahir:tgl.value,
+    jk:jk.value,
+    alamat:alamat.value,
+    status_perkawinan:status_perkawinan.value,
+    zona:zona.value,
+    referral:referral.value
   })
-  .then(res=>res.json())
-  .then(res=>{
+})
+.then(res=>res.json())
+.then(res=>{
 
-    if(res.status === "ok"){ // ✅ SESUAI APPS SCRIPT
+  hideLoading(); // 🔥 DI SINI
 
-      popup.style.display="flex";
-      confetti();
+  if(res.status === "ok"){
+
+    popup.style.display="flex";
+    confetti();
+
+    setTimeout(()=>{
+      document.querySelectorAll(".confetti").forEach(e=>e.remove());
+
+      let pop = document.getElementById("popup");
+
+      pop.style.opacity = "0";
+      pop.style.pointerEvents = "none";
 
       setTimeout(()=>{
+        pop.style.display = "none";
+        pop.style.opacity = "1";
+      },300);
 
-        document.querySelectorAll(".confetti").forEach(e=>e.remove());
+      showLogin();
 
-        let pop = document.getElementById("popup");
+    },2000);
 
-        pop.style.opacity = "0";
-        pop.style.pointerEvents = "none";
+  }else{
+    alert("Registrasi gagal");
+  }
 
-        setTimeout(()=>{
-          pop.style.display = "none";
-          pop.style.opacity = "1";
-        },300);
-
-        showLogin();
-
-      },2000);
-
-    }else{
-      alert("Registrasi gagal");
-    }
-
-  })
-  .catch(()=>{
-    alert("Koneksi gagal");
-  });
-}
+})
+.catch(()=>{
+  alert("Koneksi gagal");
+  hideLoading();
+});
 
 /* LOGIN */
 function login(){ 
 
+  showLoading();
   fetch(URL,{ 
     method:"POST", 
     body:JSON.stringify({ 
@@ -412,37 +481,39 @@ function login(){
     }) 
   }) 
   .then(res=>res.json()) 
-  .then(res=>{ 
+ .then(res=>{ 
 
-    console.log(res);
+  hideLoading();
+  console.log(res);
 
-    if(res.status=="ok"){ 
+  if(res.status=="ok"){ 
 
-      // 🔥 SIMPAN USER
-      localStorage.setItem("userLogin", JSON.stringify(res.user));
+    localStorage.setItem("userLogin", JSON.stringify(res));
+    let role = res.role;
 
-      let role = res.user.role;
+    if(role === "SUPER_ADMIN"){
+      window.location.href = "superadmin.html";
+    }
+    else if(role === "ADMIN_LPK"){
+      window.location.href = "admin_lpk.html";
+    }
+    else if(role === "ADMIN_MITRA"){
+      window.location.href = "admin_mitra.html";
+    }
+    else{
+      window.location.href = "dashboard-user.html";
+    }
 
-      // 🔥 REDIRECT BERDASARKAN ROLE
-      if(role === "SUPER_ADMIN"){
-        window.location.href = "superadmin.html";
-      }
-      else if(role === "ADMIN_LPK"){
-        window.location.href = "admin_lpk.html";
-      }
-      else if(role === "ADMIN_MITRA"){
-        window.location.href = "admin_mitra.html";
-      }
-      else{
-        window.location.href = "dashboard-user.html";
-      }
+  }else{ 
+    alert(res.msg || "Username / Password salah"); 
+  }
 
-    }else{ 
-      alert(res.msg || "Username / Password salah"); 
-    } 
-
-  }); 
-}
+})
+.catch(()=>{
+  hideLoading();
+  alert("Koneksi gagal");
+});
+  
 /* CONFETTI */
 function confetti(){
   for(let i=0;i<40;i++){
@@ -455,6 +526,15 @@ function confetti(){
   }
 }
 
+/* SHOWLOADING */
+function showLoading(){
+  document.getElementById("loading").style.display="flex";
+}
+
+function hideLoading(){
+  document.getElementById("loading").style.display="none";
+}
+  
 </script>
 
 </body>
