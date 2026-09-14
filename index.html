@@ -1,5 +1,546 @@
-fetch("https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec",{
-  method:"POST",
-  mode:"no-cors",
-  body:JSON.stringify({action:"test"})
-})
+<!DOCTYPE html>
+<html lang="id">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>LPK Gyokai Batam</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+  background:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
+  position:relative; /* WAJIB */
+}
+
+label{
+  display:block;
+  font-size:13px;
+  color:#000;
+  margin-top:10px;
+}
+  .popup{
+  transition:0.3s;
+  opacity:1;
+}
+  
+/* 🔥 5 LAYER WAVE (TIDAK DIUBAH) */
+.wave{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  z-index:-1;
+}
+.wave svg{
+  width:100%;
+  height:260px;
+  display:block;
+}
+
+/* WRAPPER */
+.wrapper{
+  max-width:400px;
+  margin:auto;
+  padding:30px 20px 200px;
+}
+
+/* LOGO */
+.logo{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.logo img{
+  width:170px;
+  max-width:70%;
+}
+/* TEXT */
+h2{text-align:center;color:#111;}
+.sub{text-align:center;color:#666;font-size:13px;margin-bottom:20px;}
+
+/* INPUT */
+input,select{
+  width:100%;
+  padding:14px 5px;
+  margin:15px 0;
+  border:none;
+  border-bottom:2px solid #ddd;
+}
+
+input:focus,select:focus{
+  border-bottom:2px solid #ff0000;
+  outline:none;
+}
+
+.error{border-bottom:2px solid red !important;}
+
+/* BUTTON */
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#ff0000;
+  color:#fff;
+  font-weight:600;
+}
+
+/* SWITCH */
+.switch{
+  margin-top:15px;
+  text-align:center;
+  font-size:13px;
+}
+.switch a{color:red;cursor:pointer;}
+
+/* STEP */
+.step{display:none;}
+.step.active{display:block;}
+
+.nav{display:flex;gap:10px;}
+.nav button{flex:1;}
+
+/* POPUP */
+.popup{
+  position:fixed;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  justify-content:center;
+  align-items:center;
+}
+
+.popup-box{
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  transform:scale(0.7);
+  animation:pop 0.4s forwards;
+}
+
+@keyframes pop{
+  to{transform:scale(1);}
+}
+
+/* ICON */
+.success-icon{
+  font-size:70px;
+  animation:bounce 1s infinite;
+}
+
+@keyframes bounce{
+  0%{transform:translateY(0);}
+  50%{transform:translateY(-20px);}
+  100%{transform:translateY(0);}
+}
+
+/* CONFETTI */
+.confetti{
+  position:fixed;
+  width:8px;
+  height:8px;
+  top:-10px;
+  animation:fall 3s linear;
+}
+@keyframes fall{
+  to{transform:translateY(100vh) rotate(360deg);}
+}
+
+.loading{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(255,255,255,0.95);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  text-align:center;
+}
+
+.loading-box{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+}
+
+.loading-logo{
+  width:120px;
+  margin-bottom:15px;
+}
+
+.loading-text span{
+  display:inline-block;
+  font-weight:600;
+  color:#ff0000;
+  font-size:16px;
+  opacity:0;
+  animation:fadeSlide 1.5s infinite;
+}
+
+.loading-text span:nth-child(1){animation-delay:0s;}
+.loading-text span:nth-child(2){animation-delay:0.1s;}
+.loading-text span:nth-child(3){animation-delay:0.2s;}
+.loading-text span:nth-child(4){animation-delay:0.3s;}
+.loading-text span:nth-child(5){animation-delay:0.4s;}
+.loading-text span:nth-child(6){animation-delay:0.5s;}
+.loading-text span:nth-child(7){animation-delay:0.6s;}
+.loading-text span:nth-child(8){animation-delay:0.7s;}
+.loading-text span:nth-child(9){animation-delay:0.8s;}
+.loading-text span:nth-child(10){animation-delay:0.9s;}
+.loading-text span:nth-child(11){animation-delay:1s;}
+.loading-text span:nth-child(12){animation-delay:1.1s;}
+
+@keyframes fadeSlide{
+  0%{opacity:0; transform:translateX(20px);}
+  50%{opacity:1; transform:translateX(0);}
+  100%{opacity:0; transform:translateX(-10px);}
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- 🔥 5 LAYER WAVE (ASLI KAMU, TIDAK DIUBAH) -->
+<div class="wave">
+<svg viewBox="0 0 1440 320">
+
+<path fill="#ff0000" fill-opacity="0.15">
+<animate attributeName="d" dur="12s" repeatCount="indefinite"
+values="M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z;
+M0,160 C500,260 900,80 1440,160 L1440,320 L0,320 Z;
+M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.25">
+<animate attributeName="d" dur="10s" repeatCount="indefinite"
+values="M0,220 C400,120 1000,260 1440,220 L1440,320 L0,320 Z;
+M0,180 C300,260 1100,80 1440,180 L1440,320 L0,320 Z;
+M0,220 C400,120 1000,260 1440,220 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.4">
+<animate attributeName="d" dur="8s" repeatCount="indefinite"
+values="M0,240 C500,140 900,260 1440,240 L1440,320 L0,320 Z;
+M0,200 C400,260 1100,100 1440,200 L1440,320 L0,320 Z;
+M0,240 C500,140 900,260 1440,240 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.6">
+<animate attributeName="d" dur="6s" repeatCount="indefinite"
+values="M0,250 C400,150 1000,260 1440,250 L1440,320 L0,320 Z;
+M0,210 C300,260 1100,120 1440,210 L1440,320 L0,320 Z;
+M0,250 C400,150 1000,260 1440,250 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000">
+<animate attributeName="d" dur="4s" repeatCount="indefinite"
+values="M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z;
+M0,230 C400,260 1100,150 1440,230 L1440,320 L0,320 Z;
+M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
+</path>
+
+</svg>
+</div>
+
+<div class="wrapper">
+
+<div class="logo">
+  <img src="jelas.png">
+</div>
+
+<!-- LOGIN -->
+<div id="loginBox">
+  <h2>Login</h2>
+  <div class="sub">LPK Gyokai Batam</div>
+
+  <label>Username</label>
+  <input id="loginUser">
+
+  <label>Password</label>
+  <input id="loginPass" type="password">
+
+  <button onclick="login()">LOGIN</button>
+
+  <div class="switch">
+    Belum punya akun? <a onclick="showRegister()">Registrasi</a>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="registerBox" style="display:none;">
+  <h2>Registrasi</h2>
+
+  <div class="step active">
+     <label>Username</label>
+     <input id="username">
+     <label>Password</label>
+     <input id="password" type="password">
+   
+    <button onclick="next()">Lanjut</button>
+  </div>
+
+  <div class="step">
+    <label>NIK</label>
+    <input id="nik">
+    <label>Nama</label>
+    <input id="nama">
+    <label>Tempat Lahir</label>
+    <input id="tempat"> 
+    <label>Tanggal Lahir</label>
+    <input type="date" id="tgl">
+
+    <div class="nav">
+      <button onclick="prev()">Kembali</button>
+      <button onclick="next()">Lanjut</button>
+    </div>
+  </div>
+
+  <div class="step">
+    <label>Jenis Kelamin</label>
+    <select id="jk">
+      <option value="">Pilih Jenis Kelamin</option>
+      <option>Laki-laki</option>
+      <option>Perempuan</option>
+    </select>
+
+    <label>Alamat</label>
+    <input id="alamat">
+    <label>Referral (Opsional)</label>
+    <input id="referral">
+
+    <label>Status Perkawinan</label>
+<select id="status_perkawinan">
+  <option value="">Pilih Status</option>
+  <option>Belum Menikah</option>
+  <option>Menikah</option>
+  <option>Cerai</option>
+</select>
+
+<label>Zona Penempatan</label>
+<select id="zona">
+  <option value="">Pilih Zona</option>
+  <option>Zona 1 (Kota Batam)</option>
+  <option>Zona 2 (Provinsi Kepulauan Riau)</option>
+  <option>Zona 3 (Luar Provinsi Kepulauan Riau)</option>
+</select>
+
+    <div class="nav">
+      <button onclick="prev()">Kembali</button>
+      <button onclick="submitForm()">Daftar</button>
+    </div>
+  </div>
+
+  <div class="switch">
+    Sudah punya akun? <a onclick="showLogin()">Login</a>
+  </div>
+</div>
+
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+  <div class="popup-box">
+    <div class="success-icon">👍</div>
+    <h3>REGISTRASI BERHASIL</h3>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <div class="loading-box">
+    <img src="jelas.png" class="loading-logo">
+    <div class="loading-text">
+      <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span>
+      <span>&nbsp;</span>
+      <span>T</span><span>U</span><span>N</span><span>G</span><span>G</span><span>U</span>
+    </div>
+  </div>
+</div>
+
+<script>
+
+const URL="https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec";
+
+/* SWITCH */
+function showRegister(){loginBox.style.display="none";registerBox.style.display="block";}
+function showLogin(){loginBox.style.display="block";registerBox.style.display="none";}
+
+/* STEP */
+let step=0;
+let steps=document.querySelectorAll(".step");
+
+function showStep(){
+  steps.forEach(s=>s.classList.remove("active"));
+  steps[step].classList.add("active");
+}
+
+/* VALIDASI */
+function validateStep(){
+  let inputs=steps[step].querySelectorAll("input,select");
+  let valid=true;
+
+  inputs.forEach(i=>{
+   if(i.id !== "referral" && i.value.trim() === ""){
+      i.classList.add("error");
+      valid=false;
+    }else{
+      i.classList.remove("error");
+    }
+  });
+
+  return valid;
+}
+
+function next(){if(!validateStep())return;step++;showStep();}
+function prev(){step--;showStep();}
+  
+/* REGISTER */
+function submitForm(){
+  if(!validateStep()) return;
+
+  showLoading();
+
+  fetch(URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      action:"register",
+      username:username.value,
+      password:password.value,
+      nik:nik.value,
+      nama:nama.value,
+      tempat:tempat.value,
+      tgl_lahir:tgl.value,
+      jk:jk.value,
+      alamat:alamat.value,
+      status_perkawinan:status_perkawinan.value,
+      zona:zona.value,
+      referral:referral.value
+    })
+  })
+  .then(res=>res.json())
+  .then(res=>{
+
+    hideLoading();
+
+    if(res.status === "ok"){
+
+      popup.style.display="flex";
+      confetti();
+
+      setTimeout(()=>{
+        document.querySelectorAll(".confetti").forEach(e=>e.remove());
+
+        let pop = document.getElementById("popup");
+
+        pop.style.opacity="0";
+        pop.style.pointerEvents="none";
+
+        setTimeout(()=>{
+          pop.style.display="none";
+          pop.style.opacity="1";
+        },300);
+
+        showLogin();
+
+      },2000);
+
+    }else{
+      alert(res.msg || "Registrasi gagal");
+    }
+
+  })
+  .catch(()=>{
+    alert("Koneksi gagal");
+    hideLoading();
+  });
+}
+/* LOGIN */
+function login(){ 
+
+  showLoading();
+
+  fetch(URL,{ 
+    method:"POST", 
+    body:JSON.stringify({ 
+      action:"login", 
+      username:loginUser.value,
+      password:loginPass.value 
+    }) 
+  }) 
+  .then(res=>res.json())
+  .then(res=>{ 
+
+    hideLoading();
+
+    console.log(res);
+
+    if(res.status=="ok"){ 
+
+      localStorage.setItem("userLogin", JSON.stringify(res));
+
+      let role = res.role;
+
+      if(role === "SUPER_ADMIN"){
+        window.location.href = "superadmin.html";
+      }
+      else if(role === "ADMIN_LPK"){
+        window.location.href = "admin_lpk.html";
+      }
+      else if(role === "ADMIN_MITRA"){
+        window.location.href = "admin_mitra.html";
+      }
+      else{
+        window.location.href = "dashboard-user.html";
+      }
+
+    }else{ 
+      alert(res.msg || "Username / Password salah"); 
+    } 
+
+  })
+  .catch(()=>{
+    hideLoading();
+    alert("Koneksi gagal");
+  });
+}
+  
+/* CONFETTI */
+function confetti(){
+  for(let i=0;i<40;i++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"%";
+    c.style.background=["red","yellow","blue"][Math.floor(Math.random()*3)];
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+
+/* SHOWLOADING */
+function showLoading(){
+  document.getElementById("loading").style.display="flex";
+}
+
+function hideLoading(){
+  document.getElementById("loading").style.display="none";
+}
+  
+</script>
+
+</body>
+</html>
