@@ -414,105 +414,118 @@ function submitForm(){
   if(!validateStep()) return;
 
   showLoading();
-fetch(URL,{
-  method:"POST",
-  body:JSON.stringify({
-    action:"register",
-    username:username.value,
-    password:password.value,
-    nik:nik.value,
-    nama:nama.value,
-    tempat:tempat.value,
-    tgl_lahir:tgl.value,
-    jk:jk.value,
-    alamat:alamat.value,
-    status_perkawinan:status_perkawinan.value,
-    zona:zona.value,
-    referral:referral.value
+
+  fetch(URL,{
+    method:"POST",
+
+    // 🔥 TAMBAHAN DI SINI (PENTING)
+    headers:{
+      "Content-Type":"application/json"
+    },
+
+    body:JSON.stringify({
+      action:"register",
+      username:username.value,
+      password:password.value,
+      nik:nik.value,
+      nama:nama.value,
+      tempat:tempat.value,
+      tgl_lahir:tgl.value,
+      jk:jk.value,
+      alamat:alamat.value,
+      status_perkawinan:status_perkawinan.value,
+      zona:zona.value,
+      referral:referral.value
+    })
   })
-})
-.then(res=>res.json())
-.then(res=>{
+  .then(res=>res.json())
+  .then(res=>{
 
-  hideLoading(); // 🔥 DI SINI
+    hideLoading(); // 🔥 SUDAH BENAR
 
-  if(res.status === "ok"){
+    if(res.status === "ok"){
 
-    popup.style.display="flex";
-    confetti();
-
-    setTimeout(()=>{
-      document.querySelectorAll(".confetti").forEach(e=>e.remove());
-
-      let pop = document.getElementById("popup");
-
-      pop.style.opacity = "0";
-      pop.style.pointerEvents = "none";
+      popup.style.display="flex";
+      confetti();
 
       setTimeout(()=>{
-        pop.style.display = "none";
-        pop.style.opacity = "1";
-      },300);
+        document.querySelectorAll(".confetti").forEach(e=>e.remove());
 
-      showLogin();
+        let pop = document.getElementById("popup");
 
-    },2000);
+        pop.style.opacity = "0";
+        pop.style.pointerEvents = "none";
 
-  }else{
-    alert("Registrasi gagal");
-  }
+        setTimeout(()=>{
+          pop.style.display = "none";
+          pop.style.opacity = "1";
+        },300);
 
-})
-.catch(()=>{
-  alert("Koneksi gagal");
-  hideLoading();
-});
+        showLogin();
 
+      },2000);
+
+    }else{
+      alert("Registrasi gagal");
+    }
+
+  })
+  .catch(()=>{
+    alert("Koneksi gagal");
+    hideLoading();
+  });
+}
+
+  
 /* LOGIN */
 function login(){ 
 
   showLoading();
+
   fetch(URL,{ 
     method:"POST", 
     body:JSON.stringify({ 
       action:"login", 
-      username:loginUser.value, 
+      username:loginUser.value,
       password:loginPass.value 
     }) 
   }) 
-  .then(res=>res.json()) 
- .then(res=>{ 
+  .then(res=>res.json())
+  .then(res=>{ 
 
-  hideLoading();
-  console.log(res);
+    hideLoading();
 
-  if(res.status=="ok"){ 
+    console.log(res);
 
-    localStorage.setItem("userLogin", JSON.stringify(res));
-    let role = res.role;
+    if(res.status=="ok"){ 
 
-    if(role === "SUPER_ADMIN"){
-      window.location.href = "superadmin.html";
-    }
-    else if(role === "ADMIN_LPK"){
-      window.location.href = "admin_lpk.html";
-    }
-    else if(role === "ADMIN_MITRA"){
-      window.location.href = "admin_mitra.html";
-    }
-    else{
-      window.location.href = "dashboard-user.html";
-    }
+      localStorage.setItem("userLogin", JSON.stringify(res));
 
-  }else{ 
-    alert(res.msg || "Username / Password salah"); 
-  }
+      let role = res.role;
 
-})
-.catch(()=>{
-  hideLoading();
-  alert("Koneksi gagal");
-});
+      if(role === "SUPER_ADMIN"){
+        window.location.href = "superadmin.html";
+      }
+      else if(role === "ADMIN_LPK"){
+        window.location.href = "admin_lpk.html";
+      }
+      else if(role === "ADMIN_MITRA"){
+        window.location.href = "admin_mitra.html";
+      }
+      else{
+        window.location.href = "dashboard-user.html";
+      }
+
+    }else{ 
+      alert(res.msg || "Username / Password salah"); 
+    } 
+
+  })
+  .catch(()=>{
+    hideLoading();
+    alert("Koneksi gagal");
+  });
+}
   
 /* CONFETTI */
 function confetti(){
