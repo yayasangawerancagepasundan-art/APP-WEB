@@ -401,26 +401,47 @@ function submitForm(){
 }
 
 /* LOGIN */
-function login(){
-  fetch(URL,{
-    method:"POST",
-    body:JSON.stringify({
-      action:"login",
-      username:loginUser.value,
-      password:loginPass.value
-    })
-  })
-  .then(res=>res.json())
-  .then(res=>{
-    console.log(res); // WAJIB BIAR KELIHATAN
+function login(){ 
 
-    if(res.status=="ok"){
-      localStorage.setItem("userLogin",JSON.stringify(res));
-      window.location.href="dashboard-user.html";
-    }else{
-      alert(res.msg || "Username / Password salah");
-    }
-  });
+  fetch(URL,{ 
+    method:"POST", 
+    body:JSON.stringify({ 
+      action:"login", 
+      username:loginUser.value, 
+      password:loginPass.value 
+    }) 
+  }) 
+  .then(res=>res.json()) 
+  .then(res=>{ 
+
+    console.log(res);
+
+    if(res.status=="ok"){ 
+
+      // 🔥 SIMPAN USER
+      localStorage.setItem("userLogin", JSON.stringify(res.user));
+
+      let role = res.user.role;
+
+      // 🔥 REDIRECT BERDASARKAN ROLE
+      if(role === "SUPER_ADMIN"){
+        window.location.href = "superadmin.html";
+      }
+      else if(role === "ADMIN_LPK"){
+        window.location.href = "admin_lpk.html";
+      }
+      else if(role === "ADMIN_MITRA"){
+        window.location.href = "admin_mitra.html";
+      }
+      else{
+        window.location.href = "dashboard-user.html";
+      }
+
+    }else{ 
+      alert(res.msg || "Username / Password salah"); 
+    } 
+
+  }); 
 }
 /* CONFETTI */
 function confetti(){
