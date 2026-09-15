@@ -217,11 +217,6 @@ function goPage(id,el){
   el.classList.add('active');
 }
 
-/* ================= HITUNG HARI ================= */
-function hari(tanggal){
-  return Math.floor((new Date()-new Date(tanggal))/(1000*60*60*24));
-}
-
 /* ================= UPDATE DASHBOARD ================= */
 function updateDashboard(){
 
@@ -229,35 +224,30 @@ function updateDashboard(){
   document.getElementById("posisi").innerText = user.posisi || "-";
   document.getElementById("perusahaan").innerText = user.perusahaan || "-";
 
-  // 🔥 LAMA KERJA (dari mulai)
-  if(user.kontrak_mulai){
-    let mulai = new Date(user.kontrak_mulai);
-    let now = new Date();
+  let mulai = user.kontrak_mulai ? new Date(user.kontrak_mulai) : null;
+  let selesai = user.kontrak_selesai ? new Date(user.kontrak_selesai) : null;
+  let now = new Date();
 
-    let hariKerja = Math.floor((now - mulai)/(1000*60*60*24));
-    document.getElementById("lama").innerText = hariKerja + " Hari";
+  // ================= SISA KONTRAK (KOTAK 1) =================
+  if(selesai){
+    let sisa = Math.ceil((selesai - now)/(1000*60*60*24));
+
+    if(sisa > 0){
+      document.getElementById("lama").innerText = sisa + " Hari";
+    }else if(sisa === 0){
+      document.getElementById("lama").innerText = "Hari Terakhir";
+    }else{
+      document.getElementById("lama").innerText = "Habis";
+    }
+
   }else{
     document.getElementById("lama").innerText = "0 Hari";
   }
 
-  // 🔥 COUNTDOWN KONTRAK (INI YANG LU MAU)
-  if(user.kontrak_selesai){
-
-    let selesai = new Date(user.kontrak_selesai);
-    let now = new Date();
-
-    let sisa = Math.ceil((selesai - now)/(1000*60*60*24));
-
-    if(sisa > 0){
-      document.getElementById("kontrak").innerText = sisa + " Hari Lagi";
-    }
-    else if(sisa === 0){
-      document.getElementById("kontrak").innerText = "Hari Terakhir";
-    }
-    else{
-      document.getElementById("kontrak").innerText = "Kontrak Habis";
-    }
-
+  // ================= TANGGAL KONTRAK (KOTAK 4) =================
+  if(mulai && selesai){
+    document.getElementById("kontrak").innerText =
+      formatTanggal(mulai) + " - " + formatTanggal(selesai);
   }else{
     document.getElementById("kontrak").innerText = "-";
   }
