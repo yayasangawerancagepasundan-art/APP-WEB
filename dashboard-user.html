@@ -201,7 +201,7 @@ body{
   </div>
 
   <div class="card">
-  <small>Perusahaan2</small>
+  <small>Perusahaan3</small>
   <div>🏢 <b id="perusahaan">-</b></div>
   </div>
 
@@ -330,11 +330,13 @@ function updateDashboard(){
 updateDashboard();
 /* ================= ABSEN ================= */
 function handleAbsen(){
-console.log("URL:", URL);
+
   const loading = document.getElementById("loadingGPS");
   loading.style.display = "flex";
 
   navigator.geolocation.getCurrentPosition(pos=>{
+
+    alert("GPS OK\nLat: "+pos.coords.latitude+"\nLng: "+pos.coords.longitude);
 
     fetch(URL,{
       method:"POST",
@@ -348,23 +350,25 @@ console.log("URL:", URL);
         lng:pos.coords.longitude
       })
     })
-    .then(res=>res.text()) // sementara text dulu
+    .then(res=>{
+      alert("STATUS: " + res.status);
+      return res.text();
+    })
     .then(res=>{
       loading.style.display = "none";
-      alert("RESPON SERVER:\n" + res);
+      alert("RESPON:\n" + res);
     })
     .catch(err=>{
       loading.style.display = "none";
-      alert("ERROR:\n" + err);
+      alert("ERROR ASLI:\n" + err.message + "\n\nFULL:\n" + err);
     });
 
   }, err=>{
     loading.style.display = "none";
-    alert("GPS gagal: " + err.message);
+    alert("GPS ERROR:\n" + err.message);
   });
 
 }
-  
 let lemburAktif = false;
 let trackingInterval = null;
 
