@@ -493,7 +493,7 @@ function login(){
 
       localStorage.setItem("userLogin", JSON.stringify(res));
 
-      let role = res.role;
+      let role = res.user.role;
 
       if(role === "SUPER_ADMIN"){
         window.location.href = "superadmin.html";
