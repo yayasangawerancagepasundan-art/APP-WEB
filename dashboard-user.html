@@ -201,7 +201,7 @@ body{
   </div>
 
   <div class="card">
-  <small>Perusahaan3</small>
+  <small>Perusahaan1</small>
   <div>🏢 <b id="perusahaan">-</b></div>
   </div>
 
@@ -336,39 +336,36 @@ function handleAbsen(){
 
   navigator.geolocation.getCurrentPosition(pos=>{
 
-    alert("GPS OK\nLat: "+pos.coords.latitude+"\nLng: "+pos.coords.longitude);
+    let form = document.createElement("form");
+    form.method = "POST";
+    form.action = URL;
+    form.target = "_blank"; // biar keliatan respon
 
-    fetch(URL,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        action:"absen",
-        username:user.username,
-        lat:pos.coords.latitude,
-        lng:pos.coords.longitude
-      })
-    })
-    .then(res=>{
-      alert("STATUS: " + res.status);
-      return res.text();
-    })
-    .then(res=>{
-      loading.style.display = "none";
-      alert("RESPON:\n" + res);
-    })
-    .catch(err=>{
-      loading.style.display = "none";
-      alert("ERROR ASLI:\n" + err.message + "\n\nFULL:\n" + err);
-    });
+    function add(name, value){
+      let input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+    }
+
+    add("action","absen");
+    add("username", user.username);
+    add("lat", pos.coords.latitude);
+    add("lng", pos.coords.longitude);
+
+    document.body.appendChild(form);
+    form.submit();
+
+    loading.style.display = "none";
 
   }, err=>{
     loading.style.display = "none";
-    alert("GPS ERROR:\n" + err.message);
+    alert("GPS gagal: " + err.message);
   });
 
 }
+  
 let lemburAktif = false;
 let trackingInterval = null;
 
