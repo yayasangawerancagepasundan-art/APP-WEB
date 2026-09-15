@@ -336,17 +336,19 @@ function handleAbsen(){
 
   navigator.geolocation.getCurrentPosition(pos=>{
 
-    const data = new URLSearchParams();
-    data.append("action","absen");
-    data.append("username", user.username);
-    data.append("lat", pos.coords.latitude);
-    data.append("lng", pos.coords.longitude);
-
     fetch(URL,{
       method:"POST",
-      body:data
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        action:"absen",
+        username:user.username,
+        lat:pos.coords.latitude,
+        lng:pos.coords.longitude
+      })
     })
-    .then(res=>res.text()) // ⬅️ JANGAN json dulu
+    .then(res=>res.text()) // sementara text dulu
     .then(res=>{
       loading.style.display = "none";
       alert("RESPON SERVER:\n" + res);
@@ -354,7 +356,6 @@ function handleAbsen(){
     .catch(err=>{
       loading.style.display = "none";
       alert("ERROR:\n" + err);
-      console.error(err);
     });
 
   }, err=>{
