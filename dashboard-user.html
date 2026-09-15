@@ -218,8 +218,8 @@ function goPage(id,el){
 }
 
 /* ================= UPDATE DASHBOARD ================= */
-window.onload = function(){
-function updateDashboard();
+/* ================= UPDATE DASHBOARD ================= */
+function updateDashboard(){
 
   document.getElementById("namaUser").innerText = user.nama || "-";
   document.getElementById("posisi").innerText = user.posisi || "-";
@@ -227,7 +227,6 @@ function updateDashboard();
 
   let now = new Date();
 
-  // ================= AMANIN DATE =================
   let mulai = user.kontrak_mulai ? new Date(user.kontrak_mulai) : null;
   let selesai = user.kontrak_selesai ? new Date(user.kontrak_selesai) : null;
 
@@ -251,14 +250,14 @@ function updateDashboard();
     document.getElementById("lama").innerText = "0 Hari";
   }
 
-  // ================= FORMAT TANGGAL =================
+  // ================= FORMAT =================
   function format(t){
     let d = new Date(t);
     if(isNaN(d)) return "-";
     return d.toLocaleDateString("id-ID");
   }
 
-  // ================= TAMPIL KONTRAK =================
+  // ================= TANGGAL =================
   if(validMulai && validSelesai){
     document.getElementById("kontrak").innerText =
       format(user.kontrak_mulai) + " - " + format(user.kontrak_selesai);
@@ -267,6 +266,9 @@ function updateDashboard();
   }
 
 }
+
+/* ================= PANGGIL ================= */
+updateDashboard();
 /* ================= ABSEN ================= */
 function handleAbsen(){
 
