@@ -218,7 +218,8 @@ function goPage(id,el){
 }
 
 /* ================= UPDATE DASHBOARD ================= */
-function updateDashboard(){
+window.onload = function(){
+function updateDashboard();
 
   document.getElementById("namaUser").innerText = user.nama || "-";
   document.getElementById("posisi").innerText = user.posisi || "-";
