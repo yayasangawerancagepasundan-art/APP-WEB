@@ -229,12 +229,40 @@ function updateDashboard(){
   document.getElementById("posisi").innerText = user.posisi || "-";
   document.getElementById("perusahaan").innerText = user.perusahaan || "-";
 
-  document.getElementById("lama").innerText = "0 Hari";
-  document.getElementById("kontrak").innerText = "-";
+  // 🔥 LAMA KERJA (dari mulai)
+  if(user.kontrak_mulai){
+    let mulai = new Date(user.kontrak_mulai);
+    let now = new Date();
+
+    let hariKerja = Math.floor((now - mulai)/(1000*60*60*24));
+    document.getElementById("lama").innerText = hariKerja + " Hari";
+  }else{
+    document.getElementById("lama").innerText = "0 Hari";
+  }
+
+  // 🔥 COUNTDOWN KONTRAK (INI YANG LU MAU)
+  if(user.kontrak_selesai){
+
+    let selesai = new Date(user.kontrak_selesai);
+    let now = new Date();
+
+    let sisa = Math.ceil((selesai - now)/(1000*60*60*24));
+
+    if(sisa > 0){
+      document.getElementById("kontrak").innerText = sisa + " Hari Lagi";
+    }
+    else if(sisa === 0){
+      document.getElementById("kontrak").innerText = "Hari Terakhir";
+    }
+    else{
+      document.getElementById("kontrak").innerText = "Kontrak Habis";
+    }
+
+  }else{
+    document.getElementById("kontrak").innerText = "-";
+  }
+
 }
-
-updateDashboard();
-
 /* ================= ABSEN ================= */
 function handleAbsen(){
 
