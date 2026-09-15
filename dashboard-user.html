@@ -217,7 +217,7 @@ body{
   </div>
 
   <div class="card">
-  <small>Perusahaan1</small>
+  <small>Perusahaan2</small>
   <div>🏢 <b id="perusahaan">-</b></div>
   </div>
 
@@ -245,21 +245,22 @@ body{
 <!-- ================= ANIMASI LOADING GPS ================= -->  
   <div class="loading" id="loadingGPS">
   <div class="loading-box">
+
     <img src="logo.png" class="loading-logo">
-    
+
     <div class="loading-text">
-      <span>Harap tunggu...</span>
+      <span id="textUtama">Harap tunggu...</span>
     </div>
 
-    <div id="gpsInfo" style="margin-top:10px; font-size:14px; color:#555;">
-      <div id="statusGPS">Mencari lokasi...</div>
-      <div id="akurasi"></div>
-      <div id="jarak"></div>
+    <!-- TAMBAHAN (INI AJA YANG BARU) -->
+    <div style="margin-top:10px;font-size:14px;color:#555;">
+      <div id="textStatus">Mencari lokasi...</div>
+      <div id="textJarak"></div>
     </div>
 
   </div>
 </div>
-
+  
 <script>
 
 /* ================= CONFIG ================= */
@@ -348,36 +349,58 @@ updateDashboard();
 function handleAbsen(){
 
   const loading = document.getElementById("loadingGPS");
+  const textUtama = document.getElementById("textUtama");
+  const textStatus = document.getElementById("textStatus");
+  const textJarak = document.getElementById("textJarak");
+
   loading.style.display = "flex";
 
-  navigator.geolocation.getCurrentPosition(pos=>{
+  navigator.geolocation.watchPosition(pos=>{
 
-    let form = document.createElement("form");
-    form.method = "POST";
-    form.action = URL;
-    form.target = "_blank"; // biar keliatan respon
+    let lat = pos.coords.latitude;
+    let lng = pos.coords.longitude;
 
-    function add(name, value){
-      let input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = value;
-      form.appendChild(input);
+    let jarak = distance(lat, lng, user.lat, user.lng);
+
+    textUtama.innerText = "Harap tunggu...";
+    textStatus.innerText = "Mencari lokasi...";
+    textJarak.innerText = "Jarak: " + Math.round(jarak) + " meter";
+
+    if(jarak <= user.radius){
+
+      textUtama.innerText = "ANDA DALAM AREA";
+      textStatus.innerText = "Mengirim absen...";
+
+      navigator.geolocation.clearWatch(this);
+
+      fetch(URL,{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+          action:"absen",
+          username:user.username,
+          lat:lat,
+          lng:lng
+        })
+      })
+      .then(res=>res.text())
+      .then(res=>{
+        alert(res);
+      })
+      .finally(()=>{
+        loading.style.display = "none";
+      });
+
     }
-
-    add("action","absen");
-    add("username", user.username);
-    add("lat", pos.coords.latitude);
-    add("lng", pos.coords.longitude);
-
-    document.body.appendChild(form);
-    form.submit();
-
-    loading.style.display = "none";
 
   }, err=>{
     loading.style.display = "none";
     alert("GPS gagal: " + err.message);
+  },{
+    enableHighAccuracy:true,
+    maximumAge:0
   });
 
 }
