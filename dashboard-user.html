@@ -224,12 +224,18 @@ function updateDashboard(){
   document.getElementById("posisi").innerText = user.posisi || "-";
   document.getElementById("perusahaan").innerText = user.perusahaan || "-";
 
-  let mulai = user.kontrak_mulai ? new Date(user.kontrak_mulai) : null;
-  let selesai = user.kontrak_selesai ? new Date(user.kontrak_selesai) : null;
   let now = new Date();
 
-  // ================= SISA KONTRAK (KOTAK 1) =================
-  if(selesai){
+  // ================= AMANIN DATE =================
+  let mulai = user.kontrak_mulai ? new Date(user.kontrak_mulai) : null;
+  let selesai = user.kontrak_selesai ? new Date(user.kontrak_selesai) : null;
+
+  let validMulai = mulai && !isNaN(mulai);
+  let validSelesai = selesai && !isNaN(selesai);
+
+  // ================= SISA KONTRAK =================
+  if(validSelesai){
+
     let sisa = Math.ceil((selesai - now)/(1000*60*60*24));
 
     if(sisa > 0){
@@ -244,10 +250,17 @@ function updateDashboard(){
     document.getElementById("lama").innerText = "0 Hari";
   }
 
-  // ================= TANGGAL KONTRAK (KOTAK 4) =================
-  if(mulai && selesai){
+  // ================= FORMAT TANGGAL =================
+  function format(t){
+    let d = new Date(t);
+    if(isNaN(d)) return "-";
+    return d.toLocaleDateString("id-ID");
+  }
+
+  // ================= TAMPIL KONTRAK =================
+  if(validMulai && validSelesai){
     document.getElementById("kontrak").innerText =
-      formatTanggal(mulai) + " - " + formatTanggal(selesai);
+      format(user.kontrak_mulai) + " - " + format(user.kontrak_selesai);
   }else{
     document.getElementById("kontrak").innerText = "-";
   }
