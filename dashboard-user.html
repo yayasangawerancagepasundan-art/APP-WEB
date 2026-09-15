@@ -337,7 +337,7 @@ body{
   </div>
 
   <div class="card">
-  <small>Perusahaan2</small>
+  <small>Perusahaan3</small>
   <div>🏢 <b id="perusahaan">-</b></div>
   </div>
 
@@ -692,27 +692,36 @@ function startGPS(){
       text.innerText = "Mencari lokasi...";
 
       // jauh → jalan
-      if(jarak > radius * 2){
-        macan.classList.remove("lari");
-        macan.classList.add("jalan");
-      }
-      // dekat → lari
-      else{
-        macan.classList.remove("jalan");
-        macan.classList.add("lari");
-      }
+ if(jarak > radius){
 
-    }else{
+  text.innerText = "Mencari lokasi...";
 
-      text.innerText = "Anda dalam area";
+  // RESET DULU
+  macan.classList.remove("jalan","lari","kabur");
 
-      macan.classList.remove("jalan","lari");
-      macan.classList.add("kabur");
+  // jauh → jalan
+  if(jarak > radius * 2){
+    macan.classList.add("jalan");
+  }
+  // dekat → lari
+  else{
+    macan.classList.add("lari");
+  }
 
-      navigator.geolocation.clearWatch(watchID);
+   macan.style.animation = "none";
+   macan.offsetHeight; // trigger reflow
+   macan.style.animation = "";
 
-    }
+}else{
 
+  text.innerText = "Anda dalam area";
+
+  macan.classList.remove("jalan","lari");
+  macan.classList.add("kabur");
+
+  navigator.geolocation.clearWatch(watchID);
+
+}
   });
 }
   
