@@ -332,10 +332,14 @@ updateDashboard();
 /* ================= ABSEN ================= */
 function handleAbsen(){
 
-  // 🔥 TAMPILKAN LOADING
-  document.getElementById("loadingGPS").style.display = "flex";
+  const loading = document.getElementById("loadingGPS");
+
+  loading.style.display = "flex";
+  document.getElementById("statusGPS").innerText = "Mengambil lokasi...";
 
   navigator.geolocation.getCurrentPosition(pos=>{
+
+    document.getElementById("statusGPS").innerText = "Lokasi didapat, mengirim...";
 
     fetch(URL,{
       method:"POST",
@@ -350,8 +354,9 @@ function handleAbsen(){
     .then(res=>res.json())
     .then(res=>{
 
-      // 🔥 HILANGKAN LOADING
-      document.getElementById("loadingGPS").style.display = "none";
+      loading.style.display = "none";
+
+      console.log("RESP:", res);
 
       if(res.status=="masuk"){
         alert("Absen MASUK berhasil");
@@ -360,21 +365,28 @@ function handleAbsen(){
         alert("Absen KELUAR berhasil");
       }
       else{
-        alert(res.msg);
+        alert(res.msg || "Respon tidak dikenal");
       }
+
+    })
+    .catch(err=>{
+
+      loading.style.display = "none";
+
+      alert("Server tidak merespon");
+      console.error(err);
 
     });
 
-  },(err)=>{
+  }, err=>{
 
-    // 🔥 ERROR GPS → TETAP MATIKAN LOADING
-    document.getElementById("loadingGPS").style.display = "none";
+    loading.style.display = "none";
 
     alert("GPS gagal: " + err.message);
 
   },{
     enableHighAccuracy:true,
-    timeout:10000,
+    timeout:15000,
     maximumAge:0
   });
 
