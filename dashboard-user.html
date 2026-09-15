@@ -201,7 +201,7 @@ body{
   </div>
 
   <div class="card">
-  <small>Perusahaan</small>
+  <small>Perusahaan1</small>
   <div>🏢 <b id="perusahaan">-</b></div>
   </div>
 
@@ -332,42 +332,34 @@ updateDashboard();
 function handleAbsen(){
 
   const loading = document.getElementById("loadingGPS");
-
   loading.style.display = "flex";
-  document.getElementById("statusGPS").innerText = "Mengambil lokasi...";
 
   navigator.geolocation.getCurrentPosition(pos=>{
 
-    document.getElementById("statusGPS").innerText = "Mengirim data...";
+    const data = new URLSearchParams();
+    data.append("action","absen");
+    data.append("username", user.username);
+    data.append("lat", pos.coords.latitude);
+    data.append("lng", pos.coords.longitude);
 
     fetch(URL,{
       method:"POST",
-      mode:"no-cors",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        action:"absen",
-        username:user.username,
-        lat:pos.coords.latitude,
-        lng:pos.coords.longitude
-      })
+      body:data
     })
-    .then(()=>{
+    .then(res=>res.text()) // ⬅️ JANGAN json dulu
+    .then(res=>{
       loading.style.display = "none";
-      alert("Absen terkirim (cek server)");
+      alert("RESPON SERVER:\n" + res);
     })
     .catch(err=>{
       loading.style.display = "none";
-      alert("Gagal kirim");
+      alert("ERROR:\n" + err);
       console.error(err);
     });
 
   }, err=>{
     loading.style.display = "none";
     alert("GPS gagal: " + err.message);
-  },{
-    enableHighAccuracy:true,
-    timeout:15000,
-    maximumAge:0
   });
 
 }
