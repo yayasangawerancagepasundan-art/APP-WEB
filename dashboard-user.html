@@ -3,9 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- 🔥 ANTI CACHE -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+
 <title>Dashboard User</title>
 
 <!-- FONT -->
@@ -68,10 +71,17 @@ body{
   top:15px;
   left:15px;
 }
+
 .logo img{
   width:170px;
   max-width:70%;
 }
+
+/* 🔥 FIX: tadi error di sini karena kurung kebanyakan */
+
+.header{
+  margin-top:60px;
+  text-align:center;
 }
 
 .header h3{
@@ -136,6 +146,7 @@ body{
   color:#ff0000;
 }
 
+/* ================= LOADING ================= */
 .loading{
   position:fixed;
   top:0;
@@ -162,9 +173,14 @@ body{
   margin-bottom:15px;
 }
 
+.loading-text{
+  font-size:16px;
+  font-weight:600;
+  color:#ff0000;
+}
+
 </style>
 </head>
-
 <body>
 
 <!-- ================= WAVE ================= -->
