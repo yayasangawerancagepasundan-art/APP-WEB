@@ -339,10 +339,11 @@ function handleAbsen(){
 
   navigator.geolocation.getCurrentPosition(pos=>{
 
-    document.getElementById("statusGPS").innerText = "Lokasi didapat, mengirim...";
+    document.getElementById("statusGPS").innerText = "Mengirim data...";
 
     fetch(URL,{
       method:"POST",
+      mode:"no-cors",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         action:"absen",
@@ -351,39 +352,19 @@ function handleAbsen(){
         lng:pos.coords.longitude
       })
     })
-    .then(res=>res.json())
-    .then(res=>{
-
+    .then(()=>{
       loading.style.display = "none";
-
-      console.log("RESP:", res);
-
-      if(res.status=="masuk"){
-        alert("Absen MASUK berhasil");
-      }
-      else if(res.status=="keluar"){
-        alert("Absen KELUAR berhasil");
-      }
-      else{
-        alert(res.msg || "Respon tidak dikenal");
-      }
-
+      alert("Absen terkirim (cek server)");
     })
     .catch(err=>{
-
       loading.style.display = "none";
-
-      alert("Server tidak merespon");
+      alert("Gagal kirim");
       console.error(err);
-
     });
 
   }, err=>{
-
     loading.style.display = "none";
-
     alert("GPS gagal: " + err.message);
-
   },{
     enableHighAccuracy:true,
     timeout:15000,
