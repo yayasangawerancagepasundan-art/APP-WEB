@@ -189,12 +189,23 @@ body{
 const URL = "https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec";
 
 /* ================= CEK LOGIN ================= */
-let user = JSON.parse(localStorage.getItem("userLogin"));
+let raw = localStorage.getItem("userLogin");
 
-if(!user){
+if(!raw){
   alert("Silahkan login dulu!");
   window.location.href = "index.html";
 }
+
+let parsed;
+try{
+  parsed = JSON.parse(raw);
+}catch(e){
+  alert("Session rusak, login ulang");
+  localStorage.removeItem("userLogin");
+  location.href="index.html";
+}
+
+let user = parsed.user || parsed;
 
 /* ================= NAVIGASI ================= */
 function goPage(id,el){
@@ -213,12 +224,10 @@ function hari(tanggal){
 /* ================= UPDATE DASHBOARD ================= */
 function updateDashboard(){
 
-  // ambil dari login Apps Script
   document.getElementById("namaUser").innerText = user.nama || "-";
   document.getElementById("posisi").innerText = user.posisi || "-";
   document.getElementById("perusahaan").innerText = user.perusahaan || "-";
 
-  // kalau belum ada tanggal
   document.getElementById("lama").innerText = "0 Hari";
   document.getElementById("kontrak").innerText = "-";
 }
@@ -232,6 +241,7 @@ function handleAbsen(){
 
     fetch(URL,{
       method:"POST",
+      headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         action:"absen",
         username:user.username,
@@ -254,9 +264,7 @@ function handleAbsen(){
 
     });
 
-  },()=>{
-    alert("GPS gagal");
-  },{enableHighAccuracy:true});
+  },()=>{ alert("GPS gagal"); },{enableHighAccuracy:true});
 
 }
 
@@ -269,6 +277,7 @@ function handleLembur(){
 
     fetch(URL,{
       method:"POST",
+      headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         action:"lembur",
         username:user.username,
@@ -281,16 +290,16 @@ function handleLembur(){
 
       alert(res.msg);
 
-      // 🔥 START TRACKING
       if(res.status == "start_lembur"){
         lemburAktif = true;
 
+        if(trackingInterval) clearInterval(trackingInterval);
+
         trackingInterval = setInterval(()=>{
           kirimTracking();
-        },600000); // 10 menit
+        },600000);
       }
 
-      // 🔥 STOP TRACKING
       if(res.status == "stop_lembur"){
         lemburAktif = false;
 
@@ -302,6 +311,7 @@ function handleLembur(){
   });
 
 }
+
 function handleKeterangan(){
 
   let ket = prompt(`Pilih Keterangan:
@@ -323,12 +333,10 @@ function handleKeterangan(){
 
     fetch(URL,{
       method:"POST",
+      headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         action:"keterangan",
-
-        // 🔥 INI DIA TEMPATNYA
         username:user.username,
-
         jenis:map[ket],
         lat:pos.coords.latitude,
         lng:pos.coords.longitude
@@ -349,7 +357,6 @@ function kirimTracking(){
 
   navigator.geolocation.getCurrentPosition(pos=>{
 
-    // 🔥 filter akurasi jelek
     if(pos.coords.accuracy > 100){
       console.log("Akurasi jelek, skip");
       return;
@@ -357,6 +364,7 @@ function kirimTracking(){
 
     fetch(URL,{
       method:"POST",
+      headers:{"Content-Type":"application/json"},
       body:JSON.stringify({
         action:"tracking",
         username:user.username,
