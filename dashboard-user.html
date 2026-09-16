@@ -373,10 +373,12 @@ body{
     </div>
   </div>
 </div>
+  
 <script>
 
 /* ================= CONFIG ================= */
-const URL = "https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec"
+const URL = "https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec";
+
 /* ================= CEK LOGIN ================= */
 let raw = localStorage.getItem("userLogin");
 
@@ -395,7 +397,7 @@ try{
 }
 
 let user = parsed.user || parsed;
-console.log(user);
+console.log("USER:", user);
 
 /* ================= NAVIGASI ================= */
 function goPage(id,el){
@@ -421,9 +423,7 @@ function updateDashboard(){
   let validMulai = mulai && !isNaN(mulai);
   let validSelesai = selesai && !isNaN(selesai);
 
-  // ================= SISA KONTRAK =================
   if(validSelesai){
-
     let sisa = Math.ceil((selesai - now)/(1000*60*60*24));
 
     if(sisa > 0){
@@ -433,19 +433,16 @@ function updateDashboard(){
     }else{
       document.getElementById("lama").innerText = "Habis";
     }
-
   }else{
     document.getElementById("lama").innerText = "0 Hari";
   }
 
-  // ================= FORMAT =================
   function format(t){
     let d = new Date(t);
     if(isNaN(d)) return "-";
     return d.toLocaleDateString("id-ID");
   }
 
-  // ================= TANGGAL =================
   if(validMulai && validSelesai){
     document.getElementById("kontrak").innerText =
       format(user.kontrak_mulai) + " - " + format(user.kontrak_selesai);
@@ -455,35 +452,53 @@ function updateDashboard(){
 
 }
 
-/* ================= PANGGIL ================= */
-updateDashboard();
-/* ================= ABSEN ================= */
+/* ================= HITUNG JARAK ================= */
+function distance(lat1, lon1, lat2, lon2){
+  const R = 6371e3;
+  const φ1 = lat1 * Math.PI/180;
+  const φ2 = lat2 * Math.PI/180;
+  const Δφ = (lat2-lat1) * Math.PI/180;
+  const Δλ = (lon2-lon1) * Math.PI/180;
+
+  const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+  return R * c;
+}
+
+/* ================= GPS + ABSEN ================= */
+let watchID;
+
 function handleAbsen(){
 
   const loading = document.getElementById("loadingGPS");
-  const textUtama = document.getElementById("textUtama");
   const textStatus = document.getElementById("textStatus");
-  const textJarak = document.getElementById("textJarak");
+  const textJarak = document.getElementById("jarakText");
 
   loading.style.display = "flex";
 
-  navigator.geolocation.watchPosition(pos=>{
+  watchID = navigator.geolocation.watchPosition(pos=>{
 
     let lat = pos.coords.latitude;
     let lng = pos.coords.longitude;
 
-    let jarak = distance(lat, lng, user.lat, user.lng);
+    let latDB = user.lat;
+    let lngDB = user.lng;
+    let radius = user.radius || 50;
 
-    textUtama.innerText = "Harap tunggu...";
+    let jarak = distance(lat, lng, latDB, lngDB);
+
     textStatus.innerText = "Mencari lokasi...";
     textJarak.innerText = "Jarak: " + Math.round(jarak) + " meter";
 
-    if(jarak <= user.radius){
+    if(jarak <= radius){
 
-      textUtama.innerText = "ANDA DALAM AREA";
       textStatus.innerText = "Mengirim absen...";
 
-      navigator.geolocation.clearWatch(this);
+      navigator.geolocation.clearWatch(watchID);
 
       fetch(URL,{
         method:"POST",
@@ -501,6 +516,9 @@ function handleAbsen(){
       .then(res=>{
         alert(res);
       })
+      .catch(err=>{
+        alert("Gagal kirim: " + err);
+      })
       .finally(()=>{
         loading.style.display = "none";
       });
@@ -516,7 +534,8 @@ function handleAbsen(){
   });
 
 }
-  
+
+/* ================= LEMBUR ================= */
 let lemburAktif = false;
 let trackingInterval = null;
 
@@ -551,7 +570,6 @@ function handleLembur(){
 
       if(res.status == "stop_lembur"){
         lemburAktif = false;
-
         clearInterval(trackingInterval);
       }
 
@@ -560,7 +578,8 @@ function handleLembur(){
   });
 
 }
-// Keterangan
+
+/* ================= KETERANGAN ================= */
 function handleKeterangan(){
 
   let ket = prompt(`Pilih Keterangan:
@@ -600,8 +619,7 @@ function handleKeterangan(){
 
 }
 
-//tracking
-
+/* ================= TRACKING ================= */
 function kirimTracking(){
 
   navigator.geolocation.getCurrentPosition(pos=>{
@@ -628,55 +646,10 @@ function kirimTracking(){
   });
 
 }
-  
-let watchID;
 
-function startGPS(){
+/* ================= INIT ================= */
+updateDashboard();
 
-  const bar = document.getElementById("bar");
-  const text = document.getElementById("textStatus");
-  const jarakText = document.getElementById("jarakText");
-
-  watchID = navigator.geolocation.watchPosition(pos=>{
-
-    let lat = pos.coords.latitude;
-    let lng = pos.coords.longitude;
-
-    let latDB = user.lat;
-    let lngDB = user.lng;
-    let radius = user.radius || 50;
-
-    let jarak = distance(lat, lng, latDB, lngDB);
-
-    // tampilkan jarak
-    jarakText.innerText = "Jarak: " + Math.round(jarak) + " meter";
-
-    // progress bar
-    let persen = 100 - (jarak / radius * 100);
-    persen = Math.max(0, Math.min(100, persen));
-    bar.style.width = persen + "%";
-
-    // kondisi
-    if(jarak > radius){
-
-      text.innerText = "Mencari lokasi...";
-
-    }else{
-
-      text.innerText = "Anda dalam area";
-
-      navigator.geolocation.clearWatch(watchID);
-
-      // DISINI nanti bisa aktifkan tombol ABSEN
-      // contoh:
-      document.getElementById("btnAbsen").disabled = false;
-
-    }
-
-  }, err=>{
-    text.innerText = "Gagal ambil lokasi";
-  });
-}
 </script>
 
 </body>
