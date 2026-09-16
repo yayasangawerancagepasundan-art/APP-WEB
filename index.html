@@ -399,11 +399,16 @@ function showLogin(){loginBox.style.display="block";registerBox.style.display="n
 
 /* STEP */
 let step=0;
-let steps=document.querySelectorAll(".step");
+let steps=[];
+
+window.onload = function(){
+  steps=document.querySelectorAll(".step");
+  showStep();
+};
 
 function showStep(){
   steps.forEach(s=>s.classList.remove("active"));
-  steps[step].classList.add("active");
+  if(steps[step]) steps[step].classList.add("active");
 }
 
 /* VALIDASI */
@@ -412,8 +417,6 @@ function validateStep(){
   let valid = true;
 
   inputs.forEach(i=>{
-
-    // 🔥 LEWATI FILE INPUT (foto & cv)
     if(i.type === "file") return;
 
     if(i.id !== "referral" && i.value.trim() === ""){
@@ -422,7 +425,6 @@ function validateStep(){
     }else{
       i.classList.remove("error");
     }
-
   });
 
   return valid;
@@ -430,33 +432,73 @@ function validateStep(){
 
 function next(){if(!validateStep())return;step++;showStep();}
 function prev(){step--;showStep();}
-  
-/* TAMBAHAN FUNCTION BASE64 (WAJIB ADA 1X) */
+
+/* BASE64 (HANYA 1x) */
 function toBase64(file){
   return new Promise((resolve,reject)=>{
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.onload = () => resolve(reader.result.split(',')[1]);
     reader.onerror = error => reject(error);
   });
 }
 
+/* UPLOAD */
+async function uploadFotoKeDrive(file){
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
+  let base64 = await toBase64(file);
+
+  console.log("SEBELUM FETCH UPLOAD");
+
+  let res = await fetch(URL,{
+    method:"POST",
+    body: new URLSearchParams({
+      action:"upload",
+      file: base64,
+      name: file.name,
+      type: file.type,
+      username: document.getElementById("username").value,
+      nik: document.getElementById("nik").value
+    }),
+    signal: controller.signal
+  });
+
+  console.log("SETELAH FETCH UPLOAD");
+
+  clearTimeout(timeout);
+
+  if(!res.ok){
+    throw new Error("HTTP error: " + res.status);
+  }
+
+  let data = await res.json();
+
+  if(!data || !data.url){
+    throw new Error("Upload gagal dari server");
+  }
+
+  return data.url;
+}
+
 /* REGISTER */
-async function submitForm(){  
+async function submitForm(){
 
-  if(!validateStep()) return;  
+  if(!validateStep()) return;
 
-  showLoading();  
+  showLoading();
 
-  try{  
+  try{
 
-    let fotoFile = document.getElementById("foto").files[0];  
-    let cvFile   = document.getElementById("cv").files[0];  
+    let fotoFile = document.getElementById("foto").files[0];
+    let cvFile   = document.getElementById("cv").files[0];
 
-    if(!fotoFile){ 
-      alert("Foto wajib diisi!"); 
-      hideLoading(); 
-      return; 
+    if(!fotoFile){
+      alert("Foto wajib diisi!");
+      hideLoading();
+      return;
     }
 
     if(!cvFile){
@@ -470,65 +512,70 @@ async function submitForm(){
       uploadFotoKeDrive(cvFile)
     ]);
 
-    // 🔥 FIX DI SINI (TANPA HEADER & TANPA JSON)
-    let res = await fetch(URL,{  
-      method:"POST",  
-      body: new URLSearchParams({  
+    console.log("SEBELUM FETCH REGISTER");
 
-        action:"register",  
+    let res = await fetch(URL,{
+      method:"POST",
+      body: new URLSearchParams({
 
-        username:document.getElementById("username").value,  
-        password:document.getElementById("password").value,  
-        nik:document.getElementById("nik").value,  
-        nama:document.getElementById("nama").value,  
-        tempat:document.getElementById("tempat").value,  
-        tgl_lahir:document.getElementById("tgl").value,  
-        jk:document.getElementById("jk").value,  
-        alamat:document.getElementById("alamat").value,  
-        status_perkawinan:document.getElementById("status_perkawinan").value,  
-        zona:document.getElementById("zona").value,  
-        referral:document.getElementById("referral").value,  
+        action:"register",
+
+        username:document.getElementById("username").value,
+        password:document.getElementById("password").value,
+        nik:document.getElementById("nik").value,
+        nama:document.getElementById("nama").value,
+        tempat:document.getElementById("tempat").value,
+        tgl_lahir:document.getElementById("tgl").value,
+        jk:document.getElementById("jk").value,
+        alamat:document.getElementById("alamat").value,
+        status_perkawinan:document.getElementById("status_perkawinan").value,
+        zona:document.getElementById("zona").value,
+        referral:document.getElementById("referral").value,
 
         foto: fotoUrl,
         cv: cvUrl
 
-      })  
-    });  
+      })
+    });
+
+    console.log("SETELAH FETCH REGISTER");
 
     if(!res.ok){
       throw new Error("HTTP error: " + res.status);
     }
 
-    let data = await res.json();  
+    let data = await res.json();
 
-    hideLoading();  
+    hideLoading();
 
-    if(data.status === "ok"){  
+    if(data.status === "ok"){
 
-      popup.style.display="flex";  
-      confetti();  
+      popup.style.display="flex";
+      confetti();
 
-      setTimeout(()=>{  
-        document.querySelectorAll(".confetti").forEach(e=>e.remove());  
+      setTimeout(()=>{
+        document.querySelectorAll(".confetti").forEach(e=>e.remove());
 
-        let pop = document.getElementById("popup");  
-        pop.style.opacity="0";  
-        pop.style.pointerEvents="none";  
+        let pop = document.getElementById("popup");
+        pop.style.opacity="0";
+        pop.style.pointerEvents="none";
 
-        setTimeout(()=>{  
-          pop.style.display="none";  
-          pop.style.opacity="1";  
-        },300);  
+        setTimeout(()=>{
+          pop.style.display="none";
+          pop.style.opacity="1";
+        },300);
 
-        showLogin();  
+        showLogin();
 
-      },2000);  
+      },2000);
 
-    }else{  
-      alert(data.msg || "Registrasi gagal");  
-    }  
+    }else{
+      alert(data.msg || "Registrasi gagal");
+    }
 
-  }catch(err){  
+  }catch(err){
+
+    console.error(err);
 
     if(err.name === "AbortError"){
       alert("Upload timeout (koneksi lambat)");
@@ -536,32 +583,29 @@ async function submitForm(){
       alert("Koneksi gagal / upload error");
     }
 
-    console.error(err);  
-    hideLoading();  
-  }  
+    hideLoading();
+  }
 }
-  
-/* LOGIN */
-function login(){ 
+
+/* LOGIN (FIX CORS) */
+function login(){
 
   showLoading();
 
-  fetch(URL,{ 
-    method:"POST", 
-    body:JSON.stringify({ 
-      action:"login", 
+  fetch(URL,{
+    method:"POST",
+    body: new URLSearchParams({
+      action:"login",
       username:loginUser.value,
-      password:loginPass.value 
-    }) 
-  }) 
+      password:loginPass.value
+    })
+  })
   .then(res=>res.json())
-  .then(res=>{ 
+  .then(res=>{
 
     hideLoading();
 
-    console.log(res);
-
-    if(res.status=="ok"){ 
+    if(res.status=="ok"){
 
       localStorage.setItem("userLogin", JSON.stringify(res));
 
@@ -580,9 +624,9 @@ function login(){
         window.location.href = "dashboard-user.html";
       }
 
-    }else{ 
-      alert(res.msg || "Username / Password salah"); 
-    } 
+    }else{
+      alert(res.msg || "Username / Password salah");
+    }
 
   })
   .catch(()=>{
@@ -590,7 +634,7 @@ function login(){
     alert("Koneksi gagal");
   });
 }
-  
+
 /* CONFETTI */
 function confetti(){
   for(let i=0;i<40;i++){
@@ -602,42 +646,8 @@ function confetti(){
     setTimeout(()=>c.remove(),3000);
   }
 }
-  // ================= AUTO COMPRESS FOTO =================
-async function compressImage(file){
-  return new Promise((resolve, reject)=>{
-    let img = new Image();
-    let reader = new FileReader();
 
-    reader.onload = e=>{
-      img.src = e.target.result;
-    };
-
-    img.onload = ()=>{
-      let canvas = document.createElement("canvas");
-      let maxWidth = 800;
-
-      let scale = maxWidth / img.width;
-      canvas.width = maxWidth;
-      canvas.height = img.height * scale;
-
-      let ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-      canvas.toBlob(blob=>{
-        let reader2 = new FileReader();
-        reader2.onload = ()=>{
-          resolve(reader2.result.split(',')[1]); // base64
-        };
-        reader2.readAsDataURL(blob);
-      }, "image/jpeg", 0.7);
-    };
-
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
-
-/* SHOWLOADING */
+/* LOADING */
 function showLoading(){
   document.getElementById("loading").style.display="flex";
 }
@@ -645,55 +655,7 @@ function showLoading(){
 function hideLoading(){
   document.getElementById("loading").style.display="none";
 }
-  function toBase64(file){
-  return new Promise((resolve, reject)=>{
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = error => reject(error);
-  });
-}
 
-/* analis fungsi */
-async function uploadFotoKeDrive(file){
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-
-  let base64 = await toBase64(file);
-
-  console.log("SEBELUM FETCH");
-
-  let res = await fetch(URL,{
-    method:"POST",
-    body: new URLSearchParams({
-      action:"upload",
-      file: base64,
-      name: file.name,
-      type: file.type,
-      username: document.getElementById("username").value,
-      nik: document.getElementById("nik").value
-    }),
-    signal: controller.signal
-  });
-
-  console.log("SETELAH FETCH");
-
-  clearTimeout(timeout);
-
-  if(!res.ok){
-    throw new Error("HTTP error: " + res.status);
-  }
-
-  let data = await res.json();
-
-  if(!data || !data.url){
-    throw new Error("Upload gagal dari server");
-  }
-
-  return data.url;
-}
-  
 </script>
 
 </body>
