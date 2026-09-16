@@ -173,6 +173,7 @@ body{
   margin-bottom:15px;
 }
 
+/* ================= TEXT HARAP TUNGGU (JANGAN DIUBAH) ================= */
 .loading-text span{
   display:inline-block;
   font-weight:600;
@@ -201,7 +202,7 @@ body{
   100%{opacity:0; transform:translateX(-10px);}
 }
 
-  /* ================= TEXT ZOOM ================= */
+/* ================= TEXT MENCARI LOKASI ================= */
 .zoom-anim{
   animation: zoomInOut 1.5s infinite ease-in-out;
 }
@@ -226,61 +227,32 @@ body{
   height:100%;
   border:2px solid rgba(255,0,0,0.3);
   border-radius:50%;
-  animation:pulse 2s infinite;
+  animation:radarPulse 2s infinite;
 }
 
 .circle:nth-child(2){animation-delay:0.5s;}
 .circle:nth-child(3){animation-delay:1s;}
 
-@keyframes pulse{
+@keyframes radarPulse{
   0%{ transform:scale(0.5); opacity:1; }
   100%{ transform:scale(1.5); opacity:0; }
 }
 
-/* ================= MACAN ================= */
-#macan{
+/* ================= ICON TENGAH ================= */
+#radarIcon{
   position:absolute;
-  width:140px; /* lebih besar */
+  width:120px;
   left:50%;
   top:50%;
   transform:translate(-50%,-50%);
-  transition:all 0.6s ease;
+  animation:iconPulse 1.5s infinite ease-in-out;
 }
 
-/* ================= JALAN (pelan) ================= */
-.jalan{
-  animation:jalan 0.8s infinite ease-in-out;
+@keyframes iconPulse{
+  0%   { transform:translate(-50%,-50%) scale(1); opacity:1; }
+  50%  { transform:translate(-50%,-50%) scale(1.15); opacity:0.7; }
+  100% { transform:translate(-50%,-50%) scale(1); opacity:1; }
 }
-
-/* ================= LARI (cepat) ================= */
-.lari{
-  animation:lari 0.25s infinite ease-in-out;
-}
-
-/* ================= KABUR ================= */
-.kabur{
-  left:130% !important;
-  transform:translateY(-50%) scale(1.1);
-  animation:none;
-  transition:1s ease-out;
-}
-
-/* ================= ANIMASI ================= */
-
-/* jalan kecil (halus) */
-@keyframes jalan{
-  0%   { transform:translate(-50%,-50%) scale(1); }
-  50%  { transform:translate(-47%,-50%) scale(1.04); }
-  100% { transform:translate(-50%,-50%) scale(1); }
-}
-
-/* lari lebih agresif */
-@keyframes lari{
-  0%   { transform:translate(-50%,-50%) scale(1); }
-  50%  { transform:translate(-38%,-50%) scale(1.1); }
-  100% { transform:translate(-50%,-50%) scale(1); }
-}
-
   
 /* ================= PROGRESS ================= */
 .progress{
@@ -387,8 +359,8 @@ body{
         <div class="circle"></div>
         <div class="circle"></div>
 
-        <!-- MACAN -->
-        <img src="macan.png" id="macan">
+        <!-- logo -->
+        <img src="jelasbulat.png" id="radarIcon">
       </div>
 
       <!-- PROGRESS -->
@@ -588,7 +560,7 @@ function handleLembur(){
   });
 
 }
-
+// Keterangan
 function handleKeterangan(){
 
   let ket = prompt(`Pilih Keterangan:
@@ -657,17 +629,13 @@ function kirimTracking(){
 
 }
   
-//start GPS
-  let watchID;
+let watchID;
 
 function startGPS(){
 
-  const macan = document.getElementById("macan");
   const bar = document.getElementById("bar");
   const text = document.getElementById("textStatus");
   const jarakText = document.getElementById("jarakText");
-
-  macan.classList.add("jalan");
 
   watchID = navigator.geolocation.watchPosition(pos=>{
 
@@ -680,51 +648,35 @@ function startGPS(){
 
     let jarak = distance(lat, lng, latDB, lngDB);
 
+    // tampilkan jarak
     jarakText.innerText = "Jarak: " + Math.round(jarak) + " meter";
 
-    // progress
+    // progress bar
     let persen = 100 - (jarak / radius * 100);
     persen = Math.max(0, Math.min(100, persen));
     bar.style.width = persen + "%";
 
+    // kondisi
     if(jarak > radius){
 
       text.innerText = "Mencari lokasi...";
 
-      // jauh → jalan
- if(jarak > radius){
+    }else{
 
-  text.innerText = "Mencari lokasi...";
+      text.innerText = "Anda dalam area";
 
-  // RESET DULU
-  macan.classList.remove("jalan","lari","kabur");
+      navigator.geolocation.clearWatch(watchID);
 
-  // jauh → jalan
-  if(jarak > radius * 2){
-    macan.classList.add("jalan");
-  }
-  // dekat → lari
-  else{
-    macan.classList.add("lari");
-  }
+      // DISINI nanti bisa aktifkan tombol ABSEN
+      // contoh:
+      document.getElementById("btnAbsen").disabled = false;
 
-   macan.style.animation = "none";
-   macan.offsetHeight; // trigger reflow
-   macan.style.animation = "";
+    }
 
-}else{
-
-  text.innerText = "Anda dalam area";
-
-  macan.classList.remove("jalan","lari");
-  macan.classList.add("kabur");
-
-  navigator.geolocation.clearWatch(watchID);
-
-}
+  }, err=>{
+    text.innerText = "Gagal ambil lokasi";
   });
 }
-  
 </script>
 
 </body>
