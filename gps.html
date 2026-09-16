@@ -1,28 +1,29 @@
-<!DOCTYPE html> 
-<html lang="id"> 
-<head> 
-<meta charset="UTF-8"> 
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-<title>GPS Tracking</title> 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style> 
-body{ 
-  margin:0; 
-  font-family: Arial, sans-serif; 
-  background:#f5f5f5; 
-  text-align:center; 
-} 
+<title>GPS Tracking</title>
 
-/* ================= LOGO ATAS ================= */ 
-.logo-atas{ 
-  width:100%; 
-  max-width:400px; 
-  margin:20px auto 10px; 
-  display:block; 
-} 
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#f5f5f5;
+  text-align:center;
+}
 
-/* ================= HARAP TUNGGU (ASLI DASHBOARD) ================= */
-.loading-text span{
+/* LOGO ATAS */
+.logo-atas{
+  width:100%;
+  max-width:400px;
+  margin:20px auto 10px;
+  display:block;
+}
+
+/* HARAP TUNGGU (TIDAK DIUBAH) */
+.wait-text span{
   display:inline-block;
   font-weight:600;
   color:#ff0000;
@@ -30,18 +31,18 @@ body{
   opacity:0;
   animation:fadeSlide 1.5s infinite;
 }
-.loading-text span:nth-child(1){animation-delay:0s;}
-.loading-text span:nth-child(2){animation-delay:0.1s;}
-.loading-text span:nth-child(3){animation-delay:0.2s;}
-.loading-text span:nth-child(4){animation-delay:0.3s;}
-.loading-text span:nth-child(5){animation-delay:0.4s;}
-.loading-text span:nth-child(6){animation-delay:0.5s;}
-.loading-text span:nth-child(7){animation-delay:0.6s;}
-.loading-text span:nth-child(8){animation-delay:0.7s;}
-.loading-text span:nth-child(9){animation-delay:0.8s;}
-.loading-text span:nth-child(10){animation-delay:0.9s;}
-.loading-text span:nth-child(11){animation-delay:1s;}
-.loading-text span:nth-child(12){animation-delay:1.1s;}
+.wait-text span:nth-child(1){animation-delay:0s;}
+.wait-text span:nth-child(2){animation-delay:0.1s;}
+.wait-text span:nth-child(3){animation-delay:0.2s;}
+.wait-text span:nth-child(4){animation-delay:0.3s;}
+.wait-text span:nth-child(5){animation-delay:0.4s;}
+.wait-text span:nth-child(6){animation-delay:0.5s;}
+.wait-text span:nth-child(7){animation-delay:0.6s;}
+.wait-text span:nth-child(8){animation-delay:0.7s;}
+.wait-text span:nth-child(9){animation-delay:0.8s;}
+.wait-text span:nth-child(10){animation-delay:0.9s;}
+.wait-text span:nth-child(11){animation-delay:1s;}
+.wait-text span:nth-child(12){animation-delay:1.1s;}
 
 @keyframes fadeSlide{
   0%{opacity:0; transform:translateX(20px);}
@@ -49,241 +50,249 @@ body{
   100%{opacity:0; transform:translateX(-10px);}
 }
 
-/* ================= RADAR ================= */ 
-.radar{ 
-  position:relative; 
-  width:200px; 
-  height:200px; 
-  margin:20px auto; 
-} 
-
-.radar::before, 
-.radar::after{ 
-  content:""; 
-  position:absolute; 
-  border:2px solid rgba(255,0,0,0.2); 
-  border-radius:50%; 
-  width:100%; 
-  height:100%; 
-  animation: pulse 2s infinite; 
-} 
-
-.radar::after{ 
-  animation-delay:1s; 
-} 
-
-@keyframes pulse{ 
-  0%{ transform:scale(0.5); opacity:1; } 
-  100%{ transform:scale(1.5); opacity:0; } 
-} 
-
-/* ================= LOGO TENGAH FIX ================= */
-.logo-bulat{ 
-  width:120px; 
-  position:absolute; 
-  top:50%; 
-  left:50%; 
-  transform:translate(-50%, -50%); 
-} 
-
-/* ================= STATUS ================= */ 
-.status{ 
-  font-size:20px; 
-  font-weight:bold; 
-  margin-top:10px; 
-} 
-
-/* ================= JARAK FIX (TIPIS) ================= */ 
-.jarak{ 
-  font-size:18px; 
-  font-weight:bold; 
-  margin-top:5px; 
-  text-shadow:0.5px 0.5px 1px #000; 
-} 
-
-/* ================= BAR ================= */ 
-.bar-container{ 
-  width:80%; 
-  height:10px; 
-  background:#ddd; 
-  border-radius:10px; 
-  margin:20px auto; 
-  overflow:hidden; 
-} 
-
-.bar{ 
-  height:100%; 
-  width:0%; 
-  background:red; 
-  transition:0.5s; 
-} 
-
-/* ================= LOADING 5 DETIK (SETENGAH LINGKARAN) ================= */
-.loading-mode{ display:none; }
-
-.circle{
-  width:220px;
-  height:110px;
-  border:10px solid #ddd;
-  border-bottom:none;
-  border-radius:220px 220px 0 0;
-  margin:80px auto 10px;
+/* RADAR FIX */
+.radar{
   position:relative;
-  overflow:hidden;
+  width:200px;
+  height:200px;
+  margin:20px auto;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.circle-fill{
+.radar::before,
+.radar::after{
+  content:"";
   position:absolute;
-  bottom:0;
-  left:0;
+  border:2px solid rgba(255,0,0,0.2);
+  border-radius:50%;
+  width:100%;
+  height:100%;
+  animation:pulse 2s infinite;
+}
+
+.radar::after{animation-delay:1s;}
+
+@keyframes pulse{
+  0%{transform:scale(0.7); opacity:1;}
+  100%{transform:scale(1.4); opacity:0;}
+}
+
+/* LOGO TENGAH FIX */
+.logo-bulat{
+  width:120px;
+  position:absolute;
+}
+
+/* STATUS */
+.status{
+  font-size:20px;
+  font-weight:bold;
+  margin-top:10px;
+}
+
+/* JARAK FIX WARNA */
+.jarak{
+  font-size:18px;
+  font-weight:bold;
+  margin-top:5px;
+  color:black;
+}
+
+/* BAR TIPIS */
+.bar-container{
+  width:70%;
+  height:6px;
+  background:#ddd;
+  border-radius:10px;
+  margin:20px auto;
+}
+
+.bar{
   height:100%;
   width:0%;
-  border-top:10px solid #00cc00;
-  border-radius:220px 220px 0 0;
+  background:red;
+  transition:0.3s;
 }
 
-.loading-text2{
-  font-size:40px;
+/* ================= LOADING SEMI CIRCLE ================= */
+.loading-mode{
+  display:none;
+}
+
+/* SVG SETENGAH LINGKARAN */
+.semi{
+  width:260px;
+  margin:40px auto 10px;
+}
+
+.percent{
+  font-size:32px;
   font-weight:bold;
 }
-</style> 
-</head> 
+</style>
+</head>
 
-<body> 
+<body>
 
-<img src="jelas.png" class="logo-atas"> 
+<img src="jelas.png" class="logo-atas">
 
-<div class="loading-text">
+<div class="wait-text">
 <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span>
 <span>&nbsp;</span>
 <span>T</span><span>U</span><span>N</span><span>G</span><span>G</span><span>U</span>
 </div>
 
-<div id="mainUI"> 
+<div id="mainUI">
 
-  <div class="radar"> 
-    <img src="jelasbulat.png" class="logo-bulat"> 
-  </div> 
+<div class="radar">
+<img src="jelasbulat.png" class="logo-bulat">
+</div>
 
-  <div id="statusArea" class="status">Mencari lokasi...</div> 
-  <div id="jarakText" class="jarak">Jarak: - meter</div> 
+<div id="statusArea" class="status">Mencari lokasi...</div>
+<div id="jarakText" class="jarak">Jarak: - meter</div>
 
-  <div class="bar-container"> 
-    <div id="bar" class="bar"></div> 
-  </div> 
+<div class="bar-container">
+<div id="bar" class="bar"></div>
+</div>
 
-</div> 
+</div>
 
-<div id="loadingUI" class="loading-mode"> 
-  <div class="circle">
-    <div id="circleFill" class="circle-fill"></div>
-  </div>
-  <div id="persenText" class="loading-text2">0%</div>
-</div> 
+<!-- LOADING -->
+<div id="loadingUI" class="loading-mode">
 
-<script> 
+<svg class="semi" viewBox="0 0 200 120">
+  <path d="M10 110 A90 90 0 0 1 190 110"
+        fill="none"
+        stroke="#ddd"
+        stroke-width="10"/>
 
-let raw = localStorage.getItem("userLogin"); 
-if(!raw){ 
-  alert("Login dulu!"); 
-  location.href="index.html"; 
-} 
+  <path id="progressArc"
+        d="M10 110 A90 90 0 0 1 190 110"
+        fill="none"
+        stroke="#f5c542"
+        stroke-width="10"
+        stroke-dasharray="283"
+        stroke-dashoffset="283"/>
+</svg>
 
-let parsed = JSON.parse(raw); 
-let user = parsed.user || parsed; 
+<div class="percent" id="persenText">0%</div>
 
-function distance(lat1, lon1, lat2, lon2){ 
-  const R = 6371e3; 
-  const φ1 = lat1 * Math.PI/180; 
-  const φ2 = lat2 * Math.PI/180; 
-  const Δφ = (lat2-lat1) * Math.PI/180; 
-  const Δλ = (lon2-lon1) * Math.PI/180; 
+</div>
 
-  const a = Math.sin(Δφ/2)**2 + 
-            Math.cos(φ1)*Math.cos(φ2)* 
-            Math.sin(Δλ/2)**2; 
+<script>
 
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-} 
+/* USER */
+let raw = localStorage.getItem("userLogin");
+if(!raw){
+  alert("Login dulu!");
+  location.href="index.html";
+}
+let parsed = JSON.parse(raw);
+let user = parsed.user || parsed;
 
-let watchID; 
-let sudahMasuk = false; 
+/* JARAK */
+function distance(lat1, lon1, lat2, lon2){
+  const R = 6371e3;
+  const φ1 = lat1 * Math.PI/180;
+  const φ2 = lat2 * Math.PI/180;
+  const Δφ = (lat2-lat1) * Math.PI/180;
+  const Δλ = (lon2-lon1) * Math.PI/180;
 
-function startGPS(){ 
+  const a = Math.sin(Δφ/2)**2 +
+            Math.cos(φ1)*Math.cos(φ2)*
+            Math.sin(Δλ/2)**2;
 
-  const status = document.getElementById("statusArea"); 
-  const jarakText = document.getElementById("jarakText"); 
-  const bar = document.getElementById("bar"); 
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
 
-  watchID = navigator.geolocation.watchPosition(pos=>{ 
+/* GPS */
+let watchID;
+let sudahMasuk = false;
 
-    let lat = pos.coords.latitude; 
-    let lng = pos.coords.longitude; 
+function startGPS(){
 
-    let latDB = parseFloat(user.lat); 
-    let lngDB = parseFloat(user.lng); 
-    let radius = parseFloat(user.radius) || 50; 
+  const status = document.getElementById("statusArea");
+  const jarakText = document.getElementById("jarakText");
+  const bar = document.getElementById("bar");
 
-    let jarak = distance(lat, lng, latDB, lngDB); 
+  watchID = navigator.geolocation.watchPosition(pos=>{
 
-    jarakText.innerText = "Jarak: " + Math.round(jarak) + " meter"; 
+    let lat = pos.coords.latitude;
+    let lng = pos.coords.longitude;
 
-    let persen = 100 - (jarak / radius * 100); 
-    persen = Math.max(0, Math.min(100, persen)); 
-    bar.style.width = persen + "%"; 
+    let latDB = parseFloat(user.lat);
+    let lngDB = parseFloat(user.lng);
+    let radius = parseFloat(user.radius) || 50;
 
-    if(jarak > radius){ 
-      status.innerText = "DI LUAR AREA"; 
-      jarakText.style.color = "red"; 
-      bar.style.background = "red"; 
-    } 
-    else if(jarak > radius * 0.5){ 
-      status.innerText = "MENDEKATI AREA"; 
-      jarakText.style.color = "orange"; 
-      bar.style.background = "orange"; 
-    } 
-    else{ 
-      status.innerText = "ANDA DALAM AREA"; 
-      jarakText.style.color = "green"; 
-      bar.style.background = "green"; 
+    let jarak = distance(lat, lng, latDB, lngDB);
 
-      if(!sudahMasuk){ 
-        sudahMasuk = true; 
-        navigator.geolocation.clearWatch(watchID); 
-        startLoading(); 
-      } 
-    } 
+    jarakText.innerText = "Jarak: " + Math.round(jarak) + " meter";
 
-  }); 
-} 
+    let persen = 100 - (jarak / radius * 100);
+    persen = Math.max(0, Math.min(100, persen));
+    bar.style.width = persen + "%";
 
-/* ================= LOADING SETENGAH LINGKARAN ================= */
-function startLoading(){ 
+    if(jarak > radius){
+      status.innerText = "DI LUAR AREA";
+      jarakText.style.color = "red";
+      bar.style.background = "red";
+    }
+    else if(jarak > radius * 0.5){
+      status.innerText = "MENDEKATI AREA";
+      jarakText.style.color = "orange";
+      bar.style.background = "orange";
+    }
+    else{
+      status.innerText = "ANDA DALAM AREA";
+      jarakText.style.color = "green";
+      bar.style.background = "green";
 
-  document.getElementById("mainUI").style.display = "none"; 
-  document.getElementById("loadingUI").style.display = "block"; 
+      if(!sudahMasuk){
+        sudahMasuk = true;
+        navigator.geolocation.clearWatch(watchID);
+        startLoading();
+      }
+    }
 
-  let persen = 0; 
-  let text = document.getElementById("persenText"); 
-  let fill = document.getElementById("circleFill"); 
+  }, err=>{
+    alert("GPS error: " + err.message);
+  },{
+    enableHighAccuracy:true
+  });
+}
 
-  let interval = setInterval(()=>{ 
+/* LOADING 5 DETIK (SEMI CIRCLE REAL) */
+function startLoading(){
 
-    persen++; 
-    text.innerText = persen + "%"; 
-    fill.style.width = persen + "%"; 
+  document.getElementById("mainUI").style.display="none";
+  document.getElementById("loadingUI").style.display="block";
 
-    if(persen >= 100){ 
-      clearInterval(interval); 
-      window.location.href = "absen.html"; 
-    } 
+  let persen = 0;
+  let text = document.getElementById("persenText");
+  let arc = document.getElementById("progressArc");
 
-  },50); // 5 detik smooth 
+  let interval = setInterval(()=>{
 
-} 
+    persen += 2;
 
-startGPS(); 
+    let offset = 283 - (283 * persen / 100);
+    arc.style.strokeDashoffset = offset;
 
-</script> 
-</body> 
+    text.innerText = persen + "%";
+
+    if(persen >= 100){
+      clearInterval(interval);
+      location.href="absen.html";
+    }
+
+  },100);
+}
+
+startGPS();
+
+</script>
+
+</body>
 </html>
