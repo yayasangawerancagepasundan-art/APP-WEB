@@ -1,285 +1,302 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html> 
+<html lang="id"> 
+<head> 
+<meta charset="UTF-8"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-<title>GPS Tracking</title>
+<title>GPS Tracking</title> 
 
-<style>
-body{
-  margin:0;
-  font-family:sans-serif;
-  text-align:center;
-  background:#fff;
-}
+<style> 
+body{ 
+  margin:0; 
+  font-family: Arial, sans-serif; 
+  background:#f5f5f5; 
+  text-align:center; 
+} 
 
-/* LOGO ATAS */
-.logo-atas{
-  width:100%;
-  max-width:350px;
-  margin-top:20px;
-}
+/* ================= LOGO ATAS ================= */ 
+.logo-atas{ 
+  width:100%; 
+  max-width:400px; 
+  margin:20px auto 10px; 
+  display:block; 
+} 
 
-/* HARAP TUNGGU */
-.loading-text{
-  margin-top:10px;
-  font-weight:bold;
-  letter-spacing:5px;
-  color:#999;
-  animation:fadeText 1.5s infinite;
-}
+/* ================= HARAP TUNGGU ================= */ 
+.wait-text{ 
+  font-weight:bold; 
+  letter-spacing:5px; 
+  color:#555; 
+  animation: blink 1.2s infinite; 
+} 
 
-@keyframes fadeText{
-  0%{opacity:0.2}
-  50%{opacity:1}
-  100%{opacity:0.2}
-}
+@keyframes blink{ 
+  0%{opacity:1;} 
+  50%{opacity:0.3;} 
+  100%{opacity:1;} 
+} 
 
-/* RADAR */
-.radar{
+/* ================= RADAR ================= */ 
+.radar{ 
+  position:relative; 
+  width:200px; 
+  height:200px; 
+  margin:20px auto; 
+  display:flex;
+  align-items:center;
+  justify-content:center;
+} 
+
+.radar::before, 
+.radar::after{ 
+  content:""; 
+  position:absolute; 
+  border:2px solid rgba(255,0,0,0.2); 
+  border-radius:50%; 
+  width:100%; 
+  height:100%; 
+  animation: pulse 2s infinite; 
+} 
+
+.radar::after{ 
+  animation-delay:1s; 
+} 
+
+@keyframes pulse{ 
+  0%{ 
+    transform:scale(0.6); 
+    opacity:1; 
+  } 
+  100%{ 
+    transform:scale(1.4); 
+    opacity:0; 
+  } 
+} 
+
+/* ================= LOGO TENGAH ================= */ 
+.logo-bulat{ 
+  width:120px; 
   position:relative;
-  margin:40px auto;
-  width:220px;
-  height:220px;
-}
+  z-index:2;
+} 
 
-.radar::before,
-.radar::after{
-  content:"";
-  position:absolute;
-  border:2px solid rgba(255,0,0,0.2);
-  border-radius:50%;
-  width:100%;
-  height:100%;
-  animation:radar 2s linear infinite;
-}
+/* ================= STATUS ================= */ 
+.status{ 
+  font-size:20px; 
+  font-weight:bold; 
+  margin-top:10px; 
+} 
 
-.radar::after{
-  animation-delay:1s;
-}
+/* ================= JARAK ================= */ 
+.jarak{ 
+  font-size:18px; 
+  font-weight:bold; 
+  margin-top:5px; 
+  text-shadow:1px 1px 2px #000; 
+} 
 
-@keyframes radar{
-  0%{transform:scale(0.5);opacity:1}
-  100%{transform:scale(1.5);opacity:0}
-}
+/* ================= BAR ================= */ 
+.bar-container{ 
+  width:80%; 
+  height:10px; 
+  background:#ddd; 
+  border-radius:10px; 
+  margin:20px auto; 
+  overflow:hidden; 
+} 
 
-/* LOGO TENGAH */
-.logo-tengah{
-  width:120px;
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-}
+.bar{ 
+  height:100%; 
+  width:0%; 
+  background:red; 
+  transition:0.5s; 
+} 
 
-/* STATUS */
-.status{
-  font-size:20px;
-  font-weight:bold;
-}
+/* ================= LOADING MODE ================= */ 
+.loading-mode{ 
+  display:none; 
+} 
 
-/* JARAK */
-.jarak{
-  font-size:22px;
-  font-weight:bold;
-  margin-top:10px;
-  -webkit-text-stroke:1px black;
-}
-
-/* BAR */
-.bar-wrap{
-  width:80%;
-  height:12px;
-  background:#ddd;
-  border-radius:10px;
-  margin:20px auto;
-  overflow:hidden;
-}
-
-.bar{
-  height:100%;
-  width:0%;
-  background:red;
-  transition:0.3s;
-}
-
-/* LOADING 5 DETIK */
-#loading5{
-  display:none;
-  margin-top:50px;
-}
-
-.semi{
+/* ================= SEMI CIRCLE ================= */
+.semi-circle{
   width:200px;
   height:100px;
+  border-top-left-radius:200px;
+  border-top-right-radius:200px;
   border:10px solid #ddd;
-  border-top:10px solid red;
-  border-radius:200px 200px 0 0;
-  margin:0 auto;
+  border-bottom:none;
+  margin:50px auto 10px;
   position:relative;
   overflow:hidden;
 }
 
-.percent{
-  font-size:30px;
-  font-weight:bold;
-  margin-top:20px;
+.semi-fill{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:100%;
+  border-top-left-radius:200px;
+  border-top-right-radius:200px;
+  border:10px solid limegreen;
+  border-bottom:none;
+  transform:rotate(-180deg);
+  transform-origin:bottom center;
 }
 
-</style>
-</head>
+.loading-text{ 
+  font-size:40px; 
+  font-weight:bold; 
+  margin-top:10px; 
+} 
+</style> 
+</head> 
 
-<body>
+<body> 
 
-<!-- MODE GPS -->
-<div id="gpsContent">
+<img src="jelas.png" class="logo-atas"> 
+<div class="wait-text">HARAP TUNGGU</div> 
 
-<img src="jelas.png" class="logo-atas">
+<div id="mainUI"> 
 
-<div class="loading-text">HARAP TUNGGU</div>
+  <div class="radar"> 
+    <img src="jelasbulat.png" class="logo-bulat"> 
+  </div> 
 
-<div class="radar">
-  <img src="jelasbulat.png" class="logo-tengah">
-</div>
+  <div id="statusArea" class="status">Mencari lokasi...</div> 
 
-<div id="status" class="status">Mencari lokasi...</div>
-<div id="jarak" class="jarak">Jarak: - meter</div>
+  <div id="jarakText" class="jarak">Jarak: - meter</div> 
 
-<div class="bar-wrap">
-  <div id="bar" class="bar"></div>
-</div>
+  <div class="bar-container"> 
+    <div id="bar" class="bar"></div> 
+  </div> 
 
-</div>
+</div> 
 
-<!-- MODE LOADING 5 DETIK -->
-<div id="loading5">
-  <div class="semi" id="semiBar"></div>
-  <div class="percent" id="percent">0%</div>
-</div>
+<!-- LOADING -->
+<div id="loadingUI" class="loading-mode"> 
 
-<script>
+  <div class="semi-circle">
+    <div id="semiFill" class="semi-fill"></div>
+  </div>
 
-/* ===== CEK LOGIN ===== */
-let raw = localStorage.getItem("userLogin");
-if(!raw){
-  alert("Login dulu");
-  location.href="index.html";
-}
+  <div class="loading-text" id="persenText">0%</div> 
 
-let user = JSON.parse(raw).user || JSON.parse(raw);
+</div> 
 
-/* ===== DISTANCE ===== */
-function distance(lat1, lon1, lat2, lon2){
-  const R = 6371e3;
-  const φ1 = lat1*Math.PI/180;
-  const φ2 = lat2*Math.PI/180;
-  const Δφ = (lat2-lat1)*Math.PI/180;
-  const Δλ = (lon2-lon1)*Math.PI/180;
+<script> 
 
-  const a = Math.sin(Δφ/2)**2 +
-            Math.cos(φ1)*Math.cos(φ2)*
-            Math.sin(Δλ/2)**2;
+let raw = localStorage.getItem("userLogin"); 
+if(!raw){ 
+  alert("Login dulu!"); 
+  location.href="index.html"; 
+} 
 
-  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-}
+let parsed = JSON.parse(raw); 
+let user = parsed.user || parsed; 
 
-/* ===== GPS ===== */
-let watchID;
-let sudahMasuk = false;
+function distance(lat1, lon1, lat2, lon2){ 
+  const R = 6371e3; 
+  const φ1 = lat1 * Math.PI/180; 
+  const φ2 = lat2 * Math.PI/180; 
+  const Δφ = (lat2-lat1) * Math.PI/180; 
+  const Δλ = (lon2-lon1) * Math.PI/180; 
 
-watchID = navigator.geolocation.watchPosition(pos=>{
+  const a = Math.sin(Δφ/2)**2 + 
+            Math.cos(φ1)*Math.cos(φ2)* 
+            Math.sin(Δλ/2)**2; 
 
-  let lat = pos.coords.latitude;
-  let lng = pos.coords.longitude;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+} 
 
-  let latDB = Number(user.lat);
-  let lngDB = Number(user.lng);
-  let radius = Number(user.radius) || 50;
+let watchID; 
+let sudahMasuk = false; 
 
-  let jarak = distance(lat,lng,latDB,lngDB);
+function startGPS(){ 
 
-  let status = document.getElementById("status");
-  let jarakText = document.getElementById("jarak");
-  let bar = document.getElementById("bar");
+  const status = document.getElementById("statusArea"); 
+  const jarakText = document.getElementById("jarakText"); 
+  const bar = document.getElementById("bar"); 
 
-  jarakText.innerText = "Jarak: " + Math.round(jarak) + " meter";
+  watchID = navigator.geolocation.watchPosition(pos=>{ 
 
-  /* WARNA DINAMIS */
-  if(jarak > radius){
-    status.innerText = "DI LUAR AREA";
-    status.style.color = "red";
-    jarakText.style.color = "red";
-    bar.style.background = "red";
-  }
-  else if(jarak > radius*0.5){
-    status.innerText = "MENDEKATI AREA";
-    status.style.color = "orange";
-    jarakText.style.color = "orange";
-    bar.style.background = "orange";
-  }
-  else{
-    status.innerText = "ANDA DALAM AREA";
-    status.style.color = "green";
-    jarakText.style.color = "green";
-    bar.style.background = "green";
-  }
+    let lat = pos.coords.latitude; 
+    let lng = pos.coords.longitude; 
 
-  /* PROGRESS */
-  let persen = 100 - (jarak/radius*100);
-  persen = Math.max(0, Math.min(100, persen));
-  bar.style.width = persen + "%";
+    let latDB = parseFloat(user.lat); 
+    let lngDB = parseFloat(user.lng); 
+    let radius = parseFloat(user.radius) || 50; 
 
-  /* MASUK AREA */
-  if(jarak <= radius && !sudahMasuk){
+    let jarak = distance(lat, lng, latDB, lngDB); 
 
-    sudahMasuk = true;
+    jarakText.innerText = "Jarak: " + Math.round(jarak) + " meter"; 
 
-    navigator.geolocation.clearWatch(watchID);
+    let persen = 100 - (jarak / radius * 100); 
+    persen = Math.max(0, Math.min(100, persen)); 
+    bar.style.width = persen + "%"; 
 
-    // STOP UI GPS
-    document.getElementById("gpsContent").style.display="none";
+    if(jarak > radius){ 
+      status.innerText = "DI LUAR AREA"; 
+      jarakText.style.color = "red"; 
+      bar.style.background = "red"; 
+    } 
+    else if(jarak > radius * 0.5){ 
+      status.innerText = "MENDEKATI AREA"; 
+      jarakText.style.color = "orange"; 
+      bar.style.background = "orange"; 
+    } 
+    else{ 
+      status.innerText = "ANDA DALAM AREA"; 
+      jarakText.style.color = "green"; 
+      bar.style.background = "green"; 
 
-    // SHOW LOADING
-    document.getElementById("loading5").style.display="block";
+      if(!sudahMasuk){ 
+        sudahMasuk = true; 
 
-    startLoading();
+        navigator.geolocation.clearWatch(watchID); 
 
-  }
+        startLoading(); 
+      } 
+    } 
 
-}, err=>{
-  alert("GPS error");
-},{
-  enableHighAccuracy:true
-});
+  }, err=>{ 
+    alert("GPS error: " + err.message); 
+  },{ 
+    enableHighAccuracy:true 
+  }); 
 
-/* ===== LOADING 5 DETIK ===== */
-function startLoading(){
+} 
 
-  let persen = 0;
-  let el = document.getElementById("percent");
-  let semi = document.getElementById("semiBar");
+/* ================= LOADING 5 DETIK ================= */ 
+function startLoading(){ 
 
-  let interval = setInterval(()=>{
+  document.getElementById("mainUI").style.display = "none"; 
+  document.getElementById("loadingUI").style.display = "block"; 
 
-    persen++;
-    el.innerText = persen + "%";
+  let persen = 0; 
+  let text = document.getElementById("persenText"); 
+  let fill = document.getElementById("semiFill"); 
 
-    semi.style.borderTopColor = `hsl(${persen*1.2},100%,50%)`;
+  let interval = setInterval(()=>{ 
 
-    if(persen >= 100){
-      clearInterval(interval);
+    persen += 2; 
+    text.innerText = persen + "%"; 
 
-      setTimeout(()=>{
-        location.href="absen.html";
-      },300);
-    }
+    let deg = -180 + (persen * 1.8);
+    fill.style.transform = "rotate(" + deg + "deg)";
 
-  },50); // 5 detik
+    if(persen >= 100){ 
+      clearInterval(interval); 
+      window.location.href = "absen.html"; 
+    } 
 
-}
+  },100); 
 
-</script>
+} 
 
-</body>
+startGPS(); 
+
+</script> 
+
+</body> 
 </html>
