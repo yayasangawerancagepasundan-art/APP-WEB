@@ -249,10 +249,16 @@ function startGPS(){
       jarakText.style.color = "green";
       bar.style.background = "green";
 
-      if(!sudahMasuk){
-        sudahMasuk = true;
-        navigator.geolocation.clearWatch(watchID);
-        startLoading();
+if(!sudahMasuk){ 
+  sudahMasuk = true; 
+
+  // kasih waktu 5 detik, UI tetap jalan
+  setTimeout(()=>{
+
+    navigator.geolocation.clearWatch(watchID); 
+    startLoading(); 
+
+  },5000); 
       }
     }
 
