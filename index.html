@@ -451,10 +451,11 @@ async function submitForm(){
     let cvFile   = document.getElementById("cv").files[0]; 
 
     // VALIDASI
-    if(!fotoFile || !cvFile){ 
-      alert("Foto & CV wajib diisi!"); 
-      hideLoading(); 
-      return; 
+if(!fotoFile){
+  alert("Foto wajib diisi!");
+  hideLoading();
+  return;
+}
     } 
 
     // ================= CONVERT (FIX) ================= 
