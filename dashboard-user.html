@@ -309,7 +309,7 @@ body{
   </div>
 
   <div class="card">
-  <small>Perusahaan3</small>
+  <small>Perusahaan1</small>
   <div>🏢 <b id="perusahaan">-</b></div>
   </div>
 
@@ -397,7 +397,8 @@ try{
 }
 
 let user = parsed.user || parsed;
-console.log("USER:", user);
+console.log("USER DATA:", user);
+alert(JSON.stringify(user)); // ⬅️ TAMBAH DI SINI
 
 /* ================= NAVIGASI ================= */
 function goPage(id,el){
