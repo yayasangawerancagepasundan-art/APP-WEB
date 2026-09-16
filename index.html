@@ -341,7 +341,21 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
   <option>Zona 2 (Provinsi Kepulauan Riau)</option>
   <option>Zona 3 (Luar Provinsi Kepulauan Riau)</option>
 </select>
+ 
+<!-- FOTO -->
+<label>Upload Foto (Wajib)</label>
+<input type="file" id="foto" accept="image/*">
+<small style="color:gray;">
+  Format: JPG/PNG, maksimal 2MB, foto wajah jelas
+</small>
 
+<!-- CV -->
+<label>Upload CV (Wajib)</label>
+<input type="file" id="cv" accept=".pdf,.doc,.docx">
+<small style="color:gray;">
+  Format: PDF/DOC/DOCX, maksimal 5MB
+</small>
+    
     <div class="nav">
       <button onclick="prev()">Kembali</button>
       <button onclick="submitForm()">Daftar</button>
@@ -412,40 +426,80 @@ function validateStep(){
 function next(){if(!validateStep())return;step++;showStep();}
 function prev(){step--;showStep();}
   
+/* TAMBAHAN FUNCTION BASE64 (WAJIB ADA 1X) */
+function toBase64(file){
+  return new Promise((resolve,reject)=>{
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result.split(",")[1]);
+    reader.onerror = error => reject(error);
+  });
+}
+
+
 /* REGISTER */
-function submitForm(){
+async function submitForm(){
+
   if(!validateStep()) return;
 
   showLoading();
 
-  fetch(URL,{
-    method:"POST",
-    body:new URLSearchParams({
-      action:"register",
-      username:username.value,
-      password:password.value,
-      nik:nik.value,
-      nama:nama.value,
-      tempat:tempat.value,
-      tgl_lahir:tgl.value,
-      jk:jk.value,
-      alamat:alamat.value,
-      status_perkawinan:status_perkawinan.value,
-      zona:zona.value,
-      referral:referral.value
-    })
-  })
-  .then(res=>res.json())
-  .then(res=>{
+  try{
+
+    // ================= FILE =================
+    let fotoFile = document.getElementById("foto").files[0];
+    let cvFile   = document.getElementById("cv").files[0];
+
+    if(!fotoFile || !cvFile){
+      alert("Foto & CV wajib diisi!");
+      hideLoading();
+      return;
+    }
+
+    // ================= CONVERT =================
+    let fotoBase64 = await toBase64(fotoFile);
+    let cvBase64   = await toBase64(cvFile);
+
+    // ================= KIRIM =================
+    let res = await fetch(URL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        action:"register",
+
+        username:username.value,
+        password:password.value,
+        nik:nik.value,
+        nama:nama.value,
+        tempat:tempat.value,
+        tgl_lahir:tgl.value,
+        jk:jk.value,
+        alamat:alamat.value,
+        status_perkawinan:status_perkawinan.value,
+        zona:zona.value,
+        referral:referral.value,
+
+        // 🔥 FILE
+        foto:fotoBase64,
+        fotoType:fotoFile.type,
+
+        cv:cvBase64,
+        cvType:cvFile.type
+      })
+    });
+
+    let data = await res.json();
 
     hideLoading();
 
-    if(res.status === "ok"){
+    // ================= RESPONSE =================
+    if(data.status === "ok"){
 
       popup.style.display="flex";
       confetti();
 
       setTimeout(()=>{
+
         document.querySelectorAll(".confetti").forEach(e=>e.remove());
 
         let pop = document.getElementById("popup");
@@ -463,15 +517,17 @@ function submitForm(){
       },2000);
 
     }else{
-      alert(res.msg || "Registrasi gagal");
+      alert(data.msg || "Registrasi gagal");
     }
 
-  })
-  .catch(()=>{
-    alert("Koneksi gagal");
+  }catch(err){
+    alert("Koneksi gagal / upload error");
+    console.error(err);
     hideLoading();
-  });
+  }
+
 }
+  
 /* LOGIN */
 function login(){ 
 
