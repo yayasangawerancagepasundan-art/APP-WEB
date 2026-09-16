@@ -436,93 +436,88 @@ function toBase64(file){
   });
 }
 
+/* REGISTER */
+async function submitForm(){  
 
-/* REGISTER */ 
-async function submitForm(){ 
+  if(!validateStep()) return;  
 
-  if(!validateStep()) return; 
+  showLoading();  
 
-  showLoading(); 
+  try{  
 
-  try{ 
+    let fotoFile = document.getElementById("foto").files[0];  
+    let cvFile   = document.getElementById("cv").files[0];  
 
-    // ================= FILE ================= 
-    let fotoFile = document.getElementById("foto").files[0]; 
-    let cvFile   = document.getElementById("cv").files[0]; 
-
-    // VALIDASI
-if(!fotoFile){
-  alert("Foto wajib diisi!");
-  hideLoading();
-  return;
-}
+    if(!fotoFile){ 
+      alert("Foto wajib diisi!"); 
+      hideLoading(); 
+      return; 
     } 
 
-    // ================= CONVERT (FIX) ================= 
-    let fotoBase64 = await compressImage(fotoFile); // tetap pakai compress
-    let cvBase64   = await toBase64(cvFile);        // CV normal
+    // CONVERT
+    let fotoBase64 = await compressImage(fotoFile);
+    let cvBase64 = ""; // CV dimatikan dulu
 
-    // ================= KIRIM ================= 
-    let res = await fetch(URL,{ 
-      method:"POST", 
-      headers:{"Content-Type":"application/json"}, 
-      body:JSON.stringify({ 
-        action:"register", 
+    // KIRIM
+    let res = await fetch(URL,{  
+      method:"POST",  
+      headers:{"Content-Type":"application/json"},  
+      body:JSON.stringify({  
+        action:"register",  
 
-        username:username.value, 
-        password:password.value, 
-        nik:nik.value, 
-        nama:nama.value, 
-        tempat:tempat.value, 
-        tgl_lahir:tgl.value, 
-        jk:jk.value, 
-        alamat:alamat.value, 
-        status_perkawinan:status_perkawinan.value, 
-        zona:zona.value, 
-        referral:referral.value, 
+        username:username.value,  
+        password:password.value,  
+        nik:nik.value,  
+        nama:nama.value,  
+        tempat:tempat.value,  
+        tgl_lahir:tgl.value,  
+        jk:jk.value,  
+        alamat:alamat.value,  
+        status_perkawinan:status_perkawinan.value,  
+        zona:zona.value,  
+        referral:referral.value,  
 
-        foto: fotoBase64, 
-        fotoType: fotoFile.type, 
+        foto: fotoBase64,  
+        fotoType: fotoFile.type,  
 
-        cv: "", 
-        cvType: "" 
-      }) 
-    }); 
+        cv: "",  
+        cvType: ""  
+      })  
+    });  
 
-    let data = await res.json(); 
+    let data = await res.json();  
 
-    hideLoading(); 
+    hideLoading();  
 
-    if(data.status === "ok"){ 
+    if(data.status === "ok"){  
+      popup.style.display="flex";  
+      confetti();  
 
-      popup.style.display="flex"; 
-      confetti(); 
+      setTimeout(()=>{  
+        document.querySelectorAll(".confetti").forEach(e=>e.remove());  
 
-      setTimeout(()=>{ 
-        document.querySelectorAll(".confetti").forEach(e=>e.remove()); 
+        let pop = document.getElementById("popup");  
+        pop.style.opacity="0";  
+        pop.style.pointerEvents="none";  
 
-        let pop = document.getElementById("popup"); 
-        pop.style.opacity="0"; 
-        pop.style.pointerEvents="none"; 
+        setTimeout(()=>{  
+          pop.style.display="none";  
+          pop.style.opacity="1";  
+        },300);  
 
-        setTimeout(()=>{ 
-          pop.style.display="none"; 
-          pop.style.opacity="1"; 
-        },300); 
+        showLogin();  
 
-        showLogin(); 
+      },2000);  
 
-      },2000); 
+    }else{  
+      alert(data.msg || "Registrasi gagal");  
+    }  
 
-    }else{ 
-      alert(data.msg || "Registrasi gagal"); 
-    } 
-
-  }catch(err){ 
-    alert("Koneksi gagal / upload error"); 
-    console.error(err); 
-    hideLoading(); 
-  } 
+  }catch(err){  
+    alert("Koneksi gagal / upload error");  
+    console.error(err);  
+    hideLoading();  
+  }  
 }
   
 /* LOGIN */
