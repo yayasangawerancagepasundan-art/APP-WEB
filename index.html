@@ -470,10 +470,11 @@ async function submitForm(){
       uploadFotoKeDrive(cvFile)
     ]);
 
+    // 🔥 FIX DI SINI (TANPA HEADER & TANPA JSON)
     let res = await fetch(URL,{  
       method:"POST",  
-      headers:{"Content-Type":"application/json"},  
-      body:JSON.stringify({  
+      body: new URLSearchParams({  
+
         action:"register",  
 
         username:document.getElementById("username").value,  
@@ -653,34 +654,31 @@ function hideLoading(){
   });
 }
 
-  /* analis fungsi */
+/* analis fungsi */
 async function uploadFotoKeDrive(file){
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
 
   let base64 = await toBase64(file);
-  
-console.log("SEBELUM FETCH");
-  
-let res = await fetch(URL,{
-  method:"POST",
-  headers:{
-    "Content-Type":"application/json"
-  },
-  body: JSON.stringify({
-    action:"upload",
-    file: base64,
-    name: file.name,
-    type: file.type,
-    username: document.getElementById("username").value,
-    nik: document.getElementById("nik").value
-  }),
-  signal: controller.signal
-});
+
+  console.log("SEBELUM FETCH");
+
+  let res = await fetch(URL,{
+    method:"POST",
+    body: new URLSearchParams({
+      action:"upload",
+      file: base64,
+      name: file.name,
+      type: file.type,
+      username: document.getElementById("username").value,
+      nik: document.getElementById("nik").value
+    }),
+    signal: controller.signal
+  });
 
   console.log("SETELAH FETCH");
-  
+
   clearTimeout(timeout);
 
   if(!res.ok){
