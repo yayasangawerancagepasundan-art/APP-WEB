@@ -437,101 +437,91 @@ function toBase64(file){
 }
 
 
-/* REGISTER */
-async function submitForm(){
+/* REGISTER */ 
+async function submitForm(){ 
 
-  if(!validateStep()) return;
+  if(!validateStep()) return; 
 
-  showLoading();
+  showLoading(); 
 
-  try{
+  try{ 
 
-    // ================= FILE =================
- let fotoFile = document.getElementById("foto").files[0];
-let cvFile   = document.getElementById("cv").files[0];
+    // ================= FILE ================= 
+    let fotoFile = document.getElementById("foto").files[0]; 
+    let cvFile   = document.getElementById("cv").files[0]; 
 
-// 🔥 FOTO AUTO KOMPRES
-let fotoBase64 = fotoFile ? await compressImage(fotoFile) : "";
+    // VALIDASI
+    if(!fotoFile || !cvFile){ 
+      alert("Foto & CV wajib diisi!"); 
+      hideLoading(); 
+      return; 
+    } 
 
-// 🔥 CV TETAP ASLI
-let cvBase64   = cvFile ? await toBase64(cvFile) : "";
-    
-    if(!fotoFile || !cvFile){
-      alert("Foto & CV wajib diisi!");
-      hideLoading();
-      return;
-    }
+    // ================= CONVERT (FIX) ================= 
+    let fotoBase64 = await compressImage(fotoFile); // tetap pakai compress
+    let cvBase64   = await toBase64(cvFile);        // CV normal
 
-    // ================= CONVERT =================
-    let fotoBase64 = await toBase64(fotoFile);
-    let cvBase64   = await toBase64(cvFile);
+    // ================= KIRIM ================= 
+    let res = await fetch(URL,{ 
+      method:"POST", 
+      headers:{"Content-Type":"application/json"}, 
+      body:JSON.stringify({ 
+        action:"register", 
 
-    // ================= KIRIM =================
-    let res = await fetch(URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        action:"register",
+        username:username.value, 
+        password:password.value, 
+        nik:nik.value, 
+        nama:nama.value, 
+        tempat:tempat.value, 
+        tgl_lahir:tgl.value, 
+        jk:jk.value, 
+        alamat:alamat.value, 
+        status_perkawinan:status_perkawinan.value, 
+        zona:zona.value, 
+        referral:referral.value, 
 
-        username:username.value,
-        password:password.value,
-        nik:nik.value,
-        nama:nama.value,
-        tempat:tempat.value,
-        tgl_lahir:tgl.value,
-        jk:jk.value,
-        alamat:alamat.value,
-        status_perkawinan:status_perkawinan.value,
-        zona:zona.value,
-        referral:referral.value,
+        foto: fotoBase64, 
+        fotoType: fotoFile.type, 
 
-        // 🔥 FILE
-       foto: fotoBase64,
-       fotoType: fotoFile ? fotoFile.type : "",
-        
-       cv: cvBase64,
-       cvType: cvFile ? cvFile.type : ""
-      })
-    });
+        cv: cvBase64, 
+        cvType: cvFile.type 
+      }) 
+    }); 
 
-    let data = await res.json();
+    let data = await res.json(); 
 
-    hideLoading();
+    hideLoading(); 
 
-    // ================= RESPONSE =================
-    if(data.status === "ok"){
+    if(data.status === "ok"){ 
 
-      popup.style.display="flex";
-      confetti();
+      popup.style.display="flex"; 
+      confetti(); 
 
-      setTimeout(()=>{
+      setTimeout(()=>{ 
+        document.querySelectorAll(".confetti").forEach(e=>e.remove()); 
 
-        document.querySelectorAll(".confetti").forEach(e=>e.remove());
+        let pop = document.getElementById("popup"); 
+        pop.style.opacity="0"; 
+        pop.style.pointerEvents="none"; 
 
-        let pop = document.getElementById("popup");
+        setTimeout(()=>{ 
+          pop.style.display="none"; 
+          pop.style.opacity="1"; 
+        },300); 
 
-        pop.style.opacity="0";
-        pop.style.pointerEvents="none";
+        showLogin(); 
 
-        setTimeout(()=>{
-          pop.style.display="none";
-          pop.style.opacity="1";
-        },300);
+      },2000); 
 
-        showLogin();
+    }else{ 
+      alert(data.msg || "Registrasi gagal"); 
+    } 
 
-      },2000);
-
-    }else{
-      alert(data.msg || "Registrasi gagal");
-    }
-
-  }catch(err){
-    alert("Koneksi gagal / upload error");
-    console.error(err);
-    hideLoading();
-  }
-
+  }catch(err){ 
+    alert("Koneksi gagal / upload error"); 
+    console.error(err); 
+    hideLoading(); 
+  } 
 }
   
 /* LOGIN */
