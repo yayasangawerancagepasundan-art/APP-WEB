@@ -408,16 +408,21 @@ function showStep(){
 
 /* VALIDASI */
 function validateStep(){
-  let inputs=steps[step].querySelectorAll("input,select");
-  let valid=true;
+  let inputs = steps[step].querySelectorAll("input,select");
+  let valid = true;
 
   inputs.forEach(i=>{
-   if(i.id !== "referral" && i.value.trim() === ""){
+
+    // 🔥 LEWATI FILE INPUT (foto & cv)
+    if(i.type === "file") return;
+
+    if(i.id !== "referral" && i.value.trim() === ""){
       i.classList.add("error");
-      valid=false;
+      valid = false;
     }else{
       i.classList.remove("error");
     }
+
   });
 
   return valid;
