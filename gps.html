@@ -3,7 +3,6 @@
 <head> 
 <meta charset="UTF-8"> 
 <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-
 <title>GPS Tracking</title> 
 
 <style> 
@@ -22,19 +21,33 @@ body{
   display:block; 
 } 
 
-/* ================= HARAP TUNGGU ================= */ 
-.wait-text{ 
-  font-weight:bold; 
-  letter-spacing:5px; 
-  color:#555; 
-  animation: blink 1.2s infinite; 
-} 
+/* ================= HARAP TUNGGU (ASLI DASHBOARD) ================= */
+.loading-text span{
+  display:inline-block;
+  font-weight:600;
+  color:#ff0000;
+  font-size:16px;
+  opacity:0;
+  animation:fadeSlide 1.5s infinite;
+}
+.loading-text span:nth-child(1){animation-delay:0s;}
+.loading-text span:nth-child(2){animation-delay:0.1s;}
+.loading-text span:nth-child(3){animation-delay:0.2s;}
+.loading-text span:nth-child(4){animation-delay:0.3s;}
+.loading-text span:nth-child(5){animation-delay:0.4s;}
+.loading-text span:nth-child(6){animation-delay:0.5s;}
+.loading-text span:nth-child(7){animation-delay:0.6s;}
+.loading-text span:nth-child(8){animation-delay:0.7s;}
+.loading-text span:nth-child(9){animation-delay:0.8s;}
+.loading-text span:nth-child(10){animation-delay:0.9s;}
+.loading-text span:nth-child(11){animation-delay:1s;}
+.loading-text span:nth-child(12){animation-delay:1.1s;}
 
-@keyframes blink{ 
-  0%{opacity:1;} 
-  50%{opacity:0.3;} 
-  100%{opacity:1;} 
-} 
+@keyframes fadeSlide{
+  0%{opacity:0; transform:translateX(20px);}
+  50%{opacity:1; transform:translateX(0);}
+  100%{opacity:0; transform:translateX(-10px);}
+}
 
 /* ================= RADAR ================= */ 
 .radar{ 
@@ -42,9 +55,6 @@ body{
   width:200px; 
   height:200px; 
   margin:20px auto; 
-  display:flex;
-  align-items:center;
-  justify-content:center;
 } 
 
 .radar::before, 
@@ -63,21 +73,17 @@ body{
 } 
 
 @keyframes pulse{ 
-  0%{ 
-    transform:scale(0.6); 
-    opacity:1; 
-  } 
-  100%{ 
-    transform:scale(1.4); 
-    opacity:0; 
-  } 
+  0%{ transform:scale(0.5); opacity:1; } 
+  100%{ transform:scale(1.5); opacity:0; } 
 } 
 
-/* ================= LOGO TENGAH ================= */ 
+/* ================= LOGO TENGAH FIX ================= */
 .logo-bulat{ 
   width:120px; 
-  position:relative;
-  z-index:2;
+  position:absolute; 
+  top:50%; 
+  left:50%; 
+  transform:translate(-50%, -50%); 
 } 
 
 /* ================= STATUS ================= */ 
@@ -87,12 +93,12 @@ body{
   margin-top:10px; 
 } 
 
-/* ================= JARAK ================= */ 
+/* ================= JARAK FIX (TIPIS) ================= */ 
 .jarak{ 
   font-size:18px; 
   font-weight:bold; 
   margin-top:5px; 
-  text-shadow:1px 1px 2px #000; 
+  text-shadow:0.5px 0.5px 1px #000; 
 } 
 
 /* ================= BAR ================= */ 
@@ -112,50 +118,46 @@ body{
   transition:0.5s; 
 } 
 
-/* ================= LOADING MODE ================= */ 
-.loading-mode{ 
-  display:none; 
-} 
+/* ================= LOADING 5 DETIK (SETENGAH LINGKARAN) ================= */
+.loading-mode{ display:none; }
 
-/* ================= SEMI CIRCLE ================= */
-.semi-circle{
-  width:200px;
-  height:100px;
-  border-top-left-radius:200px;
-  border-top-right-radius:200px;
+.circle{
+  width:220px;
+  height:110px;
   border:10px solid #ddd;
   border-bottom:none;
-  margin:50px auto 10px;
+  border-radius:220px 220px 0 0;
+  margin:80px auto 10px;
   position:relative;
   overflow:hidden;
 }
 
-.semi-fill{
+.circle-fill{
   position:absolute;
   bottom:0;
   left:0;
-  width:100%;
   height:100%;
-  border-top-left-radius:200px;
-  border-top-right-radius:200px;
-  border:10px solid limegreen;
-  border-bottom:none;
-  transform:rotate(-180deg);
-  transform-origin:bottom center;
+  width:0%;
+  border-top:10px solid #00cc00;
+  border-radius:220px 220px 0 0;
 }
 
-.loading-text{ 
-  font-size:40px; 
-  font-weight:bold; 
-  margin-top:10px; 
-} 
+.loading-text2{
+  font-size:40px;
+  font-weight:bold;
+}
 </style> 
 </head> 
 
 <body> 
 
 <img src="jelas.png" class="logo-atas"> 
-<div class="wait-text">HARAP TUNGGU</div> 
+
+<div class="loading-text">
+<span>H</span><span>A</span><span>R</span><span>A</span><span>P</span>
+<span>&nbsp;</span>
+<span>T</span><span>U</span><span>N</span><span>G</span><span>G</span><span>U</span>
+</div>
 
 <div id="mainUI"> 
 
@@ -164,7 +166,6 @@ body{
   </div> 
 
   <div id="statusArea" class="status">Mencari lokasi...</div> 
-
   <div id="jarakText" class="jarak">Jarak: - meter</div> 
 
   <div class="bar-container"> 
@@ -173,15 +174,11 @@ body{
 
 </div> 
 
-<!-- LOADING -->
 <div id="loadingUI" class="loading-mode"> 
-
-  <div class="semi-circle">
-    <div id="semiFill" class="semi-fill"></div>
+  <div class="circle">
+    <div id="circleFill" class="circle-fill"></div>
   </div>
-
-  <div class="loading-text" id="persenText">0%</div> 
-
+  <div id="persenText" class="loading-text2">0%</div>
 </div> 
 
 <script> 
@@ -252,22 +249,15 @@ function startGPS(){
 
       if(!sudahMasuk){ 
         sudahMasuk = true; 
-
         navigator.geolocation.clearWatch(watchID); 
-
         startLoading(); 
       } 
     } 
 
-  }, err=>{ 
-    alert("GPS error: " + err.message); 
-  },{ 
-    enableHighAccuracy:true 
   }); 
-
 } 
 
-/* ================= LOADING 5 DETIK ================= */ 
+/* ================= LOADING SETENGAH LINGKARAN ================= */
 function startLoading(){ 
 
   document.getElementById("mainUI").style.display = "none"; 
@@ -275,28 +265,25 @@ function startLoading(){
 
   let persen = 0; 
   let text = document.getElementById("persenText"); 
-  let fill = document.getElementById("semiFill"); 
+  let fill = document.getElementById("circleFill"); 
 
   let interval = setInterval(()=>{ 
 
-    persen += 2; 
+    persen++; 
     text.innerText = persen + "%"; 
-
-    let deg = -180 + (persen * 1.8);
-    fill.style.transform = "rotate(" + deg + "deg)";
+    fill.style.width = persen + "%"; 
 
     if(persen >= 100){ 
       clearInterval(interval); 
       window.location.href = "absen.html"; 
     } 
 
-  },100); 
+  },50); // 5 detik smooth 
 
 } 
 
 startGPS(); 
 
 </script> 
-
 </body> 
 </html>
