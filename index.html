@@ -457,44 +457,53 @@ async function submitForm(){
       alert("Foto wajib diisi!"); 
       hideLoading(); 
       return; 
-    } 
+    }
 
-    // CONVERT
-    let fotoBase64 = await compressImage(fotoFile);
-    let cvBase64 = ""; // CV dimatikan dulu
+    if(!cvFile){
+      alert("CV wajib diisi!");
+      hideLoading();
+      return;
+    }
 
-    // KIRIM
+    let [fotoUrl, cvUrl] = await Promise.all([
+      uploadFotoKeDrive(fotoFile),
+      uploadFotoKeDrive(cvFile)
+    ]);
+
     let res = await fetch(URL,{  
       method:"POST",  
       headers:{"Content-Type":"application/json"},  
       body:JSON.stringify({  
         action:"register",  
 
-        username:username.value,  
-        password:password.value,  
-        nik:nik.value,  
-        nama:nama.value,  
-        tempat:tempat.value,  
-        tgl_lahir:tgl.value,  
-        jk:jk.value,  
-        alamat:alamat.value,  
-        status_perkawinan:status_perkawinan.value,  
-        zona:zona.value,  
-        referral:referral.value,  
+        username:document.getElementById("username").value,  
+        password:document.getElementById("password").value,  
+        nik:document.getElementById("nik").value,  
+        nama:document.getElementById("nama").value,  
+        tempat:document.getElementById("tempat").value,  
+        tgl_lahir:document.getElementById("tgl").value,  
+        jk:document.getElementById("jk").value,  
+        alamat:document.getElementById("alamat").value,  
+        status_perkawinan:document.getElementById("status_perkawinan").value,  
+        zona:document.getElementById("zona").value,  
+        referral:document.getElementById("referral").value,  
 
-        foto: fotoBase64,  
-        fotoType: fotoFile.type,  
+        foto: fotoUrl,
+        cv: cvUrl
 
-        cv: "",  
-        cvType: ""  
       })  
     });  
+
+    if(!res.ok){
+      throw new Error("HTTP error: " + res.status);
+    }
 
     let data = await res.json();  
 
     hideLoading();  
 
     if(data.status === "ok"){  
+
       popup.style.display="flex";  
       confetti();  
 
@@ -519,7 +528,13 @@ async function submitForm(){
     }  
 
   }catch(err){  
-    alert("Koneksi gagal / upload error");  
+
+    if(err.name === "AbortError"){
+      alert("Upload timeout (koneksi lambat)");
+    }else{
+      alert("Koneksi gagal / upload error");
+    }
+
     console.error(err);  
     hideLoading();  
   }  
@@ -636,6 +651,42 @@ function hideLoading(){
     reader.onload = () => resolve(reader.result.split(',')[1]);
     reader.onerror = error => reject(error);
   });
+}
+
+  /* analis fungsi */
+async function uploadFotoKeDrive(file){
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
+  let base64 = await toBase64(file);
+
+  let res = await fetch(URL,{
+    method:"POST",
+    body:new URLSearchParams({
+      action:"upload",
+      file: base64.split(',')[1],
+      name: file.name,
+      type: file.type,
+      username: document.getElementById("username").value,
+      nik: document.getElementById("nik").value
+    }),
+    signal: controller.signal
+  });
+
+  clearTimeout(timeout);
+
+  if(!res.ok){
+    throw new Error("HTTP error: " + res.status);
+  }
+
+  let data = await res.json();
+
+  if(!data || !data.url){
+    throw new Error("Upload gagal dari server");
+  }
+
+  return data.url;
 }
   
 </script>
