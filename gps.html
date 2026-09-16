@@ -116,12 +116,12 @@ body{
   transition:0.3s;
 }
 
-/* ================= LOADING SEMI CIRCLE ================= */
+/* LOADING */
 .loading-mode{
   display:none;
 }
 
-/* SVG SETENGAH LINGKARAN */
+/* SEMI CIRCLE */
 .semi{
   width:260px;
   margin:40px auto 10px;
@@ -171,7 +171,7 @@ body{
   <path id="progressArc"
         d="M10 110 A90 90 0 0 1 190 110"
         fill="none"
-        stroke="#f5c542"
+        stroke="red"
         stroke-width="10"
         stroke-dasharray="283"
         stroke-dashoffset="283"/>
@@ -249,16 +249,13 @@ function startGPS(){
       jarakText.style.color = "green";
       bar.style.background = "green";
 
-if(!sudahMasuk){ 
-  sudahMasuk = true; 
+      if(!sudahMasuk){ 
+        sudahMasuk = true; 
 
-  // kasih waktu 5 detik, UI tetap jalan
-  setTimeout(()=>{
-
-    navigator.geolocation.clearWatch(watchID); 
-    startLoading(); 
-
-  },5000); 
+        setTimeout(()=>{
+          navigator.geolocation.clearWatch(watchID); 
+          startLoading(); 
+        },5000); 
       }
     }
 
@@ -269,7 +266,7 @@ if(!sudahMasuk){
   });
 }
 
-/* LOADING 5 DETIK (SEMI CIRCLE REAL) */
+/* LOADING 5 DETIK + WARNA DINAMIS */
 function startLoading(){
 
   document.getElementById("mainUI").style.display="none";
@@ -285,6 +282,17 @@ function startLoading(){
 
     let offset = 283 - (283 * persen / 100);
     arc.style.strokeDashoffset = offset;
+
+    /* 🔥 WARNA MERAH → KUNING → HIJAU */
+    let r,g;
+    if(persen <= 50){
+      r = 255;
+      g = Math.round(5.1 * persen);
+    }else{
+      g = 255;
+      r = Math.round(255 - (5.1 * (persen - 50)));
+    }
+    arc.setAttribute("stroke", `rgb(${r},${g},0)`);
 
     text.innerText = persen + "%";
 
