@@ -309,7 +309,7 @@ body{
   </div>
 
   <div class="card">
-  <small>Perusahaan2</small>
+  <small>Perusahaan1</small>
   <div>🏢 <b id="perusahaan">-</b></div>
   </div>
 
@@ -399,6 +399,12 @@ try{
 let user = parsed.user || parsed;
 console.log("USER DATA:", user);
 
+/* ================= GLOBAL STATE (FIX BUG) ================= */
+let watchID = null;
+let currentLat = null;
+let currentLng = null;
+let dalamArea = false;
+
 /* ================= NAVIGASI ================= */
 function goPage(id,el){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -449,7 +455,6 @@ function updateDashboard(){
   }else{
     document.getElementById("kontrak").innerText = "-";
   }
-
 }
 
 /* ================= HITUNG JARAK ================= */
@@ -470,16 +475,16 @@ function distance(lat1, lon1, lat2, lon2){
 }
 
 /* ================= GPS DETECT ================= */
-let watchID;
-let currentLat = null;
-let currentLng = null;
-let dalamArea = false;
-
 function startGPS(){
 
   const textStatus = document.getElementById("textStatus");
   const textJarak = document.getElementById("jarakText");
   const bar = document.getElementById("bar");
+
+  // 🔥 penting: stop watcher lama dulu
+  if(watchID){
+    navigator.geolocation.clearWatch(watchID);
+  }
 
   watchID = navigator.geolocation.watchPosition(pos=>{
 
@@ -521,12 +526,19 @@ function startGPS(){
 /* ================= ABSEN (FIX) ================= */
 function handleAbsen(){
 
+  const loading = document.getElementById("loadingGPS");
+  const btnKirim = document.getElementById("btnKirimAbsen");
+
   if(!dalamArea){
     alert("Anda masih di luar area!");
     return;
   }
 
-  const loading = document.getElementById("loadingGPS");
+  if(!currentLat || !currentLng){
+    alert("Lokasi belum siap");
+    return;
+  }
+
   loading.style.display = "flex";
 
   fetch(URL,{
@@ -551,6 +563,7 @@ function handleAbsen(){
   .finally(()=>{
     loading.style.display = "none";
   });
+
 }
 
 /* ================= LEMBUR ================= */
@@ -667,7 +680,7 @@ function kirimTracking(){
 
 /* ================= INIT ================= */
 updateDashboard();
-startGPS(); // 🔥 penting: GPS jalan otomatis
+startGPS();
 
 </script>
 
