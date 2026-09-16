@@ -447,9 +447,15 @@ async function submitForm(){
   try{
 
     // ================= FILE =================
-    let fotoFile = document.getElementById("foto").files[0];
-    let cvFile   = document.getElementById("cv").files[0];
+ let fotoFile = document.getElementById("foto").files[0];
+let cvFile   = document.getElementById("cv").files[0];
 
+// 🔥 FOTO AUTO KOMPRES
+let fotoBase64 = fotoFile ? await compressImage(fotoFile) : "";
+
+// 🔥 CV TETAP ASLI
+let cvBase64   = cvFile ? await toBase64(cvFile) : "";
+    
     if(!fotoFile || !cvFile){
       alert("Foto & CV wajib diisi!");
       hideLoading();
@@ -480,11 +486,11 @@ async function submitForm(){
         referral:referral.value,
 
         // 🔥 FILE
-        foto:fotoBase64,
-        fotoType:fotoFile.type,
-
-        cv:cvBase64,
-        cvType:cvFile.type
+       foto: fotoBase64,
+       fotoType: fotoFile ? fotoFile.type : "",
+        
+       cv: cvBase64,
+       cvType: cvFile ? cvFile.type : ""
       })
     });
 
@@ -589,6 +595,40 @@ function confetti(){
     setTimeout(()=>c.remove(),3000);
   }
 }
+  // ================= AUTO COMPRESS FOTO =================
+async function compressImage(file){
+  return new Promise((resolve, reject)=>{
+    let img = new Image();
+    let reader = new FileReader();
+
+    reader.onload = e=>{
+      img.src = e.target.result;
+    };
+
+    img.onload = ()=>{
+      let canvas = document.createElement("canvas");
+      let maxWidth = 800;
+
+      let scale = maxWidth / img.width;
+      canvas.width = maxWidth;
+      canvas.height = img.height * scale;
+
+      let ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob(blob=>{
+        let reader2 = new FileReader();
+        reader2.onload = ()=>{
+          resolve(reader2.result.split(',')[1]); // base64
+        };
+        reader2.readAsDataURL(blob);
+      }, "image/jpeg", 0.7);
+    };
+
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 /* SHOWLOADING */
 function showLoading(){
@@ -597,6 +637,14 @@ function showLoading(){
 
 function hideLoading(){
   document.getElementById("loading").style.display="none";
+}
+  function toBase64(file){
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = error => reject(error);
+  });
 }
   
 </script>
