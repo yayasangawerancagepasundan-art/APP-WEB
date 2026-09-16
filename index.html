@@ -660,7 +660,9 @@ async function uploadFotoKeDrive(file){
   const timeout = setTimeout(() => controller.abort(), 10000);
 
   let base64 = await toBase64(file);
-
+  
+console.log("SEBELUM FETCH");
+  
 let res = await fetch(URL,{
   method:"POST",
   headers:{
@@ -677,6 +679,8 @@ let res = await fetch(URL,{
   signal: controller.signal
 });
 
+  console.log("SETELAH FETCH");
+  
   clearTimeout(timeout);
 
   if(!res.ok){
