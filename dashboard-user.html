@@ -309,7 +309,7 @@ body{
   </div>
 
   <div class="card">
-  <small>Perusahaan1</small>
+  <small>Perusahaan2</small>
   <div>🏢 <b id="perusahaan">-</b></div>
   </div>
 
@@ -398,7 +398,6 @@ try{
 
 let user = parsed.user || parsed;
 console.log("USER DATA:", user);
-alert(JSON.stringify(user)); // ⬅️ TAMBAH DI SINI
 
 /* ================= NAVIGASI ================= */
 function goPage(id,el){
@@ -470,70 +469,88 @@ function distance(lat1, lon1, lat2, lon2){
   return R * c;
 }
 
-/* ================= GPS + ABSEN ================= */
+/* ================= GPS DETECT ================= */
 let watchID;
+let currentLat = null;
+let currentLng = null;
+let dalamArea = false;
 
-function handleAbsen(){
+function startGPS(){
 
-  const loading = document.getElementById("loadingGPS");
   const textStatus = document.getElementById("textStatus");
   const textJarak = document.getElementById("jarakText");
-
-  loading.style.display = "flex";
+  const bar = document.getElementById("bar");
 
   watchID = navigator.geolocation.watchPosition(pos=>{
 
     let lat = pos.coords.latitude;
     let lng = pos.coords.longitude;
 
-    let latDB = user.lat;
-    let lngDB = user.lng;
-    let radius = user.radius || 50;
+    currentLat = lat;
+    currentLng = lng;
+
+    let latDB = Number(user.lat);
+    let lngDB = Number(user.lng);
+    let radius = Number(user.radius) || 50;
 
     let jarak = distance(lat, lng, latDB, lngDB);
 
-    textStatus.innerText = "Mencari lokasi...";
     textJarak.innerText = "Jarak: " + Math.round(jarak) + " meter";
 
-    if(jarak <= radius){
+    let persen = 100 - (jarak / radius * 100);
+    persen = Math.max(0, Math.min(100, persen));
+    bar.style.width = persen + "%";
 
-      textStatus.innerText = "Mengirim absen...";
-
-      navigator.geolocation.clearWatch(watchID);
-
-      fetch(URL,{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body: JSON.stringify({
-          action:"absen",
-          username:user.username,
-          lat:lat,
-          lng:lng
-        })
-      })
-      .then(res=>res.text())
-      .then(res=>{
-        alert(res);
-      })
-      .catch(err=>{
-        alert("Gagal kirim: " + err);
-      })
-      .finally(()=>{
-        loading.style.display = "none";
-      });
-
+    if(jarak > radius){
+      dalamArea = false;
+      textStatus.innerText = "Di luar area (" + Math.round(jarak - radius) + "m lagi)";
+      document.getElementById("btnAbsen").disabled = true;
+    }else{
+      dalamArea = true;
+      textStatus.innerText = "ANDA DALAM AREA";
+      document.getElementById("btnAbsen").disabled = false;
     }
 
   }, err=>{
-    loading.style.display = "none";
-    alert("GPS gagal: " + err.message);
+    textStatus.innerText = "Gagal ambil lokasi";
   },{
-    enableHighAccuracy:true,
-    maximumAge:0
+    enableHighAccuracy:true
   });
+}
 
+/* ================= ABSEN (FIX) ================= */
+function handleAbsen(){
+
+  if(!dalamArea){
+    alert("Anda masih di luar area!");
+    return;
+  }
+
+  const loading = document.getElementById("loadingGPS");
+  loading.style.display = "flex";
+
+  fetch(URL,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      action:"absen",
+      username:user.username,
+      lat:currentLat,
+      lng:currentLng
+    })
+  })
+  .then(res=>res.text())
+  .then(res=>{
+    alert(res);
+  })
+  .catch(err=>{
+    alert("Gagal kirim: " + err);
+  })
+  .finally(()=>{
+    loading.style.display = "none";
+  });
 }
 
 /* ================= LEMBUR ================= */
@@ -650,6 +667,7 @@ function kirimTracking(){
 
 /* ================= INIT ================= */
 updateDashboard();
+startGPS(); // 🔥 penting: GPS jalan otomatis
 
 </script>
 
