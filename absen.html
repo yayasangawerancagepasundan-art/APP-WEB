@@ -7,45 +7,48 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
-<meta name="theme-color" content="#ff0000">
-<meta name="apple-mobile-web-app-capable" content="yes">
-
 <style>
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
-  background:#f2f2f2;
+  background:#f5f6fa;
+  overflow:hidden;
 }
 
-/* FULL APP */
+/* CARD */
 .card{
-  max-width:420px;
-  margin:0 auto;
-  min-height:100vh;
+  max-width:500px;
+  margin:20px auto;
   background:#fff;
   padding:20px;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  position:relative;
+  z-index:2;
+}
+
+/* HEADER */
+.header{
   display:flex;
-  flex-direction:column;
   justify-content:space-between;
-}
-
-/* LOGO */
-.logo-atas{
-  width:110px;
-  margin-bottom:20px;
-}
-
-/* CONTENT */
-.content{
-  display:flex;
-  gap:15px;
   align-items:flex-start;
+}
+
+.logo{
+  width:150px;
+}
+
+.photo img{
+  width:110px;
+  height:140px;
+  object-fit:cover;
+  border-radius:12px;
 }
 
 /* DATA */
 .data{
-  flex:1;
-  font-size:13px;
+  margin-top:15px;
+  font-size:14px;
 }
 
 .row{
@@ -54,28 +57,17 @@ body{
 }
 
 .label{
-  width:120px;
+  width:140px;
   font-weight:600;
-  color:#444;
 }
 
 .value{
   flex:1;
-  word-break:break-word;
-}
-
-/* FOTO */
-.photo img{
-  width:100px;
-  height:130px;
-  object-fit:cover;
-  border-radius:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* BUTTON */
 .btn{
-  margin-top:30px;
+  margin-top:20px;
 }
 
 button{
@@ -85,10 +77,8 @@ button{
   background:linear-gradient(135deg,#ff0000,#ff4d4d);
   color:#fff;
   font-size:16px;
-  border-radius:12px;
+  border-radius:10px;
   cursor:pointer;
-  font-weight:600;
-  box-shadow:0 5px 15px rgba(255,0,0,0.3);
 }
 
 /* LOADING (TIDAK DIUBAH) */
@@ -154,7 +144,6 @@ button{
   font-size:60px;
 }
 
-/* ANIMASI */
 .success{ animation:angguk 0.6s infinite alternate; }
 .fail{ animation:geleng 0.6s infinite alternate; }
 
@@ -167,7 +156,7 @@ button{
   to{transform:rotate(10deg);}
 }
 
-/* WAVE (TIDAK DIUBAH) */
+/* WAVE (WAJIB 5 LAYER - TIDAK DIUBAH) */
 .wave{
   position:fixed;
   bottom:0;
@@ -181,27 +170,27 @@ button{
 
 <div class="card">
 
-  <div>
-    <img src="jelas.png" class="logo-atas">
-
-    <div class="content">
-      <div class="data" id="dataUser">Loading...</div>
-
-      <div class="photo">
-        <img id="fotoUser" src="">
-      </div>
+  <!-- HEADER -->
+  <div class="header">
+    <img src="jelas.png" class="logo">
+    <div class="photo">
+      <img id="fotoUser" src="">
     </div>
   </div>
 
+  <!-- DATA -->
+  <div class="data" id="dataUser"></div>
+
+  <!-- BUTTON -->
   <div class="btn">
     <button onclick="absen()">ABSEN SEKARANG</button>
   </div>
 
 </div>
 
-<!-- LOADING (TIDAK DIUBAH) -->
+<!-- LOADING -->
 <div class="loading" id="loading">
-  <img src="jelas.png" class="logo-atas"> 
+  <img src="jelas.png" class="logo"> 
   <div class="wait-text"> 
     <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span> 
     <span>&nbsp;</span> 
@@ -217,37 +206,64 @@ button{
   </div>
 </div>
 
-<!-- WAVE (TIDAK DIUBAH) -->
+<!-- 🔥 5 WAVE FIX -->
 <div class="wave">
 <svg viewBox="0 0 1440 320">
+
 <path fill="#ff0000" fill-opacity="0.15">
 <animate attributeName="d" dur="12s" repeatCount="indefinite"
 values="M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z;
 M0,160 C500,260 900,80 1440,160 L1440,320 L0,320 Z;
 M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
 </path>
+
+<path fill="#ff0000" fill-opacity="0.25">
+<animate attributeName="d" dur="10s" repeatCount="indefinite"
+values="M0,180 C400,80 1000,280 1440,180 L1440,320 L0,320 Z;
+M0,140 C600,300 900,60 1440,140 L1440,320 L0,320 Z;
+M0,180 C400,80 1000,280 1440,180 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.35">
+<animate attributeName="d" dur="8s" repeatCount="indefinite"
+values="M0,220 C300,150 1200,250 1440,220 L1440,320 L0,320 Z;
+M0,180 C500,280 1000,120 1440,180 L1440,320 L0,320 Z;
+M0,220 C300,150 1200,250 1440,220 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.45">
+<animate attributeName="d" dur="6s" repeatCount="indefinite"
+values="M0,240 C400,180 1000,300 1440,240 L1440,320 L0,320 Z;
+M0,200 C600,320 900,160 1440,200 L1440,320 L0,320 Z;
+M0,240 C400,180 1000,300 1440,240 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.6">
+<animate attributeName="d" dur="4s" repeatCount="indefinite"
+values="M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z;
+M0,220 C500,340 1000,180 1440,220 L1440,320 L0,320 Z;
+M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z"/>
+</path>
+
 </svg>
 </div>
 
 <script>
-
 const URL = "https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec";
 
-/* USER */
 let raw = localStorage.getItem("userLogin");
 let parsed = raw ? JSON.parse(raw) : null;
 let user = parsed ? (parsed.user || parsed) : null;
 
 /* FORMAT TANGGAL */
-function formatTanggal(tgl){
-  if(!tgl) return "-";
-  let d = new Date(tgl);
+function formatTanggal(t){
+  if(!t) return "-";
+  let d = new Date(t);
   return d.toLocaleDateString("id-ID");
 }
 
 /* LOAD USER */
 function loadUser(){
-
   if(!user){
     document.getElementById("dataUser").innerText="User tidak ditemukan";
     return;
@@ -270,14 +286,12 @@ function loadUser(){
 
 /* ABSEN */
 async function absen(){
-
   let lat = localStorage.getItem("lat");
   let lng = localStorage.getItem("lng");
 
   document.getElementById("loading").style.display="flex";
 
   try{
-
     let res = await fetch(URL,{
       method:"POST",
       headers:{ "Content-Type":"text/plain;charset=utf-8" },
@@ -289,7 +303,6 @@ async function absen(){
     });
 
     let data = await res.json();
-
     document.getElementById("loading").style.display="none";
 
     let result = document.getElementById("result");
@@ -304,36 +317,21 @@ async function absen(){
       msg.innerText="ABSEN BERHASIL";
 
       setTimeout(()=>{
-        result.style.display="none";
         window.location.href="dashboard_user.html";
       },2000);
-
     }else{
       face.innerText="😕";
       face.className="face fail";
-      msg.innerText=data.msg || "ABSEN GAGAL";
-
-      setTimeout(()=>{ result.style.display="none"; },2000);
+      msg.innerText="ABSEN GAGAL";
     }
 
   }catch(err){
     document.getElementById("loading").style.display="none";
-
-    let result = document.getElementById("result");
-    let face = document.getElementById("face");
-    let msg = document.getElementById("msg");
-
-    result.style.display="flex";
-    face.innerText="😕";
-    face.className="face fail";
-    msg.innerText="KONEKSI GAGAL";
-
-    setTimeout(()=>{ result.style.display="none"; },2000);
+    alert("Koneksi gagal");
   }
 }
 
 loadUser();
-
 </script>
 
 </body>
