@@ -1,1 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Absen</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Poppins',sans-serif;
+  background:#fff;
+  overflow:hidden;
+}
+
+/* CARD */
+.card{
+  max-width:500px;
+  margin:40px auto;
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+  position:relative;
+  z-index:2;
+}
+
+/* LOGO */
+.logo-atas{
+  width:120px;
+  margin-bottom:10px;
+}
+
+/* CONTENT */
+.content{
+  display:flex;
+  justify-content:space-between;
+}
+
+.data{
+  font-size:13px;
+  line-height:1.7;
+}
+
+.data b{
+  width:130px;
+  display:inline-block;
+}
+
+.photo img{
+  width:120px;
+  height:150px;
+  object-fit:cover;
+  border-radius:6px;
+}
+
+/* BUTTON */
+.btn{
+  margin-top:20px;
+}
+
+button{
+  width:100%;
+  padding:15px;
+  border:none;
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+  font-size:16px;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* LOADING */
+.loading{
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(255,255,255,0.95);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:999;
+}
+
+/* HARAP TUNGGU (ASLI LU, TIDAK DIUBAH) */
+.wait-text span{
+  display:inline-block;
+  font-weight:600;
+  color:#ff0000;
+  font-size:16px;
+  opacity:0;
+  animation:fadeSlide 1.5s infinite;
+}
+.wait-text span:nth-child(1){animation-delay:0s;}
+.wait-text span:nth-child(2){animation-delay:0.1s;}
+.wait-text span:nth-child(3){animation-delay:0.2s;}
+.wait-text span:nth-child(4){animation-delay:0.3s;}
+.wait-text span:nth-child(5){animation-delay:0.4s;}
+.wait-text span:nth-child(6){animation-delay:0.5s;}
+.wait-text span:nth-child(7){animation-delay:0.6s;}
+.wait-text span:nth-child(8){animation-delay:0.7s;}
+.wait-text span:nth-child(9){animation-delay:0.8s;}
+.wait-text span:nth-child(10){animation-delay:0.9s;}
+.wait-text span:nth-child(11){animation-delay:1s;}
+.wait-text span:nth-child(12){animation-delay:1.1s;}
+
+@keyframes fadeSlide{
+  0%{opacity:0; transform:translateX(20px);}
+  50%{opacity:1; transform:translateX(0);}
+  100%{opacity:0; transform:translateX(-10px);}
+}
+
+/* RESULT */
+.result{
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.box{
+  background:#fff;
+  padding:30px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.face{
+  font-size:60px;
+  display:inline-block;
+}
+
+/* ANIMASI */
+.success{
+  animation:angguk 0.6s infinite alternate;
+}
+
+.fail{
+  animation:geleng 0.6s infinite alternate;
+}
+
+@keyframes angguk{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(10deg);}
+}
+
+@keyframes geleng{
+  from{transform:rotate(-10deg);}
+  to{transform:rotate(10deg);}
+}
+
+/* WAVE POSISI */
+.wave{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  z-index:1;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <img src="jelas.png" class="logo-atas">
+
+  <div class="content">
+    <div class="data" id="dataUser">Loading...</div>
+    <div class="photo">
+      <img id="fotoUser" src="">
+    </div>
+  </div>
+
+  <div class="btn">
+    <button onclick="absen()">ABSEN SEKARANG</button>
+  </div>
+
+</div>
+
+<!-- LOADING -->
+<div class="loading" id="loading">
+  <img src="jelas.png" class="logo-atas"> 
+  <div class="wait-text"> 
+    <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span> 
+    <span>&nbsp;</span> 
+    <span>T</span><span>U</span><span>N</span><span>G</span><span>G</span><span>U</span> 
+  </div> 
+</div>
+
+<!-- RESULT -->
+<div class="result" id="result">
+  <div class="box">
+    <div class="face" id="face">😊</div>
+    <div id="msg"></div>
+  </div>
+</div>
+
+<!-- 🔥 WAVE 5 LAYER (ASLI LU, TIDAK DIUBAH) -->
+<div class="wave">
+<svg viewBox="0 0 1440 320">
+
+<path fill="#ff0000" fill-opacity="0.15">
+<animate attributeName="d" dur="12s" repeatCount="indefinite"
+values="M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z;
+M0,160 C500,260 900,80 1440,160 L1440,320 L0,320 Z;
+M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.25">
+<animate attributeName="d" dur="10s" repeatCount="indefinite"
+values="M0,220 C400,120 1000,260 1440,220 L1440,320 L0,320 Z;
+M0,180 C300,260 1100,80 1440,180 L1440,320 L0,320 Z;
+M0,220 C400,120 1000,260 1440,220 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.4">
+<animate attributeName="d" dur="8s" repeatCount="indefinite"
+values="M0,240 C500,140 900,260 1440,240 L1440,320 L0,320 Z;
+M0,200 C400,260 1100,100 1440,200 L1440,320 L0,320 Z;
+M0,240 C500,140 900,260 1440,240 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000" fill-opacity="0.6">
+<animate attributeName="d" dur="6s" repeatCount="indefinite"
+values="M0,250 C400,150 1000,260 1440,250 L1440,320 L0,320 Z;
+M0,210 C300,260 1100,120 1440,210 L1440,320 L0,320 Z;
+M0,250 C400,150 1000,260 1440,250 L1440,320 L0,320 Z"/>
+</path>
+
+<path fill="#ff0000">
+<animate attributeName="d" dur="4s" repeatCount="indefinite"
+values="M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z;
+M0,230 C400,260 1100,150 1440,230 L1440,320 L0,320 Z;
+M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
+</path>
+
+</svg>
+</div>
+
+<script>
+
+const URL = "https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
+
+async function loadUser(){
+  let username = localStorage.getItem("username");
+
+  let res = await fetch(URL,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({ action:"get_user", username })
+  });
+
+  let data = await res.json();
+  let u = data.data;
+
+  document.getElementById("dataUser").innerHTML = `
+    <div><b>NIK</b>: ${u.nik}</div>
+    <div><b>Nama</b>: ${u.nama}</div>
+    <div><b>Tempat Lahir</b>: ${u.tempat}</div>
+    <div><b>Tanggal Lahir</b>: ${u.tgl_lahir}</div>
+    <div><b>Umur</b>: ${hitungUmur(u.tgl_lahir)}</div>
+    <div><b>Jenis Kelamin</b>: ${u.jk}</div>
+    <div><b>Alamat</b>: ${u.alamat}</div>
+    <div><b>Status</b>: ${u.status_perkawinan}</div>
+    <div><b>Zona</b>: ${u.zona}</div>
+  `;
+
+  document.getElementById("fotoUser").src = u.foto;
+}
+
+function hitungUmur(tgl){
+  let lahir = new Date(tgl);
+  let now = new Date();
+  return now.getFullYear() - lahir.getFullYear();
+}
+
+async function absen(){
+
+  let username = localStorage.getItem("username");
+  let lat = localStorage.getItem("lat");
+  let lng = localStorage.getItem("lng");
+
+  document.getElementById("loading").style.display="flex";
+
+  let res = await fetch(URL,{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body: JSON.stringify({
+      action:"absen",
+      username, lat, lng
+    })
+  });
+
+  let data = await res.json();
+
+  document.getElementById("loading").style.display="none";
+
+  let result = document.getElementById("result");
+  let face = document.getElementById("face");
+  let msg = document.getElementById("msg");
+
+  result.style.display="flex";
+
+  if(data.status === "ok"){
+    face.innerText="😊";
+    face.className="face success";
+    msg.innerText="ABSEN BERHASIL";
+
+    setTimeout(()=>{
+      window.location.href="dashboard_user.html";
+    },2000);
+
+  }else{
+    face.innerText="😕";
+    face.className="face fail";
+    msg.innerText="ABSEN GAGAL";
+  }
+}
+
+loadUser();
+
+</script>
+
+</body>
+</html>
