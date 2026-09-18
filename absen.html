@@ -219,10 +219,10 @@ M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
 /* 🔥 PAKAI APPS SCRIPT */
 const URL = "https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec";
 
-/* 🔥 AMBIL USER DARI LOCALSTORAGE (FIX) */
+/* 🔥 AMBIL USER */
 let raw = localStorage.getItem("userLogin");
-let parsed = JSON.parse(raw);
-let user = parsed.user || parsed;
+let parsed = raw ? JSON.parse(raw) : null;
+let user = parsed ? (parsed.user || parsed) : null;
 
 /* LOAD DATA */
 function loadUser(){
@@ -233,25 +233,18 @@ function loadUser(){
   }
 
   document.getElementById("dataUser").innerHTML = `
-    <div><b>NIK</b>: ${user.nik}</div>
-    <div><b>Nama</b>: ${user.nama}</div>
-    <div><b>Tempat Lahir</b>: ${user.tempat}</div>
-    <div><b>Tanggal Lahir</b>: ${user.tgl_lahir}</div>
-    <div><b>Umur</b>: ${hitungUmur(user.tgl_lahir)}</div>
-    <div><b>Jenis Kelamin</b>: ${user.jk}</div>
-    <div><b>Alamat</b>: ${user.alamat}</div>
-    <div><b>Status</b>: ${user.status_perkawinan}</div>
-    <div><b>Zona</b>: ${user.zona}</div>
+    <div><b>NIK</b>: ${user.nik || "-"}</div>
+    <div><b>Nama</b>: ${user.nama || "-"}</div>
+    <div><b>Tempat Lahir</b>: ${user.tempat || "-"}</div>
+    <div><b>Tanggal Lahir</b>: ${user.tgl_lahir || "-"}</div>
+    <div><b>Umur</b>: ${user.umur || "-"}</div>
+    <div><b>Jenis Kelamin</b>: ${user.jk || "-"}</div>
+    <div><b>Alamat</b>: ${user.alamat || "-"}</div>
+    <div><b>Status</b>: ${user.status_perkawinan || "-"}</div>
+    <div><b>Zona</b>: ${user.zona || "-"}</div>
   `;
 
   document.getElementById("fotoUser").src = user.foto || "";
-}
-
-/* UMUR */
-function hitungUmur(tgl){
-  let lahir = new Date(tgl);
-  let now = new Date();
-  return now.getFullYear() - lahir.getFullYear();
 }
 
 /* ABSEN */
@@ -260,17 +253,28 @@ async function absen(){
   let lat = localStorage.getItem("lat");
   let lng = localStorage.getItem("lng");
 
+  if(!user || !user.username){
+    alert("User tidak valid");
+    return;
+  }
+
   document.getElementById("loading").style.display="flex";
 
   try{
 
+    // 🔥 DEBUG OPTIONAL
+    console.log("ABSEN:", user.username, lat, lng);
+
     let res = await fetch(URL,{
       method:"POST",
-      headers:{ "Content-Type":"application/json" },
+      headers:{
+        "Content-Type":"text/plain;charset=utf-8"
+      },
       body: JSON.stringify({
         action:"absen",
         username:user.username,
-        lat, lng
+        lat: lat,
+        lng: lng
       })
     });
 
@@ -299,7 +303,7 @@ async function absen(){
 
       face.innerText="😕";
       face.className="face fail";
-      msg.innerText="ABSEN GAGAL";
+      msg.innerText = data.msg || "ABSEN GAGAL";
 
       setTimeout(()=>{
         result.style.display="none";
@@ -309,8 +313,22 @@ async function absen(){
   }catch(err){
 
     document.getElementById("loading").style.display="none";
-    alert("Koneksi gagal");
 
+    console.log("ERROR:", err);
+
+    let result = document.getElementById("result");
+    let face = document.getElementById("face");
+    let msg = document.getElementById("msg");
+
+    result.style.display="flex";
+
+    face.innerText="😕";
+    face.className="face fail";
+    msg.innerText="KONEKSI GAGAL";
+
+    setTimeout(()=>{
+      result.style.display="none";
+    },2000);
   }
 }
 
