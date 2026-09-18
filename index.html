@@ -446,48 +446,55 @@ function toBase64(file){
 /* UPLOAD */
 async function uploadFotoKeDrive(file){
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
-
-  let base64 = await toBase64(file);
-
-  console.log("SEBELUM FETCH UPLOAD");
-
-  let res = await fetch(URL,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body: JSON.stringify({
-      action:"upload",
-      file: base64,
-      name: file.name,
-      type: file.type,
-      username: document.getElementById("username").value,
-      nik: document.getElementById("nik").value
-    }),
-    signal: controller.signal
-  });
-
-  console.log("SETELAH FETCH UPLOAD");
-
-  clearTimeout(timeout);
-
-  let text = await res.text();
-  console.log("UPLOAD RAW:", text);
-
-  let data;
   try{
-    data = JSON.parse(text);
-  }catch{
-    throw new Error("Response upload bukan JSON");
-  }
 
-  if(!data || !data.url){
-    throw new Error("Upload gagal dari server");
-  }
+    let base64 = await toBase64(file);
 
-  return data.url;
+    console.log("SEBELUM FETCH UPLOAD");
+
+    let res = await fetch(URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        action:"upload",
+        file: base64,
+        name: file.name,
+        type: file.type,
+        username: document.getElementById("username").value,
+        nik: document.getElementById("nik").value
+      })
+    });
+
+    console.log("SETELAH FETCH UPLOAD");
+
+    if(!res.ok){
+      throw new Error("HTTP error: " + res.status);
+    }
+
+    let text = await res.text();
+    console.log("UPLOAD RAW:", text);
+
+    let data;
+    try{
+      data = JSON.parse(text);
+    }catch{
+      throw new Error("Response upload bukan JSON");
+    }
+
+    if(!data || !data.url){
+      throw new Error("Upload gagal dari server");
+    }
+
+    return data.url;
+
+  }catch(err){
+
+    console.error(err);
+    throw new Error("Upload gagal / server lambat");
+
+  }
 }
 
 /* REGISTER */
@@ -514,10 +521,12 @@ async function submitForm(){
       return;
     }
 
-    let [fotoUrl, cvUrl] = await Promise.all([
-      uploadFotoKeDrive(fotoFile),
-      uploadFotoKeDrive(cvFile)
-    ]);
+    // 🔥 FIX 1: upload JANGAN paralel
+    console.log("UPLOAD FOTO...");
+    let fotoUrl = await uploadFotoKeDrive(fotoFile);
+
+    console.log("UPLOAD CV...");
+    let cvUrl   = await uploadFotoKeDrive(cvFile);
 
     console.log("SEBELUM FETCH REGISTER");
 
@@ -592,7 +601,7 @@ async function submitForm(){
     console.error(err);
 
     if(err.name === "AbortError"){
-      alert("Upload timeout (koneksi lambat)");
+      alert("Upload timeout (server lambat)");
     }else{
       alert(err.message || "Koneksi gagal / upload error");
     }
@@ -600,7 +609,7 @@ async function submitForm(){
     hideLoading();
   }
 }
-
+  
 /* LOGIN (JSON) */
 function login(){
 
