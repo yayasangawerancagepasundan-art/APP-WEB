@@ -247,33 +247,57 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
 
 <script>
 
-const URL = "https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
+// 🔥 LANGSUNG KE APPS SCRIPT (BUKAN WORKER)
+const URL = "https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec";
 
 async function loadUser(){
-  let username = localStorage.getItem("username");
 
-  let res = await fetch(URL,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({ action:"get_user", username })
-  });
+  try{
 
-  let data = await res.json();
-  let u = data.data;
+    let username = localStorage.getItem("username");
 
-  document.getElementById("dataUser").innerHTML = `
-    <div><b>NIK</b>: ${u.nik}</div>
-    <div><b>Nama</b>: ${u.nama}</div>
-    <div><b>Tempat Lahir</b>: ${u.tempat}</div>
-    <div><b>Tanggal Lahir</b>: ${u.tgl_lahir}</div>
-    <div><b>Umur</b>: ${hitungUmur(u.tgl_lahir)}</div>
-    <div><b>Jenis Kelamin</b>: ${u.jk}</div>
-    <div><b>Alamat</b>: ${u.alamat}</div>
-    <div><b>Status</b>: ${u.status_perkawinan}</div>
-    <div><b>Zona</b>: ${u.zona}</div>
-  `;
+    if(!username){
+      document.getElementById("dataUser").innerHTML = "User tidak ditemukan";
+      return;
+    }
 
-  document.getElementById("fotoUser").src = u.foto;
+    let res = await fetch(URL,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ action:"get_user", username })
+    });
+
+    let text = await res.text();
+    console.log("GET USER RAW:", text);
+
+    let data = JSON.parse(text);
+
+    if(!data || !data.data){
+      throw new Error("Data user tidak ada");
+    }
+
+    let u = data.data;
+
+    document.getElementById("dataUser").innerHTML = `
+      <div><b>NIK</b>: ${u.nik}</div>
+      <div><b>Nama</b>: ${u.nama}</div>
+      <div><b>Tempat Lahir</b>: ${u.tempat}</div>
+      <div><b>Tanggal Lahir</b>: ${u.tgl_lahir}</div>
+      <div><b>Umur</b>: ${hitungUmur(u.tgl_lahir)}</div>
+      <div><b>Jenis Kelamin</b>: ${u.jk}</div>
+      <div><b>Alamat</b>: ${u.alamat}</div>
+      <div><b>Status</b>: ${u.status_perkawinan}</div>
+      <div><b>Zona</b>: ${u.zona}</div>
+    `;
+
+    document.getElementById("fotoUser").src = u.foto;
+
+  }catch(err){
+
+    console.error("LOAD USER ERROR:", err);
+    document.getElementById("dataUser").innerHTML = "Gagal memuat data";
+
+  }
 }
 
 function hitungUmur(tgl){
@@ -290,41 +314,77 @@ async function absen(){
 
   document.getElementById("loading").style.display="flex";
 
-  let res = await fetch(URL,{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      action:"absen",
-      username, lat, lng
-    })
-  });
+  try{
 
-  let data = await res.json();
+    let res = await fetch(URL,{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        action:"absen",
+        username, lat, lng
+      })
+    });
 
-  document.getElementById("loading").style.display="none";
+    let text = await res.text();
+    console.log("ABSEN RAW:", text);
 
-  let result = document.getElementById("result");
-  let face = document.getElementById("face");
-  let msg = document.getElementById("msg");
+    let data = JSON.parse(text);
 
-  result.style.display="flex";
+    document.getElementById("loading").style.display="none";
 
-  if(data.status === "ok"){
-    face.innerText="😊";
-    face.className="face success";
-    msg.innerText="ABSEN BERHASIL";
+    let result = document.getElementById("result");
+    let face = document.getElementById("face");
+    let msg = document.getElementById("msg");
 
-    setTimeout(()=>{
-      window.location.href="dashboard_user.html";
-    },2000);
+    result.style.display="flex";
 
-  }else{
+    if(data.status === "ok"){
+
+      face.innerText="😊";
+      face.className="face success";
+      msg.innerText="ABSEN BERHASIL";
+
+      setTimeout(()=>{
+        window.location.href="dashboard_user.html";
+      },2000);
+
+    }else{
+
+      face.innerText="😕";
+      face.className="face fail";
+      msg.innerText=data.msg || "ABSEN GAGAL";
+
+      // 🔥 AUTO HILANG (FIX STUCK)
+      setTimeout(()=>{
+        result.style.display="none";
+      },2000);
+
+    }
+
+  }catch(err){
+
+    console.error("ABSEN ERROR:", err);
+
+    document.getElementById("loading").style.display="none";
+
+    let result = document.getElementById("result");
+    let face = document.getElementById("face");
+    let msg = document.getElementById("msg");
+
+    result.style.display="flex";
+
     face.innerText="😕";
     face.className="face fail";
-    msg.innerText="ABSEN GAGAL";
+    msg.innerText="Koneksi gagal";
+
+    setTimeout(()=>{
+      result.style.display="none";
+    },2000);
+
   }
 }
 
+// 🔥 LOAD USER SAAT MASUK
 loadUser();
 
 </script>
