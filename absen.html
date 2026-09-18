@@ -290,37 +290,59 @@ async function absen(){
   document.getElementById("loading").style.display="flex";
 
   try{
+
     let res = await fetch(URL,{
       method:"POST",
-      headers:{ "Content-Type":"text/plain;charset=utf-8" },
+      headers:{
+        "Content-Type":"application/json"
+      },
       body: JSON.stringify({
         action:"absen",
-        username:user.username,
+        username:user.username
       })
     });
 
-    // 🔥 TAMBAHAN: fallback karena no-cors ga bisa baca response
-    setTimeout(()=>{
-      document.getElementById("loading").style.display="none";
+    // 🔥 CEK RESPONSE VALID
+    let text = await res.text();
 
-      let result = document.getElementById("result");
-      let face = document.getElementById("face");
-      let msg = document.getElementById("msg");
+    if(!text.includes("status")){
+      throw new Error("RESPON BUKAN JSON");
+    }
 
-      result.style.display="flex";
+    let data = JSON.parse(text);
 
+    document.getElementById("loading").style.display="none";
+
+    let result = document.getElementById("result");
+    let face = document.getElementById("face");
+    let msg = document.getElementById("msg");
+
+    result.style.display="flex";
+
+    if(data.status === "ok"){
       face.innerText="😊";
       face.className="face success";
-      msg.innerText="ABSEN TERKIRIM";
+      msg.innerText="ABSEN BERHASIL";
 
       setTimeout(()=>{
         window.location.href="dashboard_user.html";
       },1500);
 
-    },1500);
+    }else{
+      face.innerText="😕";
+      face.className="face fail";
+      msg.innerText=data.msg || "ABSEN GAGAL";
+
+      setTimeout(()=>{
+        location.reload();
+      },1500);
+    }
 
   }catch(err){
+
     document.getElementById("loading").style.display="none";
+
+    console.log("ERROR:", err);
 
     let result = document.getElementById("result");
     let face = document.getElementById("face");
@@ -330,14 +352,13 @@ async function absen(){
 
     face.innerText="😕";
     face.className="face fail";
-    msg.innerText="KONEKSI GAGAL";
+    msg.innerText="SERVER / CORS ERROR";
 
     setTimeout(()=>{
       location.reload();
-    },1500);
+    },10000);
   }
 }
-
 loadUser();
 </script>
 </body>
