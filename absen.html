@@ -292,6 +292,7 @@ async function absen(){
   try{
     let res = await fetch(URL,{
       method:"POST",
+      mode:"no-cors", // 🔥 TAMBAHAN (fix CORS)
       headers:{ "Content-Type":"text/plain;charset=utf-8" },
       body: JSON.stringify({
         action:"absen",
@@ -299,8 +300,27 @@ async function absen(){
       })
     });
 
-    let data = await res.json();
+    // 🔥 TAMBAHAN: fallback karena no-cors ga bisa baca response
+    setTimeout(()=>{
+      document.getElementById("loading").style.display="none";
 
+      let result = document.getElementById("result");
+      let face = document.getElementById("face");
+      let msg = document.getElementById("msg");
+
+      result.style.display="flex";
+
+      face.innerText="😊";
+      face.className="face success";
+      msg.innerText="ABSEN TERKIRIM";
+
+      setTimeout(()=>{
+        window.location.href="dashboard_user.html";
+      },1500);
+
+    },1500);
+
+  }catch(err){
     document.getElementById("loading").style.display="none";
 
     let result = document.getElementById("result");
@@ -309,27 +329,9 @@ async function absen(){
 
     result.style.display="flex";
 
-    if(data.status === "ok"){
-      face.innerText="😊";
-      face.className="face success";
-      msg.innerText="ABSEN BERHASIL";
-
-      setTimeout(()=>{
-        window.location.href="dashboard_user.html";
-      },1500);
-
-    }else{
-      face.innerText="😕";
-      face.className="face fail";
-      msg.innerText="ABSEN GAGAL";
-
-      setTimeout(()=>{
-        location.reload();
-      },1500);
-    }
-
-  }catch(err){
-    document.getElementById("loading").style.display="none";
+    face.innerText="😕";
+    face.className="face fail";
+    msg.innerText="KONEKSI GAGAL";
 
     setTimeout(()=>{
       location.reload();
