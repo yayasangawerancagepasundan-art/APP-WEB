@@ -303,6 +303,7 @@ async function absen(){
     });
 
     let data = await res.json();
+
     document.getElementById("loading").style.display="none";
 
     let result = document.getElementById("result");
@@ -318,21 +319,28 @@ async function absen(){
 
       setTimeout(()=>{
         window.location.href="dashboard_user.html";
-      },2000);
+      },1500);
+
     }else{
       face.innerText="😕";
       face.className="face fail";
       msg.innerText="ABSEN GAGAL";
+
+      setTimeout(()=>{
+        location.reload();
+      },1500);
     }
 
   }catch(err){
     document.getElementById("loading").style.display="none";
-    alert("Koneksi gagal");
+
+    setTimeout(()=>{
+      location.reload();
+    },1500);
   }
 }
 
 loadUser();
 </script>
-
 </body>
 </html>
