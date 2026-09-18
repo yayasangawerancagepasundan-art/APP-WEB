@@ -7,72 +7,91 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
+<meta name="theme-color" content="#ff0000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
 <style>
 body{
   margin:0;
   font-family:'Poppins',sans-serif;
-  background:#fff;
-  overflow:hidden;
+  background:#f2f2f2;
 }
 
-/* CARD */
+/* FULL APP */
 .card{
-  max-width:500px;
-  margin:40px auto;
+  max-width:420px;
+  margin:0 auto;
+  min-height:100vh;
   background:#fff;
   padding:20px;
-  border-radius:12px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.1);
-  position:relative;
-  z-index:2;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
 }
 
 /* LOGO */
 .logo-atas{
-  width:120px;
-  margin-bottom:10px;
+  width:110px;
+  margin-bottom:20px;
 }
 
 /* CONTENT */
 .content{
   display:flex;
-  justify-content:space-between;
+  gap:15px;
+  align-items:flex-start;
 }
 
+/* DATA */
 .data{
+  flex:1;
   font-size:13px;
-  line-height:1.7;
 }
 
-.data b{
-  width:130px;
-  display:inline-block;
+.row{
+  display:flex;
+  margin-bottom:8px;
 }
 
-.photo img{
+.label{
   width:120px;
-  height:150px;
+  font-weight:600;
+  color:#444;
+}
+
+.value{
+  flex:1;
+  word-break:break-word;
+}
+
+/* FOTO */
+.photo img{
+  width:100px;
+  height:130px;
   object-fit:cover;
-  border-radius:6px;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.1);
 }
 
 /* BUTTON */
 .btn{
-  margin-top:20px;
+  margin-top:30px;
 }
 
 button{
   width:100%;
-  padding:15px;
+  padding:16px;
   border:none;
   background:linear-gradient(135deg,#ff0000,#ff4d4d);
   color:#fff;
   font-size:16px;
-  border-radius:8px;
+  border-radius:12px;
   cursor:pointer;
+  font-weight:600;
+  box-shadow:0 5px 15px rgba(255,0,0,0.3);
 }
 
-/* LOADING */
+/* LOADING (TIDAK DIUBAH) */
 .loading{
   position:fixed;
   top:0; left:0;
@@ -85,7 +104,6 @@ button{
   z-index:999;
 }
 
-/* HARAP TUNGGU (TIDAK DIUBAH) */
 .wait-text span{
   display:inline-block;
   font-weight:600;
@@ -134,28 +152,22 @@ button{
 
 .face{
   font-size:60px;
-  display:inline-block;
 }
 
 /* ANIMASI */
-.success{
-  animation:angguk 0.6s infinite alternate;
-}
-.fail{
-  animation:geleng 0.6s infinite alternate;
-}
+.success{ animation:angguk 0.6s infinite alternate; }
+.fail{ animation:geleng 0.6s infinite alternate; }
 
 @keyframes angguk{
   from{transform:rotate(0deg);}
   to{transform:rotate(10deg);}
 }
-
 @keyframes geleng{
   from{transform:rotate(-10deg);}
   to{transform:rotate(10deg);}
 }
 
-/* WAVE */
+/* WAVE (TIDAK DIUBAH) */
 .wave{
   position:fixed;
   bottom:0;
@@ -169,12 +181,15 @@ button{
 
 <div class="card">
 
-  <img src="jelas.png" class="logo-atas">
+  <div>
+    <img src="jelas.png" class="logo-atas">
 
-  <div class="content">
-    <div class="data" id="dataUser">Loading...</div>
-    <div class="photo">
-      <img id="fotoUser" src="">
+    <div class="content">
+      <div class="data" id="dataUser">Loading...</div>
+
+      <div class="photo">
+        <img id="fotoUser" src="">
+      </div>
     </div>
   </div>
 
@@ -184,7 +199,7 @@ button{
 
 </div>
 
-<!-- LOADING -->
+<!-- LOADING (TIDAK DIUBAH) -->
 <div class="loading" id="loading">
   <img src="jelas.png" class="logo-atas"> 
   <div class="wait-text"> 
@@ -202,7 +217,7 @@ button{
   </div>
 </div>
 
-<!-- 🔥 WAVE (TIDAK DIUBAH) -->
+<!-- WAVE (TIDAK DIUBAH) -->
 <div class="wave">
 <svg viewBox="0 0 1440 320">
 <path fill="#ff0000" fill-opacity="0.15">
@@ -216,15 +231,21 @@ M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
 
 <script>
 
-/* 🔥 PAKAI APPS SCRIPT */
 const URL = "https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec";
 
-/* 🔥 AMBIL USER */
+/* USER */
 let raw = localStorage.getItem("userLogin");
 let parsed = raw ? JSON.parse(raw) : null;
 let user = parsed ? (parsed.user || parsed) : null;
 
-/* LOAD DATA */
+/* FORMAT TANGGAL */
+function formatTanggal(tgl){
+  if(!tgl) return "-";
+  let d = new Date(tgl);
+  return d.toLocaleDateString("id-ID");
+}
+
+/* LOAD USER */
 function loadUser(){
 
   if(!user){
@@ -233,15 +254,15 @@ function loadUser(){
   }
 
   document.getElementById("dataUser").innerHTML = `
-    <div><b>NIK</b>: ${user.nik || "-"}</div>
-    <div><b>Nama</b>: ${user.nama || "-"}</div>
-    <div><b>Tempat Lahir</b>: ${user.tempat || "-"}</div>
-    <div><b>Tanggal Lahir</b>: ${user.tgl_lahir || "-"}</div>
-    <div><b>Umur</b>: ${user.umur || "-"}</div>
-    <div><b>Jenis Kelamin</b>: ${user.jk || "-"}</div>
-    <div><b>Alamat</b>: ${user.alamat || "-"}</div>
-    <div><b>Status</b>: ${user.status_perkawinan || "-"}</div>
-    <div><b>Zona</b>: ${user.zona || "-"}</div>
+    <div class="row"><div class="label">NIK</div><div class="value">: ${user.nik}</div></div>
+    <div class="row"><div class="label">Nama</div><div class="value">: ${user.nama}</div></div>
+    <div class="row"><div class="label">Tempat Lahir</div><div class="value">: ${user.tempat}</div></div>
+    <div class="row"><div class="label">Tanggal Lahir</div><div class="value">: ${formatTanggal(user.tgl_lahir)}</div></div>
+    <div class="row"><div class="label">Umur</div><div class="value">: ${user.umur}</div></div>
+    <div class="row"><div class="label">Jenis Kelamin</div><div class="value">: ${user.jk}</div></div>
+    <div class="row"><div class="label">Alamat</div><div class="value">: ${user.alamat}</div></div>
+    <div class="row"><div class="label">Status</div><div class="value">: ${user.status_perkawinan}</div></div>
+    <div class="row"><div class="label">Zona</div><div class="value">: ${user.zona}</div></div>
   `;
 
   document.getElementById("fotoUser").src = user.foto || "";
@@ -253,28 +274,17 @@ async function absen(){
   let lat = localStorage.getItem("lat");
   let lng = localStorage.getItem("lng");
 
-  if(!user || !user.username){
-    alert("User tidak valid");
-    return;
-  }
-
   document.getElementById("loading").style.display="flex";
 
   try{
 
-    // 🔥 DEBUG OPTIONAL
-    console.log("ABSEN:", user.username, lat, lng);
-
     let res = await fetch(URL,{
       method:"POST",
-      headers:{
-        "Content-Type":"text/plain;charset=utf-8"
-      },
+      headers:{ "Content-Type":"text/plain;charset=utf-8" },
       body: JSON.stringify({
         action:"absen",
         username:user.username,
-        lat: lat,
-        lng: lng
+        lat, lng
       })
     });
 
@@ -289,7 +299,6 @@ async function absen(){
     result.style.display="flex";
 
     if(data.status === "ok"){
-
       face.innerText="😊";
       face.className="face success";
       msg.innerText="ABSEN BERHASIL";
@@ -300,39 +309,29 @@ async function absen(){
       },2000);
 
     }else{
-
       face.innerText="😕";
       face.className="face fail";
-      msg.innerText = data.msg || "ABSEN GAGAL";
+      msg.innerText=data.msg || "ABSEN GAGAL";
 
-      setTimeout(()=>{
-        result.style.display="none";
-      },2000);
+      setTimeout(()=>{ result.style.display="none"; },2000);
     }
 
   }catch(err){
-
     document.getElementById("loading").style.display="none";
-
-    console.log("ERROR:", err);
 
     let result = document.getElementById("result");
     let face = document.getElementById("face");
     let msg = document.getElementById("msg");
 
     result.style.display="flex";
-
     face.innerText="😕";
     face.className="face fail";
     msg.innerText="KONEKSI GAGAL";
 
-    setTimeout(()=>{
-      result.style.display="none";
-    },2000);
+    setTimeout(()=>{ result.style.display="none"; },2000);
   }
 }
 
-/* INIT */
 loadUser();
 
 </script>
