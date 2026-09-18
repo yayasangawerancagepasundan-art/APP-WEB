@@ -290,11 +290,10 @@ async function absen(){
   document.getElementById("loading").style.display="flex";
 
   try{
-
     let res = await fetch(URL,{
       method:"POST",
       headers:{
-        "Content-Type":"application/json"
+        "Content-Type":"text/plain;charset=utf-8" // 🔥 INI KUNCINYA
       },
       body: JSON.stringify({
         action:"absen",
@@ -302,14 +301,7 @@ async function absen(){
       })
     });
 
-    // 🔥 CEK RESPONSE VALID
-    let text = await res.text();
-
-    if(!text.includes("status")){
-      throw new Error("RESPON BUKAN JSON");
-    }
-
-    let data = JSON.parse(text);
+    let data = await res.json();
 
     document.getElementById("loading").style.display="none";
 
@@ -339,10 +331,7 @@ async function absen(){
     }
 
   }catch(err){
-
     document.getElementById("loading").style.display="none";
-
-    console.log("ERROR:", err);
 
     let result = document.getElementById("result");
     let face = document.getElementById("face");
@@ -352,11 +341,11 @@ async function absen(){
 
     face.innerText="😕";
     face.className="face fail";
-    msg.innerText="SERVER / CORS ERROR";
+    msg.innerText="SERVER ERROR";
 
     setTimeout(()=>{
       location.reload();
-    },10000);
+    },15000);
   }
 }
 loadUser();
