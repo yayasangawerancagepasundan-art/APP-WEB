@@ -447,7 +447,7 @@ function toBase64(file){
 async function uploadFotoKeDrive(file){
 
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
+  const timeout = setTimeout(() => controller.abort(), 15000);
 
   let base64 = await toBase64(file);
 
@@ -455,7 +455,10 @@ async function uploadFotoKeDrive(file){
 
   let res = await fetch(URL,{
     method:"POST",
-    body: new URLSearchParams({
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
       action:"upload",
       file: base64,
       name: file.name,
@@ -470,11 +473,15 @@ async function uploadFotoKeDrive(file){
 
   clearTimeout(timeout);
 
-  if(!res.ok){
-    throw new Error("HTTP error: " + res.status);
-  }
+  let text = await res.text();
+  console.log("UPLOAD RAW:", text);
 
-  let data = await res.json();
+  let data;
+  try{
+    data = JSON.parse(text);
+  }catch{
+    throw new Error("Response upload bukan JSON");
+  }
 
   if(!data || !data.url){
     throw new Error("Upload gagal dari server");
@@ -516,7 +523,10 @@ async function submitForm(){
 
     let res = await fetch(URL,{
       method:"POST",
-      body: new URLSearchParams({
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
 
         action:"register",
 
@@ -540,11 +550,15 @@ async function submitForm(){
 
     console.log("SETELAH FETCH REGISTER");
 
-    if(!res.ok){
-      throw new Error("HTTP error: " + res.status);
-    }
+    let text = await res.text();
+    console.log("REGISTER RAW:", text);
 
-    let data = await res.json();
+    let data;
+    try{
+      data = JSON.parse(text);
+    }catch{
+      throw new Error("Response register bukan JSON");
+    }
 
     hideLoading();
 
@@ -580,27 +594,39 @@ async function submitForm(){
     if(err.name === "AbortError"){
       alert("Upload timeout (koneksi lambat)");
     }else{
-      alert("Koneksi gagal / upload error");
+      alert(err.message || "Koneksi gagal / upload error");
     }
 
     hideLoading();
   }
 }
 
-/* LOGIN (FIX CORS) */
+/* LOGIN (JSON) */
 function login(){
 
   showLoading();
 
   fetch(URL,{
     method:"POST",
-    body: new URLSearchParams({
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
       action:"login",
       username:loginUser.value,
       password:loginPass.value
     })
   })
-  .then(res=>res.json())
+  .then(async res=>{
+    let text = await res.text();
+    console.log("LOGIN RAW:", text);
+
+    try{
+      return JSON.parse(text);
+    }catch{
+      throw new Error("Response login bukan JSON");
+    }
+  })
   .then(res=>{
 
     hideLoading();
@@ -629,9 +655,9 @@ function login(){
     }
 
   })
-  .catch(()=>{
+  .catch(err=>{
     hideLoading();
-    alert("Koneksi gagal");
+    alert(err.message || "Koneksi gagal");
   });
 }
 
