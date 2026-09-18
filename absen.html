@@ -85,7 +85,7 @@ button{
   z-index:999;
 }
 
-/* HARAP TUNGGU (ASLI LU, TIDAK DIUBAH) */
+/* HARAP TUNGGU (TIDAK DIUBAH) */
 .wait-text span{
   display:inline-block;
   font-weight:600;
@@ -141,7 +141,6 @@ button{
 .success{
   animation:angguk 0.6s infinite alternate;
 }
-
 .fail{
   animation:geleng 0.6s infinite alternate;
 }
@@ -156,7 +155,7 @@ button{
   to{transform:rotate(10deg);}
 }
 
-/* WAVE POSISI */
+/* WAVE */
 .wave{
   position:fixed;
   bottom:0;
@@ -203,112 +202,61 @@ button{
   </div>
 </div>
 
-<!-- 🔥 WAVE 5 LAYER (ASLI LU, TIDAK DIUBAH) -->
+<!-- 🔥 WAVE (TIDAK DIUBAH) -->
 <div class="wave">
 <svg viewBox="0 0 1440 320">
-
 <path fill="#ff0000" fill-opacity="0.15">
 <animate attributeName="d" dur="12s" repeatCount="indefinite"
 values="M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z;
 M0,160 C500,260 900,80 1440,160 L1440,320 L0,320 Z;
 M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
 </path>
-
-<path fill="#ff0000" fill-opacity="0.25">
-<animate attributeName="d" dur="10s" repeatCount="indefinite"
-values="M0,220 C400,120 1000,260 1440,220 L1440,320 L0,320 Z;
-M0,180 C300,260 1100,80 1440,180 L1440,320 L0,320 Z;
-M0,220 C400,120 1000,260 1440,220 L1440,320 L0,320 Z"/>
-</path>
-
-<path fill="#ff0000" fill-opacity="0.4">
-<animate attributeName="d" dur="8s" repeatCount="indefinite"
-values="M0,240 C500,140 900,260 1440,240 L1440,320 L0,320 Z;
-M0,200 C400,260 1100,100 1440,200 L1440,320 L0,320 Z;
-M0,240 C500,140 900,260 1440,240 L1440,320 L0,320 Z"/>
-</path>
-
-<path fill="#ff0000" fill-opacity="0.6">
-<animate attributeName="d" dur="6s" repeatCount="indefinite"
-values="M0,250 C400,150 1000,260 1440,250 L1440,320 L0,320 Z;
-M0,210 C300,260 1100,120 1440,210 L1440,320 L0,320 Z;
-M0,250 C400,150 1000,260 1440,250 L1440,320 L0,320 Z"/>
-</path>
-
-<path fill="#ff0000">
-<animate attributeName="d" dur="4s" repeatCount="indefinite"
-values="M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z;
-M0,230 C400,260 1100,150 1440,230 L1440,320 L0,320 Z;
-M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
-</path>
-
 </svg>
 </div>
 
 <script>
 
-// 🔥 LANGSUNG KE APPS SCRIPT (BUKAN WORKER)
+/* 🔥 PAKAI APPS SCRIPT */
 const URL = "https://script.google.com/macros/s/AKfycbwkBKSS5jSOqzlbX0uyBMR4BWREwOVSQRHDwY5TM2naZ-MMkBeXmREIdDV3AxgVuqH8/exec";
 
-async function loadUser(){
+/* 🔥 AMBIL USER DARI LOCALSTORAGE (FIX) */
+let raw = localStorage.getItem("userLogin");
+let parsed = JSON.parse(raw);
+let user = parsed.user || parsed;
 
-  try{
+/* LOAD DATA */
+function loadUser(){
 
-    let username = localStorage.getItem("username");
-
-    if(!username){
-      document.getElementById("dataUser").innerHTML = "User tidak ditemukan";
-      return;
-    }
-
-    let res = await fetch(URL,{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ action:"get_user", username })
-    });
-
-    let text = await res.text();
-    console.log("GET USER RAW:", text);
-
-    let data = JSON.parse(text);
-
-    if(!data || !data.data){
-      throw new Error("Data user tidak ada");
-    }
-
-    let u = data.data;
-
-    document.getElementById("dataUser").innerHTML = `
-      <div><b>NIK</b>: ${u.nik}</div>
-      <div><b>Nama</b>: ${u.nama}</div>
-      <div><b>Tempat Lahir</b>: ${u.tempat}</div>
-      <div><b>Tanggal Lahir</b>: ${u.tgl_lahir}</div>
-      <div><b>Umur</b>: ${hitungUmur(u.tgl_lahir)}</div>
-      <div><b>Jenis Kelamin</b>: ${u.jk}</div>
-      <div><b>Alamat</b>: ${u.alamat}</div>
-      <div><b>Status</b>: ${u.status_perkawinan}</div>
-      <div><b>Zona</b>: ${u.zona}</div>
-    `;
-
-    document.getElementById("fotoUser").src = u.foto;
-
-  }catch(err){
-
-    console.error("LOAD USER ERROR:", err);
-    document.getElementById("dataUser").innerHTML = "Gagal memuat data";
-
+  if(!user){
+    document.getElementById("dataUser").innerText="User tidak ditemukan";
+    return;
   }
+
+  document.getElementById("dataUser").innerHTML = `
+    <div><b>NIK</b>: ${user.nik}</div>
+    <div><b>Nama</b>: ${user.nama}</div>
+    <div><b>Tempat Lahir</b>: ${user.tempat}</div>
+    <div><b>Tanggal Lahir</b>: ${user.tgl_lahir}</div>
+    <div><b>Umur</b>: ${hitungUmur(user.tgl_lahir)}</div>
+    <div><b>Jenis Kelamin</b>: ${user.jk}</div>
+    <div><b>Alamat</b>: ${user.alamat}</div>
+    <div><b>Status</b>: ${user.status_perkawinan}</div>
+    <div><b>Zona</b>: ${user.zona}</div>
+  `;
+
+  document.getElementById("fotoUser").src = user.foto || "";
 }
 
+/* UMUR */
 function hitungUmur(tgl){
   let lahir = new Date(tgl);
   let now = new Date();
   return now.getFullYear() - lahir.getFullYear();
 }
 
+/* ABSEN */
 async function absen(){
 
-  let username = localStorage.getItem("username");
   let lat = localStorage.getItem("lat");
   let lng = localStorage.getItem("lng");
 
@@ -321,14 +269,12 @@ async function absen(){
       headers:{ "Content-Type":"application/json" },
       body: JSON.stringify({
         action:"absen",
-        username, lat, lng
+        username:user.username,
+        lat, lng
       })
     });
 
-    let text = await res.text();
-    console.log("ABSEN RAW:", text);
-
-    let data = JSON.parse(text);
+    let data = await res.json();
 
     document.getElementById("loading").style.display="none";
 
@@ -345,6 +291,7 @@ async function absen(){
       msg.innerText="ABSEN BERHASIL";
 
       setTimeout(()=>{
+        result.style.display="none";
         window.location.href="dashboard_user.html";
       },2000);
 
@@ -352,39 +299,22 @@ async function absen(){
 
       face.innerText="😕";
       face.className="face fail";
-      msg.innerText=data.msg || "ABSEN GAGAL";
+      msg.innerText="ABSEN GAGAL";
 
-      // 🔥 AUTO HILANG (FIX STUCK)
       setTimeout(()=>{
         result.style.display="none";
       },2000);
-
     }
 
   }catch(err){
 
-    console.error("ABSEN ERROR:", err);
-
     document.getElementById("loading").style.display="none";
-
-    let result = document.getElementById("result");
-    let face = document.getElementById("face");
-    let msg = document.getElementById("msg");
-
-    result.style.display="flex";
-
-    face.innerText="😕";
-    face.className="face fail";
-    msg.innerText="Koneksi gagal";
-
-    setTimeout(()=>{
-      result.style.display="none";
-    },2000);
+    alert("Koneksi gagal");
 
   }
 }
 
-// 🔥 LOAD USER SAAT MASUK
+/* INIT */
 loadUser();
 
 </script>
