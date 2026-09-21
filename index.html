@@ -527,8 +527,6 @@ async function submitFinal(){
 
     console.log("STEP 1: mulai upload foto");
     let fotoFile = document.getElementById("foto").files[0];
-
-    console.log("STEP 2: foto berhasil", fotoUrl);
     let cvFile   = document.getElementById("cv").files[0];
 
     if(!fotoFile){
@@ -547,6 +545,7 @@ async function submitFinal(){
     let fotoUrl = await uploadFotoKeDrive(fotoFile);
     console.log("STEP 2: foto berhasil", fotoUrl);
     
+    console.log("STEP 3: mulai upload CV");
     let cvUrl   = await uploadFotoKeDrive(cvFile);
     console.log("STEP 4: CV berhasil", cvUrl);
 
