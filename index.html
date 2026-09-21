@@ -305,7 +305,9 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
     <label>Tempat Lahir</label>
     <input id="tempat"> 
     <label>Tanggal Lahir</label>
-    <input type="date" id="tgl">
+
+    <!-- 🔥 FIX DI SINI (ID DITAMBAH, BUKAN DIGANTI) -->
+    <input type="date" id="tgl" data-alias="tgl_lahir">
 
     <div class="nav">
       <button onclick="prev()">Kembali</button>
@@ -323,38 +325,39 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
 
     <label>Alamat</label>
     <input id="alamat">
+
     <label>Referral (Opsional)</label>
     <input id="referral">
 
     <label>Status Perkawinan</label>
-<select id="status_perkawinan">
-  <option value="">Pilih Status</option>
-  <option>Belum Menikah</option>
-  <option>Menikah</option>
-  <option>Cerai</option>
-</select>
+    <select id="status_perkawinan">
+      <option value="">Pilih Status</option>
+      <option>Belum Menikah</option>
+      <option>Menikah</option>
+      <option>Cerai</option>
+    </select>
 
-<label>Zona Penempatan</label>
-<select id="zona">
-  <option value="">Pilih Zona</option>
-  <option>Zona 1 (Kota Batam)</option>
-  <option>Zona 2 (Provinsi Kepulauan Riau)</option>
-  <option>Zona 3 (Luar Provinsi Kepulauan Riau)</option>
-</select>
+    <label>Zona Penempatan</label>
+    <select id="zona">
+      <option value="">Pilih Zona</option>
+      <option>Zona 1 (Kota Batam)</option>
+      <option>Zona 2 (Provinsi Kepulauan Riau)</option>
+      <option>Zona 3 (Luar Provinsi Kepulauan Riau)</option>
+    </select>
  
-<!-- FOTO -->
-<label>Upload Foto (Wajib)</label>
-<input type="file" id="foto" accept="image/*">
-<small style="color:gray;">
-  Format: JPG/PNG, maksimal 2MB, foto wajah jelas
-</small>
+    <!-- FOTO -->
+    <label>Upload Foto (Wajib)</label>
+    <input type="file" id="foto" accept="image/*">
+    <small style="color:gray;">
+      Format: JPG/PNG, maksimal 2MB, foto wajah jelas
+    </small>
 
-<!-- CV -->
-<label>Upload CV (Wajib)</label>
-<input type="file" id="cv" accept=".pdf,.doc,.docx">
-<small style="color:gray;">
-  Format: PDF/DOC/DOCX, maksimal 5MB
-</small>
+    <!-- CV -->
+    <label>Upload CV (Wajib)</label>
+    <input type="file" id="cv" accept=".pdf,.doc,.docx">
+    <small style="color:gray;">
+      Format: PDF/DOC/DOCX, maksimal 5MB
+    </small>
     
     <div class="nav">
       <button onclick="prev()">Kembali</button>
