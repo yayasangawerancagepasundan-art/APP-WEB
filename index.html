@@ -522,84 +522,62 @@ async function submitFinal(){
 
   console.log("START REGISTER");
 
-  saveData();
-  showLoading();
+  let formData = new FormData();
+
+  // ambil data input
+  formData.append("action", "register");
+
+  formData.append("username", document.getElementById("username").value);
+  formData.append("password", document.getElementById("password").value);
+  formData.append("nik", document.getElementById("nik").value);
+  formData.append("nama", document.getElementById("nama").value);
+  formData.append("tempat", document.getElementById("tempat").value);
+  formData.append("tgl_lahir", document.getElementById("tgl_lahir").value);
+  formData.append("jk", document.getElementById("jk").value);
+  formData.append("alamat", document.getElementById("alamat").value);
+  formData.append("status_perkawinan", document.getElementById("status_perkawinan").value);
+  formData.append("zona", document.getElementById("zona").value);
+
+  // FILE 🔥
+  let foto = document.getElementById("foto").files[0];
+  let cv   = document.getElementById("cv").files[0];
+
+  if(!foto){
+    alert("Foto wajib!");
+    return;
+  }
+
+  if(!cv){
+    alert("CV wajib!");
+    return;
+  }
+
+  formData.append("foto", foto);
+  formData.append("cv", cv);
 
   try{
 
-    console.log("STEP 1: mulai upload foto");
-    let fotoFile = document.getElementById("foto").files[0];
-    let cvFile   = document.getElementById("cv").files[0];
-
-    if(!fotoFile){
-      alert("Foto wajib diisi!");
-      hideLoading();
-      return;
-    }
-
-    if(!cvFile){
-      alert("CV wajib diisi!");
-      hideLoading();
-      return;
-    }
-
-    // 🔥 UPLOAD TERAKHIR
-    let fotoUrl = await uploadFotoKeDrive(fotoFile);
-    console.log("STEP 2: foto berhasil", fotoUrl);
-    
-    console.log("STEP 3: mulai upload CV");
-    let cvUrl   = await uploadFotoKeDrive(cvFile);
-    console.log("STEP 4: CV berhasil", cvUrl);
-
-    // 🔥 GABUNG DATA
-    formData.foto = fotoUrl;
-    formData.cv   = cvUrl;
-    formData.action = "register";
-
-    console.log("STEP 5: kirim register");
     let res = await fetch(URL,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify(formData)
+      method: "POST",
+      body: formData
     });
 
     let text = await res.text();
+    console.log("RESPONSE:", text);
+
     let data = JSON.parse(text);
 
-    hideLoading();
-
-    if(data.status === "ok"){
-
-      popup.style.display="flex";
-      confetti();
-
-      setTimeout(()=>{
-        document.querySelectorAll(".confetti").forEach(e=>e.remove());
-
-        let pop = document.getElementById("popup");
-        pop.style.opacity="0";
-        pop.style.pointerEvents="none";
-
-        setTimeout(()=>{
-          pop.style.display="none";
-          pop.style.opacity="1";
-        },300);
-
-        showLogin();
-
-      },2000);
-
+    if(data.status === "success"){
+      alert("Registrasi berhasil");
     }else{
-      alert(data.msg || "Registrasi gagal");
+      alert(data.msg || "Gagal");
     }
 
   }catch(err){
     console.error(err);
-    alert(err.message || "Error");
-    hideLoading();
+    alert("Error koneksi");
   }
+
 }
 
 /* LOGIN (TIDAK DISENTUH) */
