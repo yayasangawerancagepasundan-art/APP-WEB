@@ -518,12 +518,17 @@ async function uploadFotoKeDrive(file){
 /* 🔥 FINAL REGISTER */
 async function submitFinal(){
 
+  console.log("START REGISTER");
+
   saveData();
   showLoading();
 
   try{
 
+    console.log("STEP 1: mulai upload foto");
     let fotoFile = document.getElementById("foto").files[0];
+
+    console.log("STEP 2: foto berhasil", fotoUrl);
     let cvFile   = document.getElementById("cv").files[0];
 
     if(!fotoFile){
@@ -540,13 +545,17 @@ async function submitFinal(){
 
     // 🔥 UPLOAD TERAKHIR
     let fotoUrl = await uploadFotoKeDrive(fotoFile);
+    console.log("STEP 2: foto berhasil", fotoUrl);
+    
     let cvUrl   = await uploadFotoKeDrive(cvFile);
+    console.log("STEP 4: CV berhasil", cvUrl);
 
     // 🔥 GABUNG DATA
     formData.foto = fotoUrl;
     formData.cv   = cvUrl;
     formData.action = "register";
 
+    console.log("STEP 5: kirim register");
     let res = await fetch(URL,{
       method:"POST",
       headers:{
