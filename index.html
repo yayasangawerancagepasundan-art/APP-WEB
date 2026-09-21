@@ -396,12 +396,23 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
 
 const URL = "https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
 
+/* ================= SWITCH ================= */
+function showRegister(){
+  document.getElementById("registerBox").style.display="block";
+  document.getElementById("loginBox").style.display="none";
+}
+
+function showLogin(){
+  document.getElementById("registerBox").style.display="none";
+  document.getElementById("loginBox").style.display="block";
+}
+
 /* ================= STEP ================= */
 let step = 0;
 let steps = [];
 
 window.onload = function(){
-  steps = document.querySelectorAll(".step");
+  steps = document.querySelectorAll("#registerBox .step");
   showStep();
 };
 
@@ -445,11 +456,9 @@ async function submitFinal(){
 
   console.log("START REGISTER");
 
-  // 🔥 pakai variable beda (BIAR GA NUBRUK)
   let fd = new FormData();
 
-  // ================= DATA =================
-  fd.append("action", "register");
+  fd.append("action","register");
 
   fd.append("username", document.getElementById("username")?.value || "");
   fd.append("password", document.getElementById("password")?.value || "");
@@ -457,7 +466,7 @@ async function submitFinal(){
   fd.append("nama", document.getElementById("nama")?.value || "");
   fd.append("tempat", document.getElementById("tempat")?.value || "");
 
-  // 🔥 FIX DI SINI (PAKAI tgl, BUKAN tgl_lahir)
+  // 🔥 FIX SESUAI HTML LU
   fd.append("tgl_lahir", document.getElementById("tgl")?.value || "");
 
   fd.append("jk", document.getElementById("jk")?.value || "");
@@ -466,7 +475,6 @@ async function submitFinal(){
   fd.append("zona", document.getElementById("zona")?.value || "");
   fd.append("referral", document.getElementById("referral")?.value || "");
 
-  // ================= FILE =================
   let foto = document.getElementById("foto")?.files[0];
   let cv   = document.getElementById("cv")?.files[0];
 
@@ -486,23 +494,18 @@ async function submitFinal(){
   try{
 
     let res = await fetch(URL,{
-      method: "POST",
+      method:"POST",
       body: fd
     });
 
     let text = await res.text();
-    console.log("RESPONSE:", text);
+    console.log("REGISTER RESPONSE:", text);
 
-    let data;
-    try{
-      data = JSON.parse(text);
-    }catch{
-      alert("Response bukan JSON");
-      return;
-    }
+    let data = JSON.parse(text);
 
     if(data.status === "success"){
       alert("Registrasi berhasil");
+      showLogin();
     }else{
       alert(data.msg || "Gagal");
     }
@@ -513,7 +516,7 @@ async function submitFinal(){
   }
 }
 
-  /* ================= LOGIN ================= */
+/* ================= LOGIN ================= */
 async function login(){
 
   let username = document.getElementById("loginUser")?.value || "";
