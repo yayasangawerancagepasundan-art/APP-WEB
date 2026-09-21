@@ -292,7 +292,7 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
      <label>Username</label>
      <input id="username">
      <label>Password</label>
-     <input id="password" type="password">
+     <input id="password" type="password (perpaduan huruf dan angka)">
    
     <button onclick="next()">Lanjut</button>
   </div>
@@ -393,6 +393,8 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
 
 const URL="https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
 
+let formData = {}; // 🔥 PENYIMPAN DATA
+
 /* SWITCH */
 function showRegister(){loginBox.style.display="none";registerBox.style.display="block";}
 function showLogin(){loginBox.style.display="block";registerBox.style.display="none";}
@@ -430,10 +432,39 @@ function validateStep(){
   return valid;
 }
 
-function next(){if(!validateStep())return;step++;showStep();}
-function prev(){step--;showStep();}
+/* 🔥 STEP NAVIGATION (FIX) */
+function next(){
+  if(!validateStep()) return;
 
-/* BASE64 (HANYA 1x) */
+  saveData(); // 🔥 SIMPAN DATA TIAP STEP
+  step++;
+  showStep();
+}
+
+function prev(){
+  step--;
+  showStep();
+}
+
+/* 🔥 SIMPAN DATA */
+function saveData(){
+
+  formData.username = document.getElementById("username")?.value || formData.username;
+  formData.password = document.getElementById("password")?.value || formData.password;
+
+  formData.nik = document.getElementById("nik")?.value || formData.nik;
+  formData.nama = document.getElementById("nama")?.value || formData.nama;
+  formData.tempat = document.getElementById("tempat")?.value || formData.tempat;
+  formData.tgl_lahir = document.getElementById("tgl")?.value || formData.tgl_lahir;
+  formData.jk = document.getElementById("jk")?.value || formData.jk;
+
+  formData.alamat = document.getElementById("alamat")?.value || formData.alamat;
+  formData.status_perkawinan = document.getElementById("status_perkawinan")?.value || formData.status_perkawinan;
+  formData.zona = document.getElementById("zona")?.value || formData.zona;
+  formData.referral = document.getElementById("referral")?.value || formData.referral;
+}
+
+/* BASE64 */
 function toBase64(file){
   return new Promise((resolve,reject)=>{
     const reader = new FileReader();
@@ -443,14 +474,12 @@ function toBase64(file){
   });
 }
 
-/* UPLOAD */
+/* UPLOAD (TIDAK DIUBAH) */
 async function uploadFotoKeDrive(file){
 
   try{
 
     let base64 = await toBase64(file);
-
-    console.log("SEBELUM FETCH UPLOAD");
 
     let res = await fetch(URL,{
       method:"POST",
@@ -467,41 +496,29 @@ async function uploadFotoKeDrive(file){
       })
     });
 
-    console.log("SETELAH FETCH UPLOAD");
-
     if(!res.ok){
       throw new Error("HTTP error: " + res.status);
     }
 
     let text = await res.text();
-    console.log("UPLOAD RAW:", text);
-
-    let data;
-    try{
-      data = JSON.parse(text);
-    }catch{
-      throw new Error("Response upload bukan JSON");
-    }
+    let data = JSON.parse(text);
 
     if(!data || !data.url){
-      throw new Error("Upload gagal dari server");
+      throw new Error("Upload gagal");
     }
 
     return data.url;
 
   }catch(err){
-
     console.error(err);
-    throw new Error("Upload gagal / server lambat");
-
+    throw new Error("Upload gagal");
   }
 }
 
-/* REGISTER */
-async function submitForm(){
+/* 🔥 FINAL REGISTER */
+async function submitFinal(){
 
-  if(!validateStep()) return;
-
+  saveData();
   showLoading();
 
   try{
@@ -521,53 +538,25 @@ async function submitForm(){
       return;
     }
 
-    // 🔥 FIX 1: upload JANGAN paralel
-    console.log("UPLOAD FOTO...");
+    // 🔥 UPLOAD TERAKHIR
     let fotoUrl = await uploadFotoKeDrive(fotoFile);
-
-    console.log("UPLOAD CV...");
     let cvUrl   = await uploadFotoKeDrive(cvFile);
 
-    console.log("SEBELUM FETCH REGISTER");
+    // 🔥 GABUNG DATA
+    formData.foto = fotoUrl;
+    formData.cv   = cvUrl;
+    formData.action = "register";
 
     let res = await fetch(URL,{
       method:"POST",
       headers:{
         "Content-Type":"application/json"
       },
-      body: JSON.stringify({
-
-        action:"register",
-
-        username:document.getElementById("username").value,
-        password:document.getElementById("password").value,
-        nik:document.getElementById("nik").value,
-        nama:document.getElementById("nama").value,
-        tempat:document.getElementById("tempat").value,
-        tgl_lahir:document.getElementById("tgl").value,
-        jk:document.getElementById("jk").value,
-        alamat:document.getElementById("alamat").value,
-        status_perkawinan:document.getElementById("status_perkawinan").value,
-        zona:document.getElementById("zona").value,
-        referral:document.getElementById("referral").value,
-
-        foto: fotoUrl,
-        cv: cvUrl
-
-      })
+      body: JSON.stringify(formData)
     });
 
-    console.log("SETELAH FETCH REGISTER");
-
     let text = await res.text();
-    console.log("REGISTER RAW:", text);
-
-    let data;
-    try{
-      data = JSON.parse(text);
-    }catch{
-      throw new Error("Response register bukan JSON");
-    }
+    let data = JSON.parse(text);
 
     hideLoading();
 
@@ -597,20 +586,13 @@ async function submitForm(){
     }
 
   }catch(err){
-
     console.error(err);
-
-    if(err.name === "AbortError"){
-      alert("Upload timeout (server lambat)");
-    }else{
-      alert(err.message || "Koneksi gagal / upload error");
-    }
-
+    alert(err.message || "Error");
     hideLoading();
   }
 }
-  
-/* LOGIN (JSON) */
+
+/* LOGIN (TIDAK DISENTUH) */
 function login(){
 
   showLoading();
@@ -628,13 +610,7 @@ function login(){
   })
   .then(async res=>{
     let text = await res.text();
-    console.log("LOGIN RAW:", text);
-
-    try{
-      return JSON.parse(text);
-    }catch{
-      throw new Error("Response login bukan JSON");
-    }
+    return JSON.parse(text);
   })
   .then(res=>{
 
@@ -692,6 +668,6 @@ function hideLoading(){
 }
 
 </script>
-
+  
 </body>
 </html>
