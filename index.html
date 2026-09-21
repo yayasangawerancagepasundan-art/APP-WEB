@@ -394,52 +394,24 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
 
 <script>
 
-const URL="https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
+const URL = "https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
 
-let formData = {}; // 🔥 PENYIMPAN DATA
-
-/* SWITCH */
-function showRegister(){loginBox.style.display="none";registerBox.style.display="block";}
-function showLogin(){loginBox.style.display="block";registerBox.style.display="none";}
-
-/* STEP */
-let step=0;
-let steps=[];
+/* ================= STEP ================= */
+let step = 0;
+let steps = [];
 
 window.onload = function(){
-  steps=document.querySelectorAll(".step");
+  steps = document.querySelectorAll(".step");
   showStep();
 };
 
 function showStep(){
-  steps.forEach(s=>s.classList.remove("active"));
+  steps.forEach(s => s.classList.remove("active"));
   if(steps[step]) steps[step].classList.add("active");
 }
 
-/* VALIDASI */
-function validateStep(){
-  let inputs = steps[step].querySelectorAll("input,select");
-  let valid = true;
-
-  inputs.forEach(i=>{
-    if(i.type === "file") return;
-
-    if(i.id !== "referral" && i.value.trim() === ""){
-      i.classList.add("error");
-      valid = false;
-    }else{
-      i.classList.remove("error");
-    }
-  });
-
-  return valid;
-}
-
-/* 🔥 STEP NAVIGATION (FIX) */
 function next(){
   if(!validateStep()) return;
-
-  saveData(); // 🔥 SIMPAN DATA TIAP STEP
   step++;
   showStep();
 }
@@ -449,101 +421,54 @@ function prev(){
   showStep();
 }
 
-/* 🔥 SIMPAN DATA */
-function saveData(){
+/* ================= VALIDASI ================= */
+function validateStep(){
+  let inputs = steps[step].querySelectorAll("input,select");
+  let valid = true;
 
-  formData.username = document.getElementById("username")?.value || formData.username;
-  formData.password = document.getElementById("password")?.value || formData.password;
+  inputs.forEach(i=>{
+    if(i.type === "file") return;
 
-  formData.nik = document.getElementById("nik")?.value || formData.nik;
-  formData.nama = document.getElementById("nama")?.value || formData.nama;
-  formData.tempat = document.getElementById("tempat")?.value || formData.tempat;
-  formData.tgl_lahir = document.getElementById("tgl")?.value || formData.tgl_lahir;
-  formData.jk = document.getElementById("jk")?.value || formData.jk;
-
-  formData.alamat = document.getElementById("alamat")?.value || formData.alamat;
-  formData.status_perkawinan = document.getElementById("status_perkawinan")?.value || formData.status_perkawinan;
-  formData.zona = document.getElementById("zona")?.value || formData.zona;
-  formData.referral = document.getElementById("referral")?.value || formData.referral;
-}
-
-/* BASE64 */
-function toBase64(file){
-  return new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = error => reject(error);
+    if(i.id !== "referral" && i.value.trim() === ""){
+      i.style.border = "1px solid red";
+      valid = false;
+    }else{
+      i.style.border = "";
+    }
   });
+
+  return valid;
 }
 
-/* UPLOAD (TIDAK DIUBAH) */
-async function uploadFotoKeDrive(file){
-
-  try{
-
-    let base64 = await toBase64(file);
-
-let res = await fetch(URL,{
-  method:"POST",
-  headers:{
-    "Content-Type":"application/json"
-  },
-  body: JSON.stringify({
-    action:"upload",
-    file: base64,
-    name: file.name,
-    type: file.type,
-    username: document.getElementById("username").value,
-    nik: document.getElementById("nik").value
-  })
-});
-
-let text = await res.text();
-console.log("RESPONSE RAW:", text);
-
-if(!res.ok){
-  throw new Error("HTTP error: " + res.status);
-}
-
-let data = JSON.parse(text);
-
-if(!data || !data.url){
-  throw new Error("Upload gagal");
-}
-
-return data.url;
-
-  }catch(err){
-    console.error(err);
-    throw new Error("Upload gagal");
-  }
-}
-
-/* 🔥 FINAL REGISTER */
+/* ================= REGISTER ================= */
 async function submitFinal(){
 
   console.log("START REGISTER");
 
-  let formData = new FormData();
+  // 🔥 pakai variable beda (BIAR GA NUBRUK)
+  let fd = new FormData();
 
-  // ambil data input
-  formData.append("action", "register");
+  // ================= DATA =================
+  fd.append("action", "register");
 
-  formData.append("username", document.getElementById("username").value);
-  formData.append("password", document.getElementById("password").value);
-  formData.append("nik", document.getElementById("nik").value);
-  formData.append("nama", document.getElementById("nama").value);
-  formData.append("tempat", document.getElementById("tempat").value);
-  formData.append("tgl_lahir", document.getElementById("tgl_lahir").value);
-  formData.append("jk", document.getElementById("jk").value);
-  formData.append("alamat", document.getElementById("alamat").value);
-  formData.append("status_perkawinan", document.getElementById("status_perkawinan").value);
-  formData.append("zona", document.getElementById("zona").value);
+  fd.append("username", document.getElementById("username")?.value || "");
+  fd.append("password", document.getElementById("password")?.value || "");
+  fd.append("nik", document.getElementById("nik")?.value || "");
+  fd.append("nama", document.getElementById("nama")?.value || "");
+  fd.append("tempat", document.getElementById("tempat")?.value || "");
 
-  // FILE 🔥
-  let foto = document.getElementById("foto").files[0];
-  let cv   = document.getElementById("cv").files[0];
+  // 🔥 FIX DI SINI (PAKAI tgl, BUKAN tgl_lahir)
+  fd.append("tgl_lahir", document.getElementById("tgl")?.value || "");
+
+  fd.append("jk", document.getElementById("jk")?.value || "");
+  fd.append("alamat", document.getElementById("alamat")?.value || "");
+  fd.append("status_perkawinan", document.getElementById("status_perkawinan")?.value || "");
+  fd.append("zona", document.getElementById("zona")?.value || "");
+  fd.append("referral", document.getElementById("referral")?.value || "");
+
+  // ================= FILE =================
+  let foto = document.getElementById("foto")?.files[0];
+  let cv   = document.getElementById("cv")?.files[0];
 
   if(!foto){
     alert("Foto wajib!");
@@ -555,20 +480,26 @@ async function submitFinal(){
     return;
   }
 
-  formData.append("foto", foto);
-  formData.append("cv", cv);
+  fd.append("foto", foto);
+  fd.append("cv", cv);
 
   try{
 
     let res = await fetch(URL,{
       method: "POST",
-      body: formData
+      body: fd
     });
 
     let text = await res.text();
     console.log("RESPONSE:", text);
 
-    let data = JSON.parse(text);
+    let data;
+    try{
+      data = JSON.parse(text);
+    }catch{
+      alert("Response bukan JSON");
+      return;
+    }
 
     if(data.status === "success"){
       alert("Registrasi berhasil");
@@ -578,40 +509,45 @@ async function submitFinal(){
 
   }catch(err){
     console.error(err);
-    alert("Error koneksi");
+    alert("Koneksi error");
   }
-
 }
 
-/* LOGIN (TIDAK DISENTUH) */
-function login(){
+  /* ================= LOGIN ================= */
+async function login(){
 
-  showLoading();
+  let username = document.getElementById("loginUser")?.value || "";
+  let password = document.getElementById("loginPass")?.value || "";
 
-  fetch(URL,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body: JSON.stringify({
-      action:"login",
-      username:loginUser.value,
-      password:loginPass.value
-    })
-  })
-  .then(async res=>{
+  if(!username || !password){
+    alert("Username & Password wajib diisi");
+    return;
+  }
+
+  try{
+
+    let res = await fetch(URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        action:"login",
+        username: username,
+        password: password
+      })
+    });
+
     let text = await res.text();
-    return JSON.parse(text);
-  })
-  .then(res=>{
+    console.log("LOGIN RESPONSE:", text);
 
-    hideLoading();
+    let data = JSON.parse(text);
 
-    if(res.status=="ok"){
+    if(data.status === "ok"){
 
-      localStorage.setItem("userLogin", JSON.stringify(res));
+      localStorage.setItem("userLogin", JSON.stringify(data));
 
-      let role = res.user.role;
+      let role = data.user.role;
 
       if(role === "SUPER_ADMIN"){
         window.location.href = "superadmin.html";
@@ -627,35 +563,13 @@ function login(){
       }
 
     }else{
-      alert(res.msg || "Username / Password salah");
+      alert(data.msg || "Login gagal");
     }
 
-  })
-  .catch(err=>{
-    hideLoading();
-    alert(err.message || "Koneksi gagal");
-  });
-}
-
-/* CONFETTI */
-function confetti(){
-  for(let i=0;i<40;i++){
-    let c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"%";
-    c.style.background=["red","yellow","blue"][Math.floor(Math.random()*3)];
-    document.body.appendChild(c);
-    setTimeout(()=>c.remove(),3000);
+  }catch(err){
+    console.error(err);
+    alert("Koneksi gagal");
   }
-}
-
-/* LOADING */
-function showLoading(){
-  document.getElementById("loading").style.display="flex";
-}
-
-function hideLoading(){
-  document.getElementById("loading").style.display="none";
 }
 
 </script>
