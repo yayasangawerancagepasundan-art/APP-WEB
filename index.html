@@ -456,63 +456,64 @@ async function submitFinal(){
 
   console.log("START REGISTER");
 
-  let fotoFile = document.getElementById("foto").files[0];
-  let cvFile   = document.getElementById("cv").files[0];
+  let foto = document.getElementById("foto").files[0];
+  let cv   = document.getElementById("cv").files[0];
 
-  if(!fotoFile){
+  if(!foto){
     alert("Foto wajib!");
     return;
   }
 
-  if(!cvFile){
+  if(!cv){
     alert("CV wajib!");
     return;
   }
 
+  let fotoBase64 = await toBase64(foto);
+  let cvBase64   = await toBase64(cv);
+
+  let payload = {
+    action: "register",
+
+    username: document.getElementById("username").value,
+    password: document.getElementById("password").value,
+    nik: document.getElementById("nik").value,
+    nama: document.getElementById("nama").value,
+    tempat: document.getElementById("tempat").value,
+    tgl_lahir: document.getElementById("tgl").value,
+    jk: document.getElementById("jk").value,
+    alamat: document.getElementById("alamat").value,
+    status_perkawinan: document.getElementById("status_perkawinan").value,
+    zona: document.getElementById("zona").value,
+    referral: document.getElementById("referral").value,
+
+    foto: fotoBase64,
+    cv: cvBase64,
+    foto_name: foto.name,
+    foto_type: foto.type,
+    cv_name: cv.name,
+    cv_type: cv.type
+  };
+
   try{
 
-    // 🔥 convert ke base64
-    let fotoBase64 = await toBase64(fotoFile);
-    let cvBase64   = await toBase64(cvFile);
-
-    let data = {
-      action: "register",
-
-      username: document.getElementById("username").value,
-      password: document.getElementById("password").value,
-      nik: document.getElementById("nik").value,
-      nama: document.getElementById("nama").value,
-      tempat: document.getElementById("tempat").value,
-      tgl_lahir: document.getElementById("tgl").value,
-      jk: document.getElementById("jk").value,
-      alamat: document.getElementById("alamat").value,
-      status_perkawinan: document.getElementById("status_perkawinan").value,
-      zona: document.getElementById("zona").value,
-
-      // 🔥 file jadi base64
-      foto: fotoBase64,
-      foto_name: fotoFile.name,
-      cv: cvBase64,
-      cv_name: cvFile.name
-    };
-
     let res = await fetch(URL,{
-      method: "POST",
+      method:"POST",
       headers:{
         "Content-Type":"application/json"
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(payload)
     });
 
     let text = await res.text();
     console.log("RESPONSE:", text);
 
-    let json = JSON.parse(text);
+    let data = JSON.parse(text);
 
-    if(json.status === "success"){
+    if(data.status === "success"){
       alert("Registrasi berhasil");
     }else{
-      alert(json.msg || "Gagal");
+      alert(data.msg || "Gagal");
     }
 
   }catch(err){
