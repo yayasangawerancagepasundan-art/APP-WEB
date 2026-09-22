@@ -456,66 +456,71 @@ async function submitFinal(){
 
   console.log("START REGISTER");
 
-  let fd = new FormData();
+  let fotoFile = document.getElementById("foto").files[0];
+  let cvFile   = document.getElementById("cv").files[0];
 
-  fd.append("action","register");
-
-  fd.append("username", document.getElementById("username")?.value || "");
-  fd.append("password", document.getElementById("password")?.value || "");
-  fd.append("nik", document.getElementById("nik")?.value || "");
-  fd.append("nama", document.getElementById("nama")?.value || "");
-  fd.append("tempat", document.getElementById("tempat")?.value || "");
-
-  // 🔥 FIX SESUAI HTML LU
-  fd.append("tgl_lahir", document.getElementById("tgl")?.value || "");
-
-  fd.append("jk", document.getElementById("jk")?.value || "");
-  fd.append("alamat", document.getElementById("alamat")?.value || "");
-  fd.append("status_perkawinan", document.getElementById("status_perkawinan")?.value || "");
-  fd.append("zona", document.getElementById("zona")?.value || "");
-  fd.append("referral", document.getElementById("referral")?.value || "");
-
-  let foto = document.getElementById("foto")?.files[0];
-  let cv   = document.getElementById("cv")?.files[0];
-
-  if(!foto){
+  if(!fotoFile){
     alert("Foto wajib!");
     return;
   }
 
-  if(!cv){
+  if(!cvFile){
     alert("CV wajib!");
     return;
   }
 
-  fd.append("foto", foto);
-  fd.append("cv", cv);
-
   try{
 
+    // 🔥 convert ke base64
+    let fotoBase64 = await toBase64(fotoFile);
+    let cvBase64   = await toBase64(cvFile);
+
+    let data = {
+      action: "register",
+
+      username: document.getElementById("username").value,
+      password: document.getElementById("password").value,
+      nik: document.getElementById("nik").value,
+      nama: document.getElementById("nama").value,
+      tempat: document.getElementById("tempat").value,
+      tgl_lahir: document.getElementById("tgl").value,
+      jk: document.getElementById("jk").value,
+      alamat: document.getElementById("alamat").value,
+      status_perkawinan: document.getElementById("status_perkawinan").value,
+      zona: document.getElementById("zona").value,
+
+      // 🔥 file jadi base64
+      foto: fotoBase64,
+      foto_name: fotoFile.name,
+      cv: cvBase64,
+      cv_name: cvFile.name
+    };
+
     let res = await fetch(URL,{
-      method:"POST",
-      body: fd
+      method: "POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify(data)
     });
 
     let text = await res.text();
-    console.log("REGISTER RESPONSE:", text);
+    console.log("RESPONSE:", text);
 
-    let data = JSON.parse(text);
+    let json = JSON.parse(text);
 
-    if(data.status === "success"){
+    if(json.status === "success"){
       alert("Registrasi berhasil");
-      showLogin();
     }else{
-      alert(data.msg || "Gagal");
+      alert(json.msg || "Gagal");
     }
 
   }catch(err){
     console.error(err);
-    alert("Koneksi error");
+    alert("Error koneksi");
   }
-}
 
+}
 /* ================= LOGIN ================= */
 async function login(){
 
