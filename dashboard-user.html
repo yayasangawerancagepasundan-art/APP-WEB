@@ -380,7 +380,7 @@ body{
 const URL = "https://script.google.com/macros/s/AKfycbz8K4ed_ZIyjTBjamSKtkCZlVLi-2wmRU_DG6g_b2MJDlfWMxPfKw76ZVam2Ox0D4c/exec";
 
 /* ================= CEK LOGIN ================= */
-let raw = localStorage.getItem("user");
+let raw = localStorage.getItem("userLogin");
 
 if(!raw){
   alert("Silahkan login dulu!");
@@ -397,8 +397,8 @@ try{
 }
 
 let user = parsed.user || parsed;
-console.log("USER DATA:", user);
 
+console.log("USER DATA:", user);
 /* ================= GLOBAL STATE (FIX BUG) ================= */
 let watchID = null;
 let currentLat = null;
