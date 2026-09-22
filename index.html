@@ -7,6 +7,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
+<meta name="theme-color" content="#e60023">
 
 <title>LPK Gyokai Batam</title>
 
@@ -213,6 +214,30 @@ button{
   100%{opacity:0; transform:translateX(-10px);}
 }
 
+/* ERROR STYLE */
+.popup-box.error{
+  animation:shake 0.4s;
+}
+
+@keyframes shake{
+  0%{transform:translateX(0);}
+  25%{transform:translateX(-5px);}
+  50%{transform:translateX(5px);}
+  75%{transform:translateX(-5px);}
+  100%{transform:translateX(0);}
+}
+
+/* WARNING STYLE */
+.popup-box.warn{
+  animation:pulse 0.6s;
+}
+
+@keyframes pulse{
+  0%{transform:scale(0.9);}
+  50%{transform:scale(1.1);}
+  100%{transform:scale(1);}
+}
+
 </style>
 </head>
 
@@ -305,8 +330,6 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
     <label>Tempat Lahir</label>
     <input id="tempat"> 
     <label>Tanggal Lahir</label>
-
-    <!-- 🔥 FIX DI SINI (ID DITAMBAH, BUKAN DIGANTI) -->
     <input type="date" id="tgl">
 
     <div class="nav">
@@ -374,9 +397,9 @@ M0,260 C500,180 900,260 1440,260 L1440,320 L0,320 Z"/>
 
 <!-- POPUP -->
 <div class="popup" id="popup">
-  <div class="popup-box">
-    <div class="success-icon">👍</div>
-    <h3>REGISTRASI BERHASIL</h3>
+  <div class="popup-box" id="popupBox">
+    <div class="success-icon" id="popupIcon">👍</div>
+    <h3 id="popupText">SUCCESS</h3>
   </div>
 </div>
 
@@ -411,8 +434,8 @@ function showLogin(){
 let step = 0;
 let steps = [];
 
-window.onload = function(){
-  steps = document.querySelectorAll("#registerBox .step");
+window.onload = ()=>{
+  steps = document.querySelectorAll(".step");
   showStep();
 };
 
@@ -432,115 +455,136 @@ function prev(){
   showStep();
 }
 
+function showPopup(type, msg){
+  let box = document.getElementById("popupBox");
+  let icon = document.getElementById("popupIcon");
+  let text = document.getElementById("popupText");
+
+  box.className = "popup-box";
+
+  if(type==="success"){icon.innerHTML="👍";}
+  if(type==="error"){icon.innerHTML="❌";box.classList.add("error");}
+  if(type==="network"){icon.innerHTML="📡";}
+
+  text.innerText = msg;
+  document.getElementById("popup").style.display="flex";
+
+  setTimeout(()=>{
+    document.getElementById("popup").style.display="none";
+  },2000);
+}
+
 /* ================= VALIDASI ================= */
 function validateStep(){
-  let inputs = steps[step].querySelectorAll("input,select");
+
+  let inputs = steps[step].querySelectorAll("input, select");
   let valid = true;
 
-  inputs.forEach(i=>{
+  inputs.forEach(i => {
+
+    // 🔥 SKIP FILE (validasi di submitFinal)
     if(i.type === "file") return;
 
-    if(i.id !== "referral" && i.value.trim() === ""){
-      i.style.border = "1px solid red";
+    let value = (i.value || "").trim();
+
+    // 🔥 SELECT (value kosong)
+    if(i.tagName === "SELECT"){
+      if(value === ""){
+        i.style.borderBottom = "2px solid red";
+        valid = false;
+        return;
+      }else{
+        i.style.borderBottom = "2px solid #ddd";
+        return;
+      }
+    }
+
+    // 🔥 INPUT DATE (khusus)
+    if(i.type === "date"){
+      if(!i.value){
+        i.style.borderBottom = "2px solid red";
+        valid = false;
+      }else{
+        i.style.borderBottom = "2px solid #ddd";
+      }
+      return;
+    }
+
+    // 🔥 INPUT TEXT NORMAL
+    if(i.id !== "referral" && value === ""){
+      i.style.borderBottom = "2px solid red";
       valid = false;
     }else{
-      i.style.border = "";
+      i.style.borderBottom = "2px solid #ddd";
     }
+
   });
 
   return valid;
 }
-
-function toBase64(file){
-  return new Promise((resolve,reject)=>{
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result.split(',')[1]);
-    reader.onerror = error => reject(error);
-  });
-}
-
 /* ================= REGISTER ================= */
 async function submitFinal(){
-
-  console.log("START REGISTER");
 
   let foto = document.getElementById("foto").files[0];
   let cv   = document.getElementById("cv").files[0];
 
-  if(!foto){
-    alert("Foto wajib!");
-    return;
-  }
+  if(!foto){showPopup("error","Foto wajib");return;}
+  if(!cv){showPopup("error","CV wajib");return;}
 
-  if(!cv){
-    alert("CV wajib!");
-    return;
-  }
-
-  let fotoBase64 = await toBase64(foto);
-  let cvBase64   = await toBase64(cv);
-
-  let payload = {
-    action: "register",
-
-    username: document.getElementById("username").value,
-    password: document.getElementById("password").value,
-    nik: document.getElementById("nik").value,
-    nama: document.getElementById("nama").value,
-    tempat: document.getElementById("tempat").value,
-    tgl_lahir: document.getElementById("tgl").value,
-    jk: document.getElementById("jk").value,
-    alamat: document.getElementById("alamat").value,
-    status_perkawinan: document.getElementById("status_perkawinan").value,
-    zona: document.getElementById("zona").value,
-    referral: document.getElementById("referral").value,
-
-    foto: fotoBase64,
-    cv: cvBase64,
-    foto_name: foto.name,
-    foto_type: foto.type,
-    cv_name: cv.name,
-    cv_type: cv.type
-  };
+  document.getElementById("loading").style.display="flex";
 
   try{
 
-    let res = await fetch(URL,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify(payload)
-    });
+    let fd = new FormData();
 
-    let text = await res.text();
-    console.log("RESPONSE:", text);
+    fd.append("username", username.value);
+    fd.append("password", password.value);
+    fd.append("nik", nik.value);
+    fd.append("nama", nama.value);
+    fd.append("tempat", tempat.value);
+    fd.append("tgl_lahir", tgl.value);
+    fd.append("jk", jk.value);
+    fd.append("alamat", alamat.value);
+    fd.append("status_perkawinan", status_perkawinan.value);
+    fd.append("zona", zona.value);
+    fd.append("referral", referral.value);
 
-    let data = JSON.parse(text);
+    fd.append("foto", foto);
+    fd.append("cv", cv);
 
-    if(data.status === "success"){
-      alert("Registrasi berhasil");
+    let res = await fetch(URL,{method:"POST",body:fd});
+    let data = await res.json();
+
+    document.getElementById("loading").style.display="none";
+
+    if(data.status==="success"){
+      showPopup("success","Registrasi berhasil");
+
+      setTimeout(()=>{
+        showLogin(); // 🔥 langsung ke login
+      },1500);
+
     }else{
-      alert(data.msg || "Gagal");
+      showPopup("error",data.msg||"Gagal");
     }
 
-  }catch(err){
-    console.error(err);
-    alert("Error koneksi");
+  }catch(e){
+    document.getElementById("loading").style.display="none";
+    showPopup("network","Koneksi error");
   }
-
 }
 /* ================= LOGIN ================= */
 async function login(){
 
-  let username = document.getElementById("loginUser")?.value || "";
-  let password = document.getElementById("loginPass")?.value || "";
+  let user = document.getElementById("loginUser").value.trim();
+  let pass = document.getElementById("loginPass").value.trim();
 
-  if(!username || !password){
-    alert("Username & Password wajib diisi");
+  if(!user || !pass){
+    showPopup("error","Username & Password wajib");
     return;
   }
+
+  document.getElementById("loading").style.display = "flex";
 
   try{
 
@@ -551,43 +595,43 @@ async function login(){
       },
       body: JSON.stringify({
         action:"login",
-        username: username,
-        password: password
+        username: user,
+        password: pass
       })
     });
 
-    let text = await res.text();
-    console.log("LOGIN RESPONSE:", text);
+    let data = await res.json();
 
-    let data = JSON.parse(text);
+    document.getElementById("loading").style.display = "none";
 
+    // 🔥 SUCCESS
     if(data.status === "ok"){
 
-      localStorage.setItem("userLogin", JSON.stringify(data));
+      showPopup("success","Login berhasil");
 
-      let role = data.user.role;
+      // simpan user (optional tapi aman)
+      localStorage.setItem("user", JSON.stringify(data.user));
 
-      if(role === "SUPER_ADMIN"){
-        window.location.href = "superadmin.html";
-      }
-      else if(role === "ADMIN_LPK"){
-        window.location.href = "admin_lpk.html";
-      }
-      else if(role === "ADMIN_MITRA"){
-        window.location.href = "admin_mitra.html";
-      }
-      else{
-        window.location.href = "dashboard-user.html";
-      }
+      setTimeout(()=>{
+        // 🔥 arahkan ke halaman berikutnya
+        window.location.href = "dashboard.html";
+      },1500);
 
-    }else{
-      alert(data.msg || "Login gagal");
+    }
+    // 🔥 ERROR LOGIN
+    else{
+      showPopup("error", data.msg || "Login gagal");
     }
 
-  }catch(err){
-    console.error(err);
-    alert("Koneksi gagal");
+  }catch(e){
+
+    document.getElementById("loading").style.display = "none";
+
+    // 🔥 ERROR NETWORK
+    showPopup("network","Koneksi gagal");
+
   }
+
 }
 
 </script>
