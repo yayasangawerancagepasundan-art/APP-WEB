@@ -612,8 +612,6 @@ async function login(){
       // simpan user (optional tapi aman)
       localStorage.setItem("user", JSON.stringify(data.user));
 
-      setTimeout(()=>{
-        // 🔥 arahkan ke halaman berikutnya
 
 let role = data.user.role;
 
@@ -635,7 +633,7 @@ else if(role === "super admin"){
 else{
   window.location.href = "dashboard-user.html"; // default user
 }
-      },2000);
+      setTimeout(()=>{  },2000);
 
     }
     // 🔥 ERROR LOGIN
