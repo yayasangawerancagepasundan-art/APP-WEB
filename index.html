@@ -609,34 +609,38 @@ async function login(){
 
       showPopup("success","Login berhasil");
 
-      // simpan user (optional tapi aman)
+      // 🔥 FIX 1: hapus data lama (BIAR SELY HILANG)
+      localStorage.removeItem("user");
+      localStorage.removeItem("userLogin");
+
+      // simpan user (tetap punyamu)
       localStorage.setItem("user", JSON.stringify(data.user));
 
+      // 🔥 FIX 2: samakan format role
+      let role = (data.user.role || "").toLowerCase().trim();
 
-let role = data.user.role;
+      if(role === "admin lpk"){
+        window.location.href = "admin_lpk.html";
+      }
+      else if(role === "hrd"){
+        window.location.href = "hrd.html";
+      }
+      else if(role === "admin mitra"){
+        window.location.href = "admin_mitra.html";
+      }
+      else if(role === "direktur"){
+        window.location.href = "direktur.html";
+      }
+      else if(role === "super admin"){
+        window.location.href = "superadmin.html";
+      }
+      else{
+        window.location.href = "dashboard-user.html"; // default user
+      }
 
-if(role === "admin lpk"){
-  window.location.href = "admin_lpk.html";
-}
-else if(role === "hrd"){
-  window.location.href = "hrd.html";
-}
-else if(role === "admin mitra"){
-  window.location.href = "admin_mitra.html";
-}
-else if(role === "direktur"){
-  window.location.href = "direktur.html";
-}
-else if(role === "super admin"){
-  window.location.href = "superadmin.html";
-}
-else{
-  window.location.href = "dashboard-user.html"; // default user
-}
-      setTimeout(()=>{  },2000);
+      setTimeout(()=>{  },2000); // 🔥 ANIMASI LU TETAP
 
     }
-    // 🔥 ERROR LOGIN
     else{
       showPopup("error", data.msg || "Login gagal");
     }
@@ -644,14 +648,11 @@ else{
   }catch(e){
 
     document.getElementById("loading").style.display = "none";
-
-    // 🔥 ERROR NETWORK
     showPopup("network","Koneksi gagal");
 
   }
 
 }
-
 </script>
   
 </body>
