@@ -562,7 +562,7 @@ async function submitFinal(){
 
       setTimeout(()=>{
         showLogin(); // 🔥 langsung ke login
-      },1500);
+      },3000);
 
     }else{
       showPopup("error",data.msg||"Gagal");
@@ -614,8 +614,28 @@ async function login(){
 
       setTimeout(()=>{
         // 🔥 arahkan ke halaman berikutnya
-        window.location.href = "dashboard.html";
-      },1500);
+
+let role = data.user.role;
+
+if(role === "admin lpk"){
+  window.location.href = "admin_lpk.html";
+}
+else if(role === "hrd"){
+  window.location.href = "hrd.html";
+}
+else if(role === "admin mitra"){
+  window.location.href = "admin_mitra.html";
+}
+else if(role === "direktur"){
+  window.location.href = "direktur.html";
+}
+else if(role === "super admin"){
+  window.location.href = "superadmin.html";
+}
+else{
+  window.location.href = "dashboard-user.html"; // default user
+}
+      },2000);
 
     }
     // 🔥 ERROR LOGIN
