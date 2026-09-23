@@ -609,14 +609,17 @@ async function login(){
 
       showPopup("success","Login berhasil");
 
-      // 🔥 FIX 1: hapus data lama (BIAR SELY HILANG)
+      // 🔥 hapus data lama
       localStorage.removeItem("user");
       localStorage.removeItem("userLogin");
 
-      // simpan user (tetap punyamu)
-      localStorage.setItem("user", JSON.stringify(data.user));
+      // 🔥 SIMPAN HANYA IDENTITAS (LIVE SYSTEM)
+      localStorage.setItem("user", JSON.stringify({
+        username: data.user.username,
+        device_id: data.user.device_id || ""
+      }));
 
-      // 🔥 FIX 2: samakan format role
+      // 🔥 ROLE TETAP UNTUK REDIRECT (TIDAK DISIMPAN)
       let role = (data.user.role || "").toLowerCase().trim();
 
       if(role === "admin lpk"){
@@ -635,10 +638,11 @@ async function login(){
         window.location.href = "superadmin.html";
       }
       else{
-        window.location.href = "dashboard-user.html"; // default user
+        window.location.href = "dashboard-user.html";
       }
 
-      setTimeout(()=>{  },2000); // 🔥 ANIMASI LU TETAP
+      // 🔥 ANIMASI LU (TIDAK DISENTUH)
+      setTimeout(()=>{  },2000);
 
     }
     else{
