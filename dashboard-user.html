@@ -424,7 +424,8 @@ async function loadUser(){
       })
     });
 
-    let data = await res.json();
+    let text = await res.text();
+console.log("RESPONSE:", text);
 
     if(data.status === "ok"){
       user = data.data; // 🔥 ambil dari backend
