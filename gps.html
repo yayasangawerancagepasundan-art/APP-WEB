@@ -183,8 +183,11 @@ body{
 
 <script>
 
+/* ================= URL WORKER ================= */
+const URL = "https://gps-worker.yayasangawerancagepasundan.workers.dev/"; // 🔥 TAMBAH INI
+
 /* ================= SESSION ================= */
-let raw = localStorage.getItem("userLogin");
+let raw = localStorage.getItem("user"); // 🔥 GANTI userLogin → user
 
 if(!raw){
   alert("Login dulu!");
@@ -195,8 +198,8 @@ let parsed = JSON.parse(raw);
 
 /* 🔥 HANYA IDENTITAS */
 let user = {
-  username: parsed.username || (parsed.user ? parsed.user.username : ""),
-  device_id: parsed.device_id || (parsed.user ? parsed.user.device_id : "")
+  username: parsed.username || "",
+  device_id: parsed.device_id || ""
 };
 
 /* ================= LOAD USER LIVE ================= */
@@ -220,8 +223,7 @@ async function loadUserLive(){
 
     if(data.status === "ok"){
 
-      /* 🔥 OVERWRITE TOTAL (FULL LIVE) */
-      user = data.data;
+      user = data.data; // 🔥 tetap
 
       startGPS();
 
@@ -264,12 +266,10 @@ function startGPS(){
     let lat = pos.coords.latitude;
     let lng = pos.coords.longitude;
 
-    /* 🔥 DATA DARI BACKEND (LIVE) */
     let latDB = parseFloat(user.lat);
     let lngDB = parseFloat(user.lng);
     let radius = parseFloat(user.radius) || 50;
 
-    /* 🔴 VALIDASI TAMBAHAN (BIAR GAK ERROR DIAM-DIAM) */
     if(!latDB || !lngDB){
       status.innerText = "LOKASI BELUM DISET";
       jarakText.innerText = "-";
@@ -357,6 +357,6 @@ function startLoading(){
 loadUserLive();
 
 </script>
-
+  
 </body>
 </html>
