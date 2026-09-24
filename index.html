@@ -573,6 +573,14 @@ async function submitFinal(){
     showPopup("network","Koneksi error");
   }
 }
+
+let DEVICE_ID = localStorage.getItem("device_id");
+
+if(!DEVICE_ID){
+  DEVICE_ID = "DEV-" + Date.now();
+  localStorage.setItem("device_id", DEVICE_ID);
+}
+
 /* ================= LOGIN ================= */
 async function login(){
 
@@ -594,10 +602,11 @@ async function login(){
         "Content-Type":"application/json"
       },
       body: JSON.stringify({
-        action:"login",
-        username: user,
-        password: pass
-      })
+      action:"login",
+      username: user,
+      password: pass,
+      device_id: DEVICE_ID // 🔥 WAJIB
+})
     });
 
     let data = await res.json();
@@ -606,7 +615,7 @@ async function login(){
 
     // 🔥 SUCCESS
     if(data.status === "ok"){
-
+  
       showPopup("success","Login berhasil");
 
       // 🔥 hapus data lama
