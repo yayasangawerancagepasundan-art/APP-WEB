@@ -183,16 +183,58 @@ body{
 
 <script>
 
-/* USER */
+/* ================= SESSION ================= */
 let raw = localStorage.getItem("userLogin");
+
 if(!raw){
   alert("Login dulu!");
   location.href="index.html";
 }
-let parsed = JSON.parse(raw);
-let user = parsed.user || parsed;
 
-/* JARAK */
+let parsed = JSON.parse(raw);
+
+/* 🔥 HANYA IDENTITAS */
+let user = {
+  username: parsed.username || (parsed.user ? parsed.user.username : ""),
+  device_id: parsed.device_id || (parsed.user ? parsed.user.device_id : "")
+};
+
+/* ================= LOAD USER LIVE ================= */
+async function loadUserLive(){
+
+  try{
+
+    let res = await fetch(URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        action:"get_user",
+        username: user.username,
+        device_id: user.device_id
+      })
+    });
+
+    let data = await res.json();
+
+    if(data.status === "ok"){
+
+      /* 🔥 OVERWRITE TOTAL (FULL LIVE) */
+      user = data.data;
+
+      startGPS();
+
+    }else{
+      alert(data.msg || "Gagal ambil data user");
+    }
+
+  }catch(e){
+    alert("Koneksi gagal");
+  }
+}
+
+/* ================= JARAK ================= */
 function distance(lat1, lon1, lat2, lon2){
   const R = 6371e3;
   const φ1 = lat1 * Math.PI/180;
@@ -207,7 +249,7 @@ function distance(lat1, lon1, lat2, lon2){
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-/* GPS */
+/* ================= GPS ================= */
 let watchID;
 let sudahMasuk = false;
 
@@ -222,9 +264,17 @@ function startGPS(){
     let lat = pos.coords.latitude;
     let lng = pos.coords.longitude;
 
+    /* 🔥 DATA DARI BACKEND (LIVE) */
     let latDB = parseFloat(user.lat);
     let lngDB = parseFloat(user.lng);
     let radius = parseFloat(user.radius) || 50;
+
+    /* 🔴 VALIDASI TAMBAHAN (BIAR GAK ERROR DIAM-DIAM) */
+    if(!latDB || !lngDB){
+      status.innerText = "LOKASI BELUM DISET";
+      jarakText.innerText = "-";
+      return;
+    }
 
     let jarak = distance(lat, lng, latDB, lngDB);
 
@@ -266,7 +316,7 @@ function startGPS(){
   });
 }
 
-/* LOADING 5 DETIK + WARNA DINAMIS */
+/* ================= LOADING ================= */
 function startLoading(){
 
   document.getElementById("mainUI").style.display="none";
@@ -283,7 +333,6 @@ function startLoading(){
     let offset = 283 - (283 * persen / 100);
     arc.style.strokeDashoffset = offset;
 
-    /* 🔥 WARNA MERAH → KUNING → HIJAU */
     let r,g;
     if(persen <= 50){
       r = 255;
@@ -304,7 +353,8 @@ function startLoading(){
   },100);
 }
 
-startGPS();
+/* ================= START ================= */
+loadUserLive();
 
 </script>
 
