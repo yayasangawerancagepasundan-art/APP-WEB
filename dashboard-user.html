@@ -4,17 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-
 <title>Dashboard User</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-
-/* ================= GLOBAL ================= */
 *{
   margin:0;
   padding:0;
@@ -27,10 +21,10 @@ body{
   overflow-x:hidden;
 }
 
-/* ================= WAVE ================= */
+/* ================= WAVE (SAMAKAN INDEX) ================= */
 .wave{
   position:fixed;
-  bottom:-50px;
+  bottom:-70px;
   left:0;
   width:200%;
   height:220px;
@@ -38,7 +32,6 @@ body{
   animation:waveMove 12s linear infinite;
   z-index:0;
 }
-
 .wave:nth-child(1){background:#ff0000;opacity:0.9;}
 .wave:nth-child(2){background:#ff1a1a;opacity:0.7;animation-duration:14s;}
 .wave:nth-child(3){background:#ff3333;opacity:0.5;animation-duration:16s;}
@@ -50,90 +43,111 @@ body{
   100%{transform:translateX(-50%);}
 }
 
-/* ================= HEADER ================= */
-.header{
+/* ================= TOPBAR ================= */
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
   padding:20px;
   position:relative;
   z-index:2;
 }
 
-.logo{
-  position:absolute;
-  top:15px;
-  left:15px;
-}
-
 .logo img{
-  width:140px;
+  width:150px;
 }
 
-.user-photo{
-  position:absolute;
-  top:15px;
-  right:15px;
-}
-
-.user-photo img{
-  width:50px;
-  height:50px;
+/* FOTO USER PREMIUM */
+.avatar{
+  width:58px;
+  height:58px;
   border-radius:50%;
   object-fit:cover;
+  border:2px solid #fff;
+  box-shadow:0 6px 18px rgba(0,0,0,0.15);
 }
 
-/* ================= GREETING ================= */
-.greet{
-  margin-top:70px;
-  padding:0 10px;
+/* ================= WELCOME ================= */
+.welcome{
+  padding:0 20px;
+  margin-top:5px;
+  position:relative;
+  z-index:2;
 }
 
-.greet p{
-  color:#888;
+.welcome h4{
   font-size:13px;
+  color:#888;
 }
 
-.greet h2{
-  font-size:20px;
+.welcome h2{
+  font-size:22px;
+  font-weight:600;
 }
 
-/* ================= INFO ================= */
-.info-box{
-  margin-top:20px;
+/* ================= CARD PREMIUM ================= */
+.card{
+  background:#fff;
+  margin:20px;
+  padding:20px;
+  border-radius:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.08);
+  border:1px solid rgba(0,0,0,0.03);
+  position:relative;
+  z-index:2;
+}
+
+.row{
   display:flex;
-  flex-direction:column;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+
+.left{
+  display:flex;
+  align-items:center;
   gap:10px;
 }
 
-.info-item{
-  background:#fff;
-  padding:12px 15px;
-  border-radius:12px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.06);
+.icon{
+  width:18px;
+  height:18px;
+  fill:#999;
+}
+
+.label{
   font-size:13px;
+  color:#777;
+}
+
+.value{
+  font-size:14px;
+  font-weight:600;
+  text-align:right;
 }
 
 /* ================= BUTTON ================= */
 .btn{
-  margin-top:15px;
-  width:100%;
-  padding:14px;
+  margin:10px 20px;
+  width:calc(100% - 40px);
+  padding:15px;
   border:none;
   border-radius:15px;
   background:linear-gradient(135deg,#ff0000,#ff4d4d);
   color:#fff;
   font-weight:600;
-  font-size:14px;
+  box-shadow:0 6px 15px rgba(255,0,0,0.25);
+  transition:0.2s;
+  position:relative;
+  z-index:2;
 }
 
-.btn-row{
-  display:flex;
-  gap:10px;
+.btn:active{
+  transform:scale(0.96);
 }
 
-.btn-row .btn{
-  flex:1;
-}
-
-/* ================= LOADING ================= */
+/* ================= LOADING (JANGAN DIUBAH) ================= */
 .loading{
   position:fixed;
   top:0;
@@ -145,10 +159,6 @@ body{
   justify-content:center;
   align-items:center;
   z-index:9999;
-}
-
-.loading-box{
-  text-align:center;
 }
 
 .loading-text span{
@@ -178,64 +188,6 @@ body{
   50%{opacity:1; transform:translateX(0);}
   100%{opacity:0; transform:translateX(-10px);}
 }
-
-/* ================= POPUP ================= */
-.popup{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.3);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-  opacity:0;
-  pointer-events:none;
-  transition:0.3s;
-}
-
-.popup.show{
-  opacity:1;
-  pointer-events:auto;
-}
-
-.popup-box{
-  background:#fff;
-  padding:25px;
-  border-radius:20px;
-  text-align:center;
-  width:80%;
-  max-width:300px;
-  transform:scale(0.8);
-  transition:0.3s;
-}
-
-.popup.show .popup-box{
-  transform:scale(1);
-}
-
-.popup-icon{
-  width:60px;
-  height:60px;
-  margin:0 auto 10px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  color:#fff;
-}
-
-.success{ background:linear-gradient(45deg,#00c853,#69f0ae); }
-.error{ background:linear-gradient(45deg,#ff0000,#ff4d4d); }
-.warning{ background:linear-gradient(45deg,#ff9800,#ffc107); }
-
-.popup-msg{
-  font-weight:600;
-}
-
 </style>
 </head>
 
@@ -248,100 +200,113 @@ body{
 <div class="wave"></div>
 <div class="wave"></div>
 
-<!-- HEADER -->
-<div class="header">
-
+<!-- TOPBAR -->
+<div class="topbar">
   <div class="logo">
-    <img src="logo.png">
+    <img src="jelas.png">
+  </div>
+  <img id="fotoUser" class="avatar">
+</div>
+
+<!-- WELCOME -->
+<div class="welcome">
+  <h4>Selamat Datang</h4>
+  <h2 id="namaUser">-</h2>
+</div>
+
+<!-- CARD -->
+<div class="card">
+
+  <div class="row">
+    <div class="left">
+      <!-- ICON USER -->
+      <svg class="icon" viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 20c0-4 16-4 16 0"></path>
+      </svg>
+      <div class="label">Posisi</div>
+    </div>
+    <div class="value" id="posisi">-</div>
   </div>
 
-  <div class="user-photo">
-    <img id="fotoUser" src="">
+  <div class="row">
+    <div class="left">
+      <svg class="icon" viewBox="0 0 24 24">
+        <rect x="3" y="10" width="18" height="10"></rect>
+        <rect x="7" y="4" width="10" height="6"></rect>
+      </svg>
+      <div class="label">Perusahaan</div>
+    </div>
+    <div class="value" id="perusahaan">-</div>
   </div>
 
-  <div class="greet">
-    <p>Selamat Datang</p>
-    <h2 id="namaUser">-</h2>
+  <div class="row">
+    <div class="left">
+      <svg class="icon" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 7v6l4 2"></path>
+      </svg>
+      <div class="label">Sisa Kontrak</div>
+    </div>
+    <div class="value" id="lama">-</div>
   </div>
 
-  <div class="info-box">
-    <div class="info-item">Posisi: <b id="posisi">-</b></div>
-    <div class="info-item">Perusahaan: <b id="perusahaan">-</b></div>
-    <div class="info-item">Sisa Kontrak: <b id="lama">-</b></div>
-    <div class="info-item">Periode: <b id="kontrak">-</b></div>
-  </div>
-
-  <button class="btn" onclick="goAbsen()">ABSEN</button>
-
-  <div class="btn-row">
-    <button class="btn" onclick="goLembur()">LEMBUR</button>
-    <button class="btn" onclick="goKet()">KETERANGAN</button>
+  <div class="row">
+    <div class="left">
+      <svg class="icon" viewBox="0 0 24 24">
+        <rect x="3" y="5" width="18" height="16"></rect>
+        <line x1="3" y1="10" x2="21" y2="10"></line>
+      </svg>
+      <div class="label">Periode</div>
+    </div>
+    <div class="value" id="kontrak">-</div>
   </div>
 
 </div>
+
+<!-- BUTTON -->
+<button class="btn" onclick="goAbsen()">ABSEN</button>
+<button class="btn" onclick="goLembur()">LEMBUR</button>
+<button class="btn" onclick="goKet()">KETERANGAN</button>
 
 <!-- LOADING -->
 <div class="loading" id="loading">
-  <div class="loading-box">
-    <div class="loading-text">
-      <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span>
-      <span> </span>
-      <span>T</span><span>U</span><span>N</span><span>G</span><span>G</span><span>U</span>
-    </div>
-  </div>
-</div>
-
-<!-- POPUP -->
-<div id="popup" class="popup">
-  <div class="popup-box">
-    <div id="popupIcon" class="popup-icon">✓</div>
-    <div id="popupMsg" class="popup-msg">Message</div>
+  <div class="loading-text">
+    <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span>
+    <span> </span>
+    <span>T</span><span>U</span><span>N</span><span>G</span><span>G</span><span>U</span>
   </div>
 </div>
 
 <script>
-
-/* ================= CONFIG ================= */
 const URL = "https://dashboard-user.yayasangawerancagepasundan.workers.dev/";
 
-/* ================= LOGIN CHECK ================= */
-let raw = localStorage.getItem("user");
-
-if(!raw){
-  alert("Silahkan login dulu!");
-  location.href="index.html";
-}
-
-let userLogin = JSON.parse(raw);
+let userLogin = JSON.parse(localStorage.getItem("user") || "{}");
 let user = {};
 
-/* ================= POPUP ================= */
-function showPopup(type, message, duration=1500){
-  const popup = document.getElementById("popup");
-  const icon = document.getElementById("popupIcon");
-  const msg = document.getElementById("popupMsg");
+function showLoad(){ document.getElementById("loading").style.display="flex"; }
+function hideLoad(){ document.getElementById("loading").style.display="none"; }
 
-  msg.innerText = message;
-  icon.className = "popup-icon " + type;
+/* ================= FOTO FIX ================= */
+function fixFotoURL(url, nama){
+  if(!url || typeof url !== "string"){
+    return "https://ui-avatars.com/api/?name="+encodeURIComponent(nama||"User");
+  }
 
-  if(type==="success") icon.innerText="✓";
-  if(type==="error") icon.innerText="✕";
-  if(type==="warning") icon.innerText="!";
-
-  popup.classList.add("show");
-
-  setTimeout(()=>{
-    popup.classList.remove("show");
-  },duration);
+  try{
+    let safe = encodeURI(url.trim());
+    if(!safe.startsWith("http")) throw "invalid";
+    return safe;
+  }catch(e){
+    return "https://ui-avatars.com/api/?name="+encodeURIComponent(nama||"User");
+  }
 }
 
 /* ================= LOAD USER ================= */
 async function loadUser(){
-
-  document.getElementById("loading").style.display="flex";
+  showLoad();
 
   try{
-
     let res = await fetch(URL,{
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -354,70 +319,57 @@ async function loadUser(){
 
     let data = await res.json();
 
-    document.getElementById("loading").style.display="none";
-
-    if(data.status==="ok"){
+    if(data.status === "ok"){
       user = data.data;
-      updateDashboard();
-    }else{
-      showPopup("error",data.msg||"Gagal ambil data");
+
+      document.getElementById("namaUser").innerText = user.nama || "-";
+      document.getElementById("posisi").innerText = user.posisi || "-";
+      document.getElementById("perusahaan").innerText = user.perusahaan || "-";
+
+      let foto = fixFotoURL(user.foto, user.nama);
+      let img = document.getElementById("fotoUser");
+
+      img.src = foto;
+
+      img.onerror = function(){
+        this.src = "https://ui-avatars.com/api/?name="+encodeURIComponent(user.nama);
+      };
+
+      let now = new Date();
+      let selesai = new Date(user.kontrak_selesai || now);
+      let sisa = Math.ceil((selesai-now)/(1000*60*60*24));
+
+      document.getElementById("lama").innerText =
+        sisa > 0 ? sisa+" Hari" : "Habis";
+
+      document.getElementById("kontrak").innerText =
+        user.kontrak_mulai+" - "+user.kontrak_selesai;
     }
 
   }catch(e){
-    document.getElementById("loading").style.display="none";
-    showPopup("error","Koneksi gagal");
+    alert("Gagal load user");
   }
+
+  hideLoad();
 }
 
-/* ================= UPDATE UI ================= */
-function updateDashboard(){
-
-  document.getElementById("namaUser").innerText = user.nama || "-";
-  document.getElementById("posisi").innerText = user.posisi || "-";
-  document.getElementById("perusahaan").innerText = user.perusahaan || "-";
-
-  // FOTO
-  let foto = user.foto || "";
-  if(!foto){
-    foto = "https://ui-avatars.com/api/?name="+encodeURIComponent(user.nama||"User");
-  }
-  document.getElementById("fotoUser").src = foto;
-
-  // KONTRAK
-  let now = new Date();
-  let mulai = new Date(user.kontrak_mulai);
-  let selesai = new Date(user.kontrak_selesai);
-
-  if(!isNaN(selesai)){
-    let sisa = Math.ceil((selesai-now)/(1000*60*60*24));
-    document.getElementById("lama").innerText = sisa>0 ? sisa+" Hari" : "Habis";
-  }
-
-  function f(t){
-    let d=new Date(t);
-    return isNaN(d)?"-":d.toLocaleDateString("id-ID");
-  }
-
-  document.getElementById("kontrak").innerText =
-    f(user.kontrak_mulai)+" - "+f(user.kontrak_selesai);
-}
-
-/* ================= NAVIGATION ================= */
+/* ================= NAV ================= */
 function goAbsen(){
-  location.href="gps.html";
+  showLoad();
+  setTimeout(()=>{ location.href="gps.html"; },800);
 }
 
 function goLembur(){
-  location.href="lembur.html";
+  showLoad();
+  setTimeout(()=>{ location.href="lembur.html"; },800);
 }
 
 function goKet(){
-  location.href="keterangan.html";
+  showLoad();
+  setTimeout(()=>{ location.href="keterangan.html"; },800);
 }
 
-/* ================= INIT ================= */
 loadUser();
-
 </script>
 
 </body>
