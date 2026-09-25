@@ -21,13 +21,13 @@ body{
   overflow-x:hidden;
 }
 
-/* ================= WAVE (SAMAKAN INDEX) ================= */
+/* ================= WAVE ================= */
 .wave{
   position:fixed;
-  bottom:-70px;
+  bottom:-120px;
   left:0;
   width:200%;
-  height:220px;
+  height:180px;
   border-radius:45%;
   animation:waveMove 12s linear infinite;
   z-index:0;
@@ -57,14 +57,14 @@ body{
   width:150px;
 }
 
-/* FOTO USER PREMIUM */
+/* FOTO */
 .avatar{
-  width:58px;
-  height:58px;
+  width:72px;
+  height:72px;
   border-radius:50%;
   object-fit:cover;
-  border:2px solid #fff;
-  box-shadow:0 6px 18px rgba(0,0,0,0.15);
+  border:3px solid #fff;
+  box-shadow:0 8px 20px rgba(0,0,0,0.18);
 }
 
 /* ================= WELCOME ================= */
@@ -85,7 +85,7 @@ body{
   font-weight:600;
 }
 
-/* ================= CARD PREMIUM ================= */
+/* ================= CARD ================= */
 .card{
   background:#fff;
   margin:20px;
@@ -125,6 +125,12 @@ body{
   font-size:14px;
   font-weight:600;
   text-align:right;
+  max-width:55%;
+  word-break:break-word;
+}
+
+.value.small{
+  font-size:12px;
 }
 
 /* ================= BUTTON ================= */
@@ -147,7 +153,18 @@ body{
   transform:scale(0.96);
 }
 
-/* ================= LOADING (JANGAN DIUBAH) ================= */
+.row-btn{
+  display:flex;
+  gap:10px;
+  margin:10px 20px;
+}
+
+.btn.half{
+  width:100%;
+  margin:0;
+}
+
+/* ================= LOADING ================= */
 .loading{
   position:fixed;
   top:0;
@@ -193,14 +210,12 @@ body{
 
 <body>
 
-<!-- WAVE -->
 <div class="wave"></div>
 <div class="wave"></div>
 <div class="wave"></div>
 <div class="wave"></div>
 <div class="wave"></div>
 
-<!-- TOPBAR -->
 <div class="topbar">
   <div class="logo">
     <img src="jelas.png">
@@ -208,18 +223,15 @@ body{
   <img id="fotoUser" class="avatar">
 </div>
 
-<!-- WELCOME -->
 <div class="welcome">
   <h4>Selamat Datang</h4>
   <h2 id="namaUser">-</h2>
 </div>
 
-<!-- CARD -->
 <div class="card">
 
   <div class="row">
     <div class="left">
-      <!-- ICON USER -->
       <svg class="icon" viewBox="0 0 24 24">
         <circle cx="12" cy="8" r="4"></circle>
         <path d="M4 20c0-4 16-4 16 0"></path>
@@ -264,12 +276,13 @@ body{
 
 </div>
 
-<!-- BUTTON -->
 <button class="btn" onclick="goAbsen()">ABSEN</button>
-<button class="btn" onclick="goLembur()">LEMBUR</button>
-<button class="btn" onclick="goKet()">KETERANGAN</button>
 
-<!-- LOADING -->
+<div class="row-btn">
+  <button class="btn half" onclick="goLembur()">LEMBUR</button>
+  <button class="btn half" onclick="goKet()">KETERANGAN</button>
+</div>
+
 <div class="loading" id="loading">
   <div class="loading-text">
     <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span>
@@ -287,12 +300,10 @@ let user = {};
 function showLoad(){ document.getElementById("loading").style.display="flex"; }
 function hideLoad(){ document.getElementById("loading").style.display="none"; }
 
-/* ================= FOTO FIX ================= */
 function fixFotoURL(url, nama){
   if(!url || typeof url !== "string"){
     return "https://ui-avatars.com/api/?name="+encodeURIComponent(nama||"User");
   }
-
   try{
     let safe = encodeURI(url.trim());
     if(!safe.startsWith("http")) throw "invalid";
@@ -302,7 +313,18 @@ function fixFotoURL(url, nama){
   }
 }
 
-/* ================= LOAD USER ================= */
+function autoSizeText(el){
+  if(el.innerText.length > 25){
+    el.classList.add("small");
+  }
+}
+
+function formatTanggal(t){
+  let d = new Date(t);
+  if(isNaN(d)) return "-";
+  return d.toLocaleDateString("id-ID");
+}
+
 async function loadUser(){
   showLoad();
 
@@ -330,7 +352,6 @@ async function loadUser(){
       let img = document.getElementById("fotoUser");
 
       img.src = foto;
-
       img.onerror = function(){
         this.src = "https://ui-avatars.com/api/?name="+encodeURIComponent(user.nama);
       };
@@ -343,7 +364,11 @@ async function loadUser(){
         sisa > 0 ? sisa+" Hari" : "Habis";
 
       document.getElementById("kontrak").innerText =
-        user.kontrak_mulai+" - "+user.kontrak_selesai;
+        formatTanggal(user.kontrak_mulai) + " - " +
+        formatTanggal(user.kontrak_selesai);
+
+      autoSizeText(document.getElementById("perusahaan"));
+      autoSizeText(document.getElementById("kontrak"));
     }
 
   }catch(e){
@@ -353,7 +378,6 @@ async function loadUser(){
   hideLoad();
 }
 
-/* ================= NAV ================= */
 function goAbsen(){
   showLoad();
   setTimeout(()=>{ location.href="gps.html"; },800);
