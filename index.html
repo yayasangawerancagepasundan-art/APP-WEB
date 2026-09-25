@@ -620,13 +620,10 @@ async function login(){
 
     let data = await res.json();
 
-    // 🔥 STOP LOADING DULU
     document.getElementById("loading").style.display = "none";
 
-    // 🔥 SUCCESS
     if(data.status === "ok"){
 
-      // delay dikit biar animasi smooth
       setTimeout(()=>{
         showPopup("success","Login berhasil");
       },1000);
@@ -664,7 +661,6 @@ async function login(){
 
     }
 
-    // 🔴 DEVICE BEDA (INI YANG BARU)
     else if(data.status === "device_mismatch"){
 
       setTimeout(()=>{
@@ -673,7 +669,6 @@ async function login(){
 
     }
 
-    // 🔴 ERROR BIASA
     else{
 
       setTimeout(()=>{
@@ -693,6 +688,10 @@ async function login(){
   }
 
 }
+
+// 🔥 WAJIB DI LUAR FUNCTION
+window.login = login;
+  
 </script>
   
 </body>
