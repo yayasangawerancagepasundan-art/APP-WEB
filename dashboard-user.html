@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- 🔥 ANTI CACHE -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 
 <title>Dashboard User</title>
 
-<!-- FONT -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
@@ -29,7 +27,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ================= WAVE BACKGROUND ================= */
+/* ================= WAVE ================= */
 .wave{
   position:fixed;
   bottom:-50px;
@@ -41,7 +39,6 @@ body{
   z-index:0;
 }
 
-/* 5 LAYER */
 .wave:nth-child(1){background:#ff0000;opacity:0.9;}
 .wave:nth-child(2){background:#ff1a1a;opacity:0.7;animation-duration:14s;}
 .wave:nth-child(3){background:#ff3333;opacity:0.5;animation-duration:16s;}
@@ -53,19 +50,13 @@ body{
   100%{transform:translateX(-50%);}
 }
 
-/* ================= PAGE ================= */
-.page{
-  display:none;
-  padding:80px 20px 90px;
+/* ================= HEADER ================= */
+.header{
+  padding:20px;
   position:relative;
   z-index:2;
 }
 
-.page.active{
-  display:block;
-}
-
-/* ================= HEADER ================= */
 .logo{
   position:absolute;
   top:15px;
@@ -73,77 +64,73 @@ body{
 }
 
 .logo img{
-  width:170px;
-  max-width:70%;
+  width:140px;
 }
 
-/* 🔥 FIX: tadi error di sini karena kurung kebanyakan */
-
-.header{
-  margin-top:60px;
-  text-align:center;
+.user-photo{
+  position:absolute;
+  top:15px;
+  right:15px;
 }
 
-.header h3{
-  font-size:13px;
+.user-photo img{
+  width:50px;
+  height:50px;
+  border-radius:50%;
+  object-fit:cover;
+}
+
+/* ================= GREETING ================= */
+.greet{
+  margin-top:70px;
+  padding:0 10px;
+}
+
+.greet p{
   color:#888;
+  font-size:13px;
 }
 
-.header h2{
-  font-size:22px;
-  margin-bottom:20px;
+.greet h2{
+  font-size:20px;
 }
 
-/* ================= DASHBOARD ================= */
-.menu{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
+/* ================= INFO ================= */
+.info-box{
+  margin-top:20px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
-.card{
+.info-item{
   background:#fff;
-  padding:20px;
-  border-radius:20px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.08);
-  text-align:center;
+  padding:12px 15px;
+  border-radius:12px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.06);
+  font-size:13px;
 }
 
 /* ================= BUTTON ================= */
 .btn{
-  margin-top:20px;
+  margin-top:15px;
   width:100%;
-  padding:15px;
+  padding:14px;
   border:none;
   border-radius:15px;
   background:linear-gradient(135deg,#ff0000,#ff4d4d);
   color:#fff;
   font-weight:600;
+  font-size:14px;
 }
 
-/* ================= NAV ================= */
-.bottom-nav{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:65px;
-  background:#fff;
+.btn-row{
   display:flex;
-  justify-content:space-around;
-  align-items:center;
-  box-shadow:0 -5px 20px rgba(0,0,0,0.08);
-  z-index:3;
+  gap:10px;
 }
 
-.nav-item{
-  text-align:center;
-  font-size:12px;
-  color:#888;
-  cursor:pointer;
-}
-
-.nav-item.active{
-  color:#ff0000;
+.btn-row .btn{
+  flex:1;
 }
 
 /* ================= LOADING ================= */
@@ -158,22 +145,12 @@ body{
   justify-content:center;
   align-items:center;
   z-index:9999;
-  text-align:center;
 }
 
 .loading-box{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+  text-align:center;
 }
 
-.loading-logo{
-  width:120px;
-  margin-bottom:15px;
-}
-
-/* ================= TEXT HARAP TUNGGU (JANGAN DIUBAH) ================= */
 .loading-text span{
   display:inline-block;
   font-weight:600;
@@ -202,521 +179,244 @@ body{
   100%{opacity:0; transform:translateX(-10px);}
 }
 
-/* ================= TEXT MENCARI LOKASI ================= */
-.zoom-anim{
-  animation: zoomInOut 1.5s infinite ease-in-out;
-}
-
-@keyframes zoomInOut{
-  0%{ transform:scale(0.9); opacity:0.6; }
-  50%{ transform:scale(1.2); opacity:1; }
-  100%{ transform:scale(0.9); opacity:0.6; }
-}
-
-/* ================= RADAR ================= */
-.radar{
-  position:relative;
-  width:200px;
-  height:200px;
-  margin:15px auto;
-}
-
-.circle{
-  position:absolute;
+/* ================= POPUP ================= */
+.popup{
+  position:fixed;
+  top:0;
+  left:0;
   width:100%;
   height:100%;
-  border:2px solid rgba(255,0,0,0.3);
-  border-radius:50%;
-  animation:radarPulse 2s infinite;
-}
-
-.circle:nth-child(2){animation-delay:0.5s;}
-.circle:nth-child(3){animation-delay:1s;}
-
-@keyframes radarPulse{
-  0%{ transform:scale(0.5); opacity:1; }
-  100%{ transform:scale(1.5); opacity:0; }
-}
-
-/* ================= ICON TENGAH ================= */
-#radarIcon{
-  position:absolute;
-  width:120px;
-  left:50%;
-  top:50%;
-  transform:translate(-50%,-50%);
-  animation:iconPulse 1.5s infinite ease-in-out;
-}
-
-@keyframes iconPulse{
-  0%   { transform:translate(-50%,-50%) scale(1); opacity:1; }
-  50%  { transform:translate(-50%,-50%) scale(1.15); opacity:0.7; }
-  100% { transform:translate(-50%,-50%) scale(1); opacity:1; }
-}
-  
-/* ================= PROGRESS ================= */
-.progress{
-  width:80%;
-  height:10px;
-  background:#ddd;
-  border-radius:10px;
-  margin:10px auto;
-  overflow:hidden;
-}
-
-#bar{
-  width:0%;
-  height:100%;
-  background:red;
+  background:rgba(0,0,0,0.3);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  opacity:0;
+  pointer-events:none;
   transition:0.3s;
+}
+
+.popup.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.popup-box{
+  background:#fff;
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+  width:80%;
+  max-width:300px;
+  transform:scale(0.8);
+  transition:0.3s;
+}
+
+.popup.show .popup-box{
+  transform:scale(1);
+}
+
+.popup-icon{
+  width:60px;
+  height:60px;
+  margin:0 auto 10px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  color:#fff;
+}
+
+.success{ background:linear-gradient(45deg,#00c853,#69f0ae); }
+.error{ background:linear-gradient(45deg,#ff0000,#ff4d4d); }
+.warning{ background:linear-gradient(45deg,#ff9800,#ffc107); }
+
+.popup-msg{
+  font-weight:600;
 }
 
 </style>
 </head>
+
 <body>
 
-<!-- ================= WAVE ================= -->
+<!-- WAVE -->
 <div class="wave"></div>
 <div class="wave"></div>
 <div class="wave"></div>
 <div class="wave"></div>
 <div class="wave"></div>
 
-<!-- ================= HOME ================= -->
-<div class="page active" id="home">
+<!-- HEADER -->
+<div class="header">
 
-  <!-- LOGO -->
   <div class="logo">
-    <img src="jelas.png">
+    <img src="logo.png">
   </div>
 
-  <!-- HEADER -->
-  <div class="header">
-    <h3>Selamat Datang 👋</h3>
+  <div class="user-photo">
+    <img id="fotoUser" src="">
+  </div>
+
+  <div class="greet">
+    <p>Selamat Datang</p>
     <h2 id="namaUser">-</h2>
   </div>
 
-  <!-- DASHBOARD -->
-  <div class="menu">
-  <div class="card">
-  <small>Sisa Kontrak</small>
-  <div>⏳ <b id="lama">0 Hari</b></div>
+  <div class="info-box">
+    <div class="info-item">Posisi: <b id="posisi">-</b></div>
+    <div class="info-item">Perusahaan: <b id="perusahaan">-</b></div>
+    <div class="info-item">Sisa Kontrak: <b id="lama">-</b></div>
+    <div class="info-item">Periode: <b id="kontrak">-</b></div>
   </div>
 
-  <div class="card">
-  <small>Posisi</small>
-  <div>👷 <b id="posisi">-</b></div>
+  <button class="btn" onclick="goAbsen()">ABSEN</button>
+
+  <div class="btn-row">
+    <button class="btn" onclick="goLembur()">LEMBUR</button>
+    <button class="btn" onclick="goKet()">KETERANGAN</button>
   </div>
 
-  <div class="card">
-  <small>Perusahaan2</small>
-  <div>🏢 <b id="perusahaan">-</b></div>
-  </div>
-
-  <div class="card">
-  <small>Masa Kontrak</small>
-  <div>📅 <b id="kontrak">-</b></div>
-  </div>
-
-  <!-- BUTTON ABSEN -->
-  <button class="btn" onclick="window.location.href='gps.html'">ABSEN</button>
-  
-  <!-- BUTTON LEMBUR -->
-  <button class="btn" onclick="handleLembur()">LEMBUR</button>
-
-  <!-- BUTTON KETERANGAN -->
-  <button class="btn" onclick="handleKeterangan()">KETERANGAN</button>
-  
 </div>
 
-<!-- ================= NAV ================= -->
-<div class="bottom-nav">
-  <div class="nav-item active" onclick="goPage('home',this)">🏠 Home</div>
-</div>
-
-<!-- ================= ANIMASI LOADING GPS ================= -->  
-<div class="loading" id="loadingGPS">
+<!-- LOADING -->
+<div class="loading" id="loading">
   <div class="loading-box">
-
-    <img src="jelas.png" class="loading-logo">
-
     <div class="loading-text">
       <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span>
-      <span>&nbsp;</span>
+      <span> </span>
       <span>T</span><span>U</span><span>N</span><span>G</span><span>G</span><span>U</span>
-    </div>
-
-    <!-- TAMBAHAN (LU PUNYA) -->
-    <div style="margin-top:10px;font-size:14px;color:#555;">
-      
-      <!-- 🔥 TAMBAH CLASS -->
-      <div id="textStatus" class="zoom-anim">Mencari lokasi...</div>
-      <div id="textJarak"></div>
-  
-      <!-- TARGET AREA -->
-      <div class="radar">
-        <div class="circle"></div>
-        <div class="circle"></div>
-        <div class="circle"></div>
-
-        <!-- logo -->
-        <img src="jelasbulat.png" id="radarIcon">
-      </div>
-
-      <!-- PROGRESS -->
-      <div class="progress">
-        <div id="bar"></div>
-      </div>
-
-      <p id="jarakText">Jarak: - meter</p>
-
     </div>
   </div>
 </div>
-  
+
+<!-- POPUP -->
+<div id="popup" class="popup">
+  <div class="popup-box">
+    <div id="popupIcon" class="popup-icon">✓</div>
+    <div id="popupMsg" class="popup-msg">Message</div>
+  </div>
+</div>
+
 <script>
 
 /* ================= CONFIG ================= */
 const URL = "https://dashboard-user.yayasangawerancagepasundan.workers.dev/";
 
-/* ================= CEK LOGIN ================= */
+/* ================= LOGIN CHECK ================= */
 let raw = localStorage.getItem("user");
 
 if(!raw){
   alert("Silahkan login dulu!");
-  window.location.href = "index.html";
-}
-
-let parsed;
-try{
-  parsed = JSON.parse(raw);
-}catch(e){
-  alert("Session rusak, login ulang");
-  localStorage.removeItem("user");
   location.href="index.html";
 }
 
-let userLogin = parsed; // 🔥 hanya username + device_id
-let user = {}; // 🔥 data dari backend (LIVE)
+let userLogin = JSON.parse(raw);
+let user = {};
 
-console.log("LOGIN DATA:", userLogin);
+/* ================= POPUP ================= */
+function showPopup(type, message, duration=1500){
+  const popup = document.getElementById("popup");
+  const icon = document.getElementById("popupIcon");
+  const msg = document.getElementById("popupMsg");
 
-/* ================= GLOBAL STATE (FIX BUG) ================= */
-let watchID = null;
-let currentLat = null;
-let currentLng = null;
-let dalamArea = false;
+  msg.innerText = message;
+  icon.className = "popup-icon " + type;
 
-/* ================= AMBIL DATA LIVE ================= */
+  if(type==="success") icon.innerText="✓";
+  if(type==="error") icon.innerText="✕";
+  if(type==="warning") icon.innerText="!";
+
+  popup.classList.add("show");
+
+  setTimeout(()=>{
+    popup.classList.remove("show");
+  },duration);
+}
+
+/* ================= LOAD USER ================= */
 async function loadUser(){
+
+  document.getElementById("loading").style.display="flex";
 
   try{
 
     let res = await fetch(URL,{
       method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
         action:"get_user",
-        username: userLogin.username,
-        device_id: userLogin.device_id
+        username:userLogin.username,
+        device_id:userLogin.device_id
       })
     });
 
     let data = await res.json();
 
-    if(data.status === "ok"){
-      user = data.data; // 🔥 ambil dari backend
-      updateDashboard(); // 🔥 pakai UI lama lu
+    document.getElementById("loading").style.display="none";
+
+    if(data.status==="ok"){
+      user = data.data;
+      updateDashboard();
     }else{
-      alert(data.msg || "Gagal ambil data");
+      showPopup("error",data.msg||"Gagal ambil data");
     }
 
   }catch(e){
-    alert("Koneksi gagal");
+    document.getElementById("loading").style.display="none";
+    showPopup("error","Koneksi gagal");
   }
 }
 
-/* ================= NAVIGASI ================= */
-function goPage(id,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  el.classList.add('active');
-}
-
-/* ================= UPDATE DASHBOARD ================= */
+/* ================= UPDATE UI ================= */
 function updateDashboard(){
 
   document.getElementById("namaUser").innerText = user.nama || "-";
   document.getElementById("posisi").innerText = user.posisi || "-";
   document.getElementById("perusahaan").innerText = user.perusahaan || "-";
 
+  // FOTO
+  let foto = user.foto || "";
+  if(!foto){
+    foto = "https://ui-avatars.com/api/?name="+encodeURIComponent(user.nama||"User");
+  }
+  document.getElementById("fotoUser").src = foto;
+
+  // KONTRAK
   let now = new Date();
+  let mulai = new Date(user.kontrak_mulai);
+  let selesai = new Date(user.kontrak_selesai);
 
-  let mulai = user.kontrak_mulai ? new Date(user.kontrak_mulai) : null;
-  let selesai = user.kontrak_selesai ? new Date(user.kontrak_selesai) : null;
-
-  let validMulai = mulai && !isNaN(mulai);
-  let validSelesai = selesai && !isNaN(selesai);
-
-  if(validSelesai){
-    let sisa = Math.ceil((selesai - now)/(1000*60*60*24));
-
-    if(sisa > 0){
-      document.getElementById("lama").innerText = sisa + " Hari";
-    }else if(sisa === 0){
-      document.getElementById("lama").innerText = "Hari Terakhir";
-    }else{
-      document.getElementById("lama").innerText = "Habis";
-    }
-  }else{
-    document.getElementById("lama").innerText = "0 Hari";
+  if(!isNaN(selesai)){
+    let sisa = Math.ceil((selesai-now)/(1000*60*60*24));
+    document.getElementById("lama").innerText = sisa>0 ? sisa+" Hari" : "Habis";
   }
 
-  function format(t){
-    let d = new Date(t);
-    if(isNaN(d)) return "-";
-    return d.toLocaleDateString("id-ID");
+  function f(t){
+    let d=new Date(t);
+    return isNaN(d)?"-":d.toLocaleDateString("id-ID");
   }
 
-  if(validMulai && validSelesai){
-    document.getElementById("kontrak").innerText =
-      format(user.kontrak_mulai) + " - " + format(user.kontrak_selesai);
-  }else{
-    document.getElementById("kontrak").innerText = "-";
-  }
+  document.getElementById("kontrak").innerText =
+    f(user.kontrak_mulai)+" - "+f(user.kontrak_selesai);
 }
 
-/* ================= AUTO LOAD ================= */
-loadUser();
-
-/* ================= HITUNG JARAK ================= */
-function distance(lat1, lon1, lat2, lon2){
-  const R = 6371e3;
-  const φ1 = lat1 * Math.PI/180;
-  const φ2 = lat2 * Math.PI/180;
-  const Δφ = (lat2-lat1) * Math.PI/180;
-  const Δλ = (lon2-lon1) * Math.PI/180;
-
-  const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-            Math.cos(φ1) * Math.cos(φ2) *
-            Math.sin(Δλ/2) * Math.sin(Δλ/2);
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-
-  return R * c;
+/* ================= NAVIGATION ================= */
+function goAbsen(){
+  location.href="gps.html";
 }
 
-/* ================= GPS DETECT ================= */
-function startGPS(){
-
-  const textStatus = document.getElementById("textStatus");
-  const textJarak = document.getElementById("jarakText");
-  const bar = document.getElementById("bar");
-
-  // 🔥 penting: stop watcher lama dulu
-  if(watchID){
-    navigator.geolocation.clearWatch(watchID);
-  }
-
-  watchID = navigator.geolocation.watchPosition(pos=>{
-
-    let lat = pos.coords.latitude;
-    let lng = pos.coords.longitude;
-
-    currentLat = lat;
-    currentLng = lng;
-
-    let latDB = Number(user.lat);
-    let lngDB = Number(user.lng);
-    let radius = Number(user.radius) || 50;
-
-    let jarak = distance(lat, lng, latDB, lngDB);
-
-    textJarak.innerText = "Jarak: " + Math.round(jarak) + " meter";
-
-    let persen = 100 - (jarak / radius * 100);
-    persen = Math.max(0, Math.min(100, persen));
-    bar.style.width = persen + "%";
-
-    if(jarak > radius){
-      dalamArea = false;
-      textStatus.innerText = "Di luar area (" + Math.round(jarak - radius) + "m lagi)";
-      document.getElementById("btnAbsen").disabled = true;
-    }else{
-      dalamArea = true;
-      textStatus.innerText = "ANDA DALAM AREA";
-      document.getElementById("btnAbsen").disabled = false;
-    }
-
-  }, err=>{
-    textStatus.innerText = "Gagal ambil lokasi";
-  },{
-    enableHighAccuracy:true
-  });
+function goLembur(){
+  location.href="lembur.html";
 }
 
-/* ================= ABSEN (FIX) ================= */
-function handleAbsen(){
-
-  const loading = document.getElementById("loadingGPS");
-  const btnKirim = document.getElementById("btnKirimAbsen");
-
-  if(!dalamArea){
-    alert("Anda masih di luar area!");
-    return;
-  }
-
-  if(!currentLat || !currentLng){
-    alert("Lokasi belum siap");
-    return;
-  }
-
-  loading.style.display = "flex";
-
-  fetch(URL,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body: JSON.stringify({
-      action:"absen",
-      username:user.username,
-      lat:currentLat,
-      lng:currentLng
-    })
-  })
-  .then(res=>res.text())
-  .then(res=>{
-    alert(res);
-  })
-  .catch(err=>{
-    alert("Gagal kirim: " + err);
-  })
-  .finally(()=>{
-    loading.style.display = "none";
-  });
-
-}
-
-/* ================= LEMBUR ================= */
-let lemburAktif = false;
-let trackingInterval = null;
-
-function handleLembur(){
-
-  navigator.geolocation.getCurrentPosition(pos=>{
-
-    fetch(URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        action:"lembur",
-        username:user.username,
-        lat:pos.coords.latitude,
-        lng:pos.coords.longitude
-      })
-    })
-    .then(res=>res.json())
-    .then(res=>{
-
-      alert(res.msg);
-
-      if(res.status == "start_lembur"){
-        lemburAktif = true;
-
-        if(trackingInterval) clearInterval(trackingInterval);
-
-        trackingInterval = setInterval(()=>{
-          kirimTracking();
-        },600000);
-      }
-
-      if(res.status == "stop_lembur"){
-        lemburAktif = false;
-        clearInterval(trackingInterval);
-      }
-
-    });
-
-  });
-
-}
-
-/* ================= KETERANGAN ================= */
-function handleKeterangan(){
-
-  let ket = prompt(`Pilih Keterangan:
-1. SAKIT
-2. IZIN
-3. CUTI
-4. DINAS`);
-
-  let map = {
-    "1":"SAKIT",
-    "2":"IZIN",
-    "3":"CUTI",
-    "4":"DINAS",
-  };
-
-  if(!map[ket]) return alert("Pilihan tidak valid");
-
-  navigator.geolocation.getCurrentPosition(pos=>{
-
-    fetch(URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        action:"keterangan",
-        username:user.username,
-        jenis:map[ket],
-        lat:pos.coords.latitude,
-        lng:pos.coords.longitude
-      })
-    })
-    .then(res=>res.json())
-    .then(res=>{
-      alert(res.msg || "Berhasil");
-    });
-
-  });
-
-}
-
-/* ================= TRACKING ================= */
-function kirimTracking(){
-
-  navigator.geolocation.getCurrentPosition(pos=>{
-
-    if(pos.coords.accuracy > 100){
-      console.log("Akurasi jelek, skip");
-      return;
-    }
-
-    fetch(URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        action:"tracking",
-        username:user.username,
-        lat:pos.coords.latitude,
-        lng:pos.coords.longitude,
-        acc:pos.coords.accuracy
-      })
-    });
-
-    console.log("Tracking lembur terkirim");
-
-  });
-
+function goKet(){
+  location.href="keterangan.html";
 }
 
 /* ================= INIT ================= */
-updateDashboard();
-startGPS();
+loadUser();
 
 </script>
 
