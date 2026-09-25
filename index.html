@@ -482,24 +482,20 @@ function validateStep(){
 
   inputs.forEach(i => {
 
-    // 🔥 SKIP FILE (validasi di submitFinal)
     if(i.type === "file") return;
 
     let value = (i.value || "").trim();
 
-    // 🔥 SELECT (value kosong)
     if(i.tagName === "SELECT"){
       if(value === ""){
         i.style.borderBottom = "2px solid red";
         valid = false;
-        return;
       }else{
         i.style.borderBottom = "2px solid #ddd";
-        return;
       }
+      return;
     }
 
-    // 🔥 INPUT DATE (khusus)
     if(i.type === "date"){
       if(!i.value){
         i.style.borderBottom = "2px solid red";
@@ -510,7 +506,6 @@ function validateStep(){
       return;
     }
 
-    // 🔥 INPUT TEXT NORMAL
     if(i.id !== "referral" && value === ""){
       i.style.borderBottom = "2px solid red";
       valid = false;
@@ -522,6 +517,7 @@ function validateStep(){
 
   return valid;
 }
+
 /* ================= REGISTER ================= */
 async function submitFinal(){
 
@@ -561,7 +557,7 @@ async function submitFinal(){
       showPopup("success","Registrasi berhasil");
 
       setTimeout(()=>{
-        showLogin(); // 🔥 langsung ke login
+        showLogin();
       },3000);
 
     }else{
@@ -574,15 +570,7 @@ async function submitFinal(){
   }
 }
 
-let DEVICE_ID = localStorage.getItem("device_id");
-
-if(!DEVICE_ID){
-  DEVICE_ID = "DEV-" + Date.now();
-  localStorage.setItem("device_id", DEVICE_ID);
-}
-
-/* ================= LOGIN ================= */
-// 🔥 DEVICE ID (HANYA SEKALI SEUMUR DEVICE)
+/* ================= DEVICE ID (FIX FINAL) ================= */
 let DEVICE_ID = localStorage.getItem("device_id");
 
 if(!DEVICE_ID){
@@ -662,37 +650,31 @@ async function login(){
     }
 
     else if(data.status === "device_mismatch"){
-
       setTimeout(()=>{
         showPopup("error", data.msg || "Akun sudah terdaftar di perangkat lain");
       },1000);
-
     }
 
     else{
-
       setTimeout(()=>{
         showPopup("error", data.msg || "Login gagal");
       },1000);
-
     }
 
   }catch(e){
-
     document.getElementById("loading").style.display = "none";
 
     setTimeout(()=>{
       showPopup("network","Koneksi gagal");
     },1000);
-
   }
 
 }
 
-// 🔥 WAJIB DI LUAR FUNCTION
+// 🔥 WAJIB
 window.login = login;
-  
-</script>
+
+</script>  
   
 </body>
 </html>
