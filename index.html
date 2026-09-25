@@ -582,6 +582,15 @@ if(!DEVICE_ID){
 }
 
 /* ================= LOGIN ================= */
+// 🔥 DEVICE ID (HANYA SEKALI SEUMUR DEVICE)
+let DEVICE_ID = localStorage.getItem("device_id");
+
+if(!DEVICE_ID){
+  DEVICE_ID = "DEV-" + Math.random().toString(36).substr(2,9);
+  localStorage.setItem("device_id", DEVICE_ID);
+}
+
+/* ================= LOGIN ================= */
 async function login(){
 
   let user = document.getElementById("loginUser").value.trim();
@@ -602,66 +611,84 @@ async function login(){
         "Content-Type":"application/json"
       },
       body: JSON.stringify({
-      action:"login",
-      username: user,
-      password: pass,
-      device_id: DEVICE_ID // 🔥 WAJIB
-})
+        action:"login",
+        username: user,
+        password: pass,
+        device_id: DEVICE_ID
+      })
     });
 
     let data = await res.json();
 
+    // 🔥 STOP LOADING DULU
     document.getElementById("loading").style.display = "none";
 
     // 🔥 SUCCESS
     if(data.status === "ok"){
-  
-      showPopup("success","Login berhasil");
 
-      // 🔥 hapus data lama
+      // delay dikit biar animasi smooth
+      setTimeout(()=>{
+        showPopup("success","Login berhasil");
+      },1000);
+
       localStorage.removeItem("user");
       localStorage.removeItem("userLogin");
 
-      // 🔥 SIMPAN HANYA IDENTITAS (LIVE SYSTEM)
       localStorage.setItem("user", JSON.stringify({
         username: data.user.username,
-        device_id: data.user.device_id || ""
+        device_id: DEVICE_ID
       }));
 
-      // 🔥 ROLE TETAP UNTUK REDIRECT (TIDAK DISIMPAN)
       let role = (data.user.role || "").toLowerCase().trim();
 
-      if(role === "admin lpk"){
-        window.location.href = "admin_lpk.html";
-      }
-      else if(role === "hrd"){
-        window.location.href = "hrd.html";
-      }
-      else if(role === "admin mitra"){
-        window.location.href = "admin_mitra.html";
-      }
-      else if(role === "direktur"){
-        window.location.href = "direktur.html";
-      }
-      else if(role === "super admin"){
-        window.location.href = "superadmin.html";
-      }
-      else{
-        window.location.href = "dashboard-user.html";
-      }
-
-      // 🔥 ANIMASI LU (TIDAK DISENTUH)
-      setTimeout(()=>{  },2000);
+      setTimeout(()=>{
+        if(role === "admin lpk"){
+          window.location.href = "admin_lpk.html";
+        }
+        else if(role === "hrd"){
+          window.location.href = "hrd.html";
+        }
+        else if(role === "admin mitra"){
+          window.location.href = "admin_mitra.html";
+        }
+        else if(role === "direktur"){
+          window.location.href = "direktur.html";
+        }
+        else if(role === "super admin"){
+          window.location.href = "superadmin.html";
+        }
+        else{
+          window.location.href = "dashboard-user.html";
+        }
+      },2000);
 
     }
+
+    // 🔴 DEVICE BEDA (INI YANG BARU)
+    else if(data.status === "device_mismatch"){
+
+      setTimeout(()=>{
+        showPopup("error", data.msg || "Akun sudah terdaftar di perangkat lain");
+      },1000);
+
+    }
+
+    // 🔴 ERROR BIASA
     else{
-      showPopup("error", data.msg || "Login gagal");
+
+      setTimeout(()=>{
+        showPopup("error", data.msg || "Login gagal");
+      },1000);
+
     }
 
   }catch(e){
 
     document.getElementById("loading").style.display = "none";
-    showPopup("network","Koneksi gagal");
+
+    setTimeout(()=>{
+      showPopup("network","Koneksi gagal");
+    },1000);
 
   }
 
