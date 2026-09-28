@@ -255,6 +255,9 @@ const URL = "https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
 let raw = localStorage.getItem("user");
 let parsed = raw ? JSON.parse(raw) : null;
 
+// 🔥 SIMPAN DEVICE_ID ASLI (JANGAN SAMPAI HILANG)
+let device_id = parsed ? parsed.device_id : "";
+
 let user = parsed ? {
   username: parsed.username,
   device_id: parsed.device_id
@@ -285,7 +288,7 @@ async function loadUser(){
       body: JSON.stringify({
         action:"get_user",
         username:user.username,
-        device_id:user.device_id
+        device_id:device_id // 🔥 pakai yang asli
       })
     });
 
@@ -293,7 +296,12 @@ async function loadUser(){
 
     if(data.status === "ok"){
 
-      user = data.data;
+      // 🔥 FIX UTAMA: JANGAN HILANGKAN DEVICE_ID
+      user = {
+        ...data.data,            // data LIVE dari backend
+        username: user.username, // tetap
+        device_id: device_id     // 🔥 tetap dari localStorage
+      };
 
       document.getElementById("dataUser").innerHTML = `
         <div class="row"><div class="label">NIK</div><div class="value">: ${user.nik}</div></div>
@@ -323,7 +331,6 @@ async function absen(){
 
   document.getElementById("loading").style.display="flex";
 
-  // 🔥 AMBIL GPS DULU
   navigator.geolocation.getCurrentPosition(async (pos)=>{
 
     let lat = pos.coords.latitude;
@@ -339,7 +346,7 @@ async function absen(){
         body: JSON.stringify({
           action:"absen",
           username:user.username,
-          device_id:user.device_id,
+          device_id:device_id, // 🔥 FIX: selalu pakai yang asli
           lat: lat,
           lng: lng
         })
@@ -420,6 +427,5 @@ async function absen(){
 /* ================= START ================= */
 loadUser();
 </script>
-
 </body>
 </html>
