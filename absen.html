@@ -288,7 +288,7 @@ async function loadUser(){
       body: JSON.stringify({
         action:"get_user",
         username:user.username,
-        device_id:device_id // 🔥 pakai yang asli
+        device_id:device_id
       })
     });
 
@@ -296,11 +296,10 @@ async function loadUser(){
 
     if(data.status === "ok"){
 
-      // 🔥 FIX UTAMA: JANGAN HILANGKAN DEVICE_ID
       user = {
-        ...data.data,            // data LIVE dari backend
-        username: user.username, // tetap
-        device_id: device_id     // 🔥 tetap dari localStorage
+        ...data.data,
+        username: user.username,
+        device_id: device_id
       };
 
       document.getElementById("dataUser").innerHTML = `
@@ -346,7 +345,7 @@ async function absen(){
         body: JSON.stringify({
           action:"absen",
           username:user.username,
-          device_id:device_id, // 🔥 FIX: selalu pakai yang asli
+          device_id:device_id,
           lat: lat,
           lng: lng
         })
@@ -361,6 +360,29 @@ async function absen(){
       let msg = document.getElementById("msg");
 
       result.style.display="flex";
+
+      // 🔥 ================= TAMBAHAN (FIX BUG) =================
+      if(data.status === "need_keterangan"){
+
+        // simpan data untuk halaman keterangan
+        localStorage.setItem("pending_absen", JSON.stringify({
+          username: user.username,
+          device_id: device_id,
+          lat: lat,
+          lng: lng
+        }));
+
+        face.innerText="⚠️";
+        face.className="face fail";
+        msg.innerText="BELUM JAM PULANG";
+
+        setTimeout(()=>{
+          window.location.href="keterangan.html";
+        },1500);
+
+        return;
+      }
+      // 🔥 ================= END =================
 
       if(data.status === "ok"){
         face.innerText="😊";
