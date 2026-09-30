@@ -247,7 +247,7 @@ body{
 </div>
 
 <script>
-const URL = "https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
+const URL = "https://keterangan-keluar.yayasangawerancagepasundan.workers.dev/";
 
 let userLogin = JSON.parse(localStorage.getItem("user") || "{}");
 let selected = "";
@@ -282,6 +282,8 @@ async function loadData(){
       document.getElementById("namaUser").innerText = data.data.nama || "-";
       document.getElementById("perusahaan").innerText = data.data.perusahaan || "-";
       document.getElementById("fotoUser").src = data.data.foto || "";
+      document.getElementById("shift").innerText = data.data.shift || "-";
+      document.getElementById("jamMasuk").innerText = data.data.jam_masuk || "-";
     }
 
   }catch(e){
