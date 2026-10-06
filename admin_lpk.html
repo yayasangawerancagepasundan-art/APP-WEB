@@ -1075,6 +1075,7 @@ async function loadBackendData(){
     messagesData = result.messages || {};
 
     initAdmin();
+    updateDashboardSummary();
     updateBadges();
 
   }catch(error){
@@ -1287,10 +1288,303 @@ async function loadBackendData(){
     max-width:none;
   }
 }
+
+/* =========================================================
+   ADMIN LPK VISUAL UPGRADE
+   - watermark jelasbulat.png di belakang konten
+   - dashboard lebih informatif
+   - tombol kembali tetap interaktif
+========================================================= */
+
+body{
+  background:
+    radial-gradient(circle at 15% 12%, rgba(255,0,0,.035), transparent 28%),
+    radial-gradient(circle at 88% 30%, rgba(255,90,90,.045), transparent 30%),
+    #fff;
+}
+
+.app-watermark{
+  position:fixed;
+  left:50%;
+  top:53%;
+  width:min(430px,78vw);
+  height:auto;
+  transform:translate(-50%,-50%);
+  opacity:.055;
+  filter:grayscale(100%);
+  z-index:1;
+  pointer-events:none;
+  user-select:none;
+}
+
+.dashboard,
+.view,
+.welcome,
+.logout-wrap,
+.topbar{
+  position:relative;
+  z-index:2;
+}
+
+.welcome{
+  margin-top:8px;
+}
+
+.welcome h4{
+  letter-spacing:.2px;
+}
+
+.welcome h2{
+  font-size:24px;
+  background:linear-gradient(90deg,#1d1d1d,#777);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+}
+
+.dashboard-hero{
+  margin-top:18px;
+  padding:18px;
+  border-radius:24px;
+  color:#fff;
+  background:
+    radial-gradient(circle at 90% 15%, rgba(255,255,255,.25), transparent 25%),
+    linear-gradient(135deg,#161616,#3b3b3b 58%,#ff2020);
+  box-shadow:0 18px 40px rgba(0,0,0,.14);
+  overflow:hidden;
+  position:relative;
+}
+
+.dashboard-hero:after{
+  content:"";
+  position:absolute;
+  width:130px;
+  height:130px;
+  right:-42px;
+  bottom:-55px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+  box-shadow:0 0 0 22px rgba(255,255,255,.05),0 0 0 44px rgba(255,255,255,.035);
+}
+
+.hero-kicker{
+  font-size:9px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+  opacity:.7;
+}
+
+.hero-title{
+  margin-top:4px;
+  font-size:18px;
+  font-weight:700;
+}
+
+.hero-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:10px;
+}
+
+.hero-chip{
+  padding:6px 9px;
+  border-radius:20px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.14);
+  font-size:9px;
+  backdrop-filter:blur(5px);
+}
+
+.summary-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin:12px 0 2px;
+}
+
+.summary-card{
+  background:rgba(255,255,255,.92);
+  border:1px solid rgba(0,0,0,.035);
+  border-radius:18px;
+  padding:14px;
+  box-shadow:0 10px 24px rgba(0,0,0,.06);
+  position:relative;
+  overflow:hidden;
+}
+
+.summary-card:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:0;
+  bottom:0;
+  width:3px;
+  background:linear-gradient(#ff0000,#ff7777);
+}
+
+.summary-label{
+  font-size:9px;
+  color:#8b8b8b;
+}
+
+.summary-value{
+  margin-top:2px;
+  font-size:20px;
+  font-weight:700;
+}
+
+.summary-note{
+  margin-top:3px;
+  font-size:8px;
+  color:#aaa;
+}
+
+.menu-grid{
+  margin-top:14px;
+}
+
+.menu-card{
+  background:linear-gradient(145deg,#fff,#fffafa);
+  box-shadow:0 15px 34px rgba(0,0,0,.075);
+}
+
+.menu-card:before{
+  content:"";
+  position:absolute;
+  width:90px;
+  height:90px;
+  right:-42px;
+  top:-42px;
+  border-radius:50%;
+  background:rgba(255,0,0,.035);
+}
+
+.menu-title{
+  letter-spacing:.15px;
+}
+
+.view-header{
+  margin-top:4px;
+  padding:4px 0 5px;
+}
+
+.back-btn{
+  width:44px;
+  height:44px;
+  border-radius:15px;
+  background:linear-gradient(145deg,#fff,#f8f8f8);
+  border:1px solid rgba(0,0,0,.035);
+  box-shadow:0 10px 22px rgba(0,0,0,.09);
+  transition:transform .18s ease,box-shadow .18s ease,background .18s ease;
+}
+
+.back-btn:hover{
+  box-shadow:0 12px 26px rgba(0,0,0,.13);
+  background:#fff7f7;
+}
+
+.back-btn:active{
+  transform:translateX(-2px) scale(.94);
+}
+
+.view-title{
+  letter-spacing:.1px;
+}
+
+.search-box{
+  border:1px solid rgba(0,0,0,.035);
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(8px);
+}
+
+.list-card,
+.company-card,
+.payment-card,
+.detail-card{
+  border:1px solid rgba(0,0,0,.035);
+  background:rgba(255,255,255,.95);
+}
+
+.company-card{
+  position:relative;
+  overflow:hidden;
+}
+
+.company-card:after{
+  content:"›";
+  position:absolute;
+  right:17px;
+  top:50%;
+  transform:translateY(-50%);
+  width:28px;
+  height:28px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fff1f1;
+  color:#e00000;
+  font-size:18px;
+}
+
+.company-action{
+  display:inline-block;
+  padding:7px 10px;
+  border-radius:10px;
+  background:#fff2f2;
+}
+
+.empty{
+  border-radius:20px;
+  background:rgba(255,255,255,.72);
+  box-shadow:0 10px 25px rgba(0,0,0,.04);
+}
+
+.logout-btn{
+  transition:.18s;
+}
+
+.logout-btn:active{
+  transform:scale(.985);
+}
+
+@media(max-width:520px){
+  .app-watermark{
+    width:92vw;
+    top:55%;
+    opacity:.045;
+  }
+
+  .dashboard-hero{
+    border-radius:21px;
+    padding:16px;
+  }
+
+  .hero-title{
+    font-size:17px;
+  }
+
+  .summary-grid{
+    gap:8px;
+  }
+
+  .summary-card{
+    padding:12px;
+  }
+
+  .summary-value{
+    font-size:18px;
+  }
+}
+
 </style>
 </head>
 
 <body>
+<!-- LOGO WATERMARK: tetap di belakang seluruh informasi -->
+<img class="app-watermark" src="jelasbulat.png" alt="" aria-hidden="true">
+
 
 <!-- =======================================================
      WAVE
@@ -1389,6 +1683,39 @@ async function loadBackendData(){
      DASHBOARD UTAMA
 ======================================================= -->
 <div class="dashboard" id="dashboard">
+
+  <div class="dashboard-hero">
+  <div class="hero-kicker">PANEL ADMIN LPK</div>
+  <div class="hero-title">Ringkasan Operasional</div>
+  <div class="hero-meta">
+    <span class="hero-chip" id="heroRole">ADMIN LPK</span>
+    <span class="hero-chip" id="heroZona">Zona: -</span>
+    <span class="hero-chip" id="heroClock">Online</span>
+  </div>
+</div>
+
+<div class="summary-grid">
+  <div class="summary-card">
+    <div class="summary-label">Perusahaan</div>
+    <div class="summary-value" id="summaryCompanies">0</div>
+    <div class="summary-note">terdaftar</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">User Aktif</div>
+    <div class="summary-value" id="summaryActive">0</div>
+    <div class="summary-note">bekerja + menunggu</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">Belum Bekerja</div>
+    <div class="summary-value" id="summaryInactive">0</div>
+    <div class="summary-note">status non-aktif</div>
+  </div>
+  <div class="summary-card">
+    <div class="summary-label">Pembayaran</div>
+    <div class="summary-value" id="summaryPending">0</div>
+    <div class="summary-note">menunggu verifikasi</div>
+  </div>
+</div>
 
   <div class="menu-grid">
 
@@ -3637,6 +3964,31 @@ function renderNotifications(){
    BADGES
 ========================================================= */
 
+function updateDashboardSummary(){
+  const zoneMatch = u => !admin.zona || u.zona === admin.zona;
+  const scopedUsers = users.filter(zoneMatch);
+  const scopedCompanies = companies.filter(c => !admin.zona || !c.zona || c.zona === admin.zona);
+  const active = scopedUsers.filter(u =>
+    u.status === "AKTIF BEKERJA" || u.status === "AKTIF MENUNGGU"
+  ).length;
+  const inactive = scopedUsers.filter(u => u.status === "TIDAK AKTIF").length;
+  const pending = payments.filter(p =>
+    p.status === "MENUNGGU" && zoneMatch(p)
+  ).length;
+
+  const set = (id,value) => {
+    const el=document.getElementById(id);
+    if(el) el.innerText=value;
+  };
+
+  set("summaryCompanies",scopedCompanies.length);
+  set("summaryActive",active);
+  set("summaryInactive",inactive);
+  set("summaryPending",pending);
+  set("heroRole",admin.role || "ADMIN LPK");
+  set("heroZona","Zona: "+(admin.zona || "Semua Zona"));
+}
+
 function updateBadges(){
 
   const unreadChat =
@@ -3701,6 +4053,7 @@ function updateBadges(){
 }
 
 
+updateDashboardSummary();
 updateBadges();
 
 
