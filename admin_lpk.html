@@ -3,7 +3,3833 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>Dashboard User</title>
+
+<title>Admin LPK</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  background:#fff;
+  overflow-x:hidden;
+  min-height:100vh;
+  color:#222;
+}
+
+/* =========================================================
+   WAVE
+========================================================= */
+.wave{
+  position:fixed;
+  bottom:-120px;
+  left:0;
+  width:200%;
+  height:180px;
+  border-radius:45%;
+  animation:waveMove 12s linear infinite;
+  z-index:0;
+  pointer-events:none;
+}
+
+.wave:nth-child(1){
+  background:#ff0000;
+  opacity:0.9;
+}
+
+.wave:nth-child(2){
+  background:#ff1a1a;
+  opacity:0.7;
+  animation-duration:14s;
+}
+
+.wave:nth-child(3){
+  background:#ff3333;
+  opacity:0.5;
+  animation-duration:16s;
+}
+
+.wave:nth-child(4){
+  background:#ff6666;
+  opacity:0.35;
+  animation-duration:18s;
+}
+
+.wave:nth-child(5){
+  background:#ff9999;
+  opacity:0.25;
+  animation-duration:20s;
+}
+
+@keyframes waveMove{
+  0%{
+    transform:translateX(0);
+  }
+  100%{
+    transform:translateX(-50%);
+  }
+}
+
+/* =========================================================
+   TOPBAR
+========================================================= */
+.topbar{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  padding:18px 20px;
+  position:relative;
+  z-index:10;
+}
+
+.logo{
+  justify-self:start;
+}
+
+.logo img{
+  width:150px;
+  display:block;
+}
+
+.clock{
+  text-align:center;
+  line-height:1.15;
+}
+
+.clock-time{
+  font-size:20px;
+  font-weight:600;
+  letter-spacing:1px;
+}
+
+.clock-date{
+  font-size:10px;
+  color:#888;
+  margin-top:3px;
+}
+
+.top-actions{
+  justify-self:end;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.icon-btn{
+  width:44px;
+  height:44px;
+  border:none;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  position:relative;
+  transition:0.2s;
+}
+
+.icon-btn:active{
+  transform:scale(0.94);
+}
+
+.icon-btn svg{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:#777;
+  stroke-width:1.8;
+}
+
+.badge{
+  position:absolute;
+  top:-4px;
+  right:-4px;
+  min-width:18px;
+  height:18px;
+  padding:0 5px;
+  border-radius:20px;
+  background:#ff0000;
+  color:#fff;
+  font-size:9px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  font-weight:600;
+  border:2px solid #fff;
+}
+
+/* =========================================================
+   WELCOME
+========================================================= */
+.welcome{
+  padding:0 20px;
+  margin-top:5px;
+  position:relative;
+  z-index:2;
+}
+
+.welcome h4{
+  font-size:13px;
+  color:#888;
+}
+
+.welcome h2{
+  font-size:22px;
+  font-weight:600;
+  margin-top:2px;
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+.dashboard{
+  position:relative;
+  z-index:2;
+  padding:0 20px 100px;
+}
+
+.menu-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+  margin-top:22px;
+}
+
+.menu-card{
+  background:#fff;
+  border-radius:20px;
+  padding:20px 17px;
+  min-height:150px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.08);
+  border:1px solid rgba(0,0,0,0.03);
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:0.2s;
+}
+
+.menu-card:active{
+  transform:scale(0.97);
+}
+
+.menu-icon{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  background:#fff1f1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-bottom:13px;
+}
+
+.menu-icon svg{
+  width:24px;
+  height:24px;
+  fill:none;
+  stroke:#ff0000;
+  stroke-width:1.7;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.menu-title{
+  font-size:15px;
+  font-weight:600;
+}
+
+.menu-desc{
+  font-size:10px;
+  color:#888;
+  margin-top:5px;
+  line-height:1.5;
+}
+
+.menu-count{
+  position:absolute;
+  top:14px;
+  right:14px;
+  min-width:25px;
+  height:25px;
+  padding:0 7px;
+  border-radius:20px;
+  background:#fff0f0;
+  color:#ff0000;
+  font-size:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:600;
+}
+
+.menu-card.full{
+  grid-column:1 / -1;
+}
+
+/* =========================================================
+   CONTENT VIEW
+========================================================= */
+.view{
+  display:none;
+  position:relative;
+  z-index:3;
+  padding:0 20px 100px;
+}
+
+.view.active{
+  display:block;
+  animation:viewIn 0.25s ease;
+}
+
+@keyframes viewIn{
+  from{
+    opacity:0;
+    transform:translateY(8px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.view-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin:10px 0 18px;
+}
+
+.back-btn{
+  width:40px;
+  height:40px;
+  border:none;
+  border-radius:13px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.back-btn svg{
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:#555;
+  stroke-width:2;
+}
+
+.view-title{
+  font-size:19px;
+  font-weight:600;
+}
+
+.view-subtitle{
+  font-size:10px;
+  color:#888;
+  margin-top:2px;
+}
+
+/* =========================================================
+   SEARCH
+========================================================= */
+.search-box{
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.07);
+  display:flex;
+  align-items:center;
+  padding:0 14px;
+  height:50px;
+  margin-bottom:15px;
+}
+
+.search-box svg{
+  width:19px;
+  height:19px;
+  fill:none;
+  stroke:#999;
+  stroke-width:1.8;
+  flex:none;
+}
+
+.search-box input{
+  width:100%;
+  border:none;
+  outline:none;
+  padding:0 10px;
+  font-size:12px;
+  background:transparent;
+}
+
+/* =========================================================
+   FILTER
+========================================================= */
+.filter-row{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding-bottom:4px;
+  margin-bottom:15px;
+}
+
+.filter-btn{
+  white-space:nowrap;
+  border:none;
+  background:#fff;
+  color:#777;
+  border-radius:20px;
+  padding:9px 14px;
+  font-size:10px;
+  box-shadow:0 7px 18px rgba(0,0,0,0.06);
+  cursor:pointer;
+}
+
+.filter-btn.active{
+  background:#ff0000;
+  color:#fff;
+}
+
+/* =========================================================
+   LIST CARD
+========================================================= */
+.list-card{
+  background:#fff;
+  border-radius:18px;
+  padding:15px;
+  margin-bottom:11px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.07);
+  border:1px solid rgba(0,0,0,0.03);
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.list-card:active{
+  transform:scale(0.985);
+}
+
+.list-main{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.list-avatar{
+  width:44px;
+  height:44px;
+  border-radius:14px;
+  background:#fff1f1;
+  color:#ff0000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  font-weight:600;
+  flex:none;
+}
+
+.list-info{
+  min-width:0;
+  flex:1;
+}
+
+.list-name{
+  font-size:13px;
+  font-weight:600;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.list-detail{
+  font-size:10px;
+  color:#888;
+  margin-top:3px;
+}
+
+.list-arrow{
+  width:20px;
+  height:20px;
+  fill:none;
+  stroke:#aaa;
+  stroke-width:2;
+  flex:none;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  border-radius:20px;
+  padding:4px 8px;
+  font-size:8px;
+  font-weight:600;
+  margin-top:6px;
+}
+
+.status.green{
+  color:#18844a;
+  background:#eaf9f0;
+}
+
+.status.orange{
+  color:#c77b00;
+  background:#fff6df;
+}
+
+.status.red{
+  color:#d50000;
+  background:#fff0f0;
+}
+
+.status.blue{
+  color:#2465c7;
+  background:#eef5ff;
+}
+
+/* =========================================================
+   COMPANY
+========================================================= */
+.company-card{
+  background:#fff;
+  border-radius:18px;
+  padding:17px;
+  margin-bottom:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.07);
+}
+
+.company-name{
+  font-size:14px;
+  font-weight:600;
+}
+
+.company-count{
+  font-size:10px;
+  color:#888;
+  margin-top:4px;
+}
+
+.company-action{
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid #eee;
+  font-size:10px;
+  color:#ff0000;
+  font-weight:600;
+}
+
+/* =========================================================
+   DETAIL
+========================================================= */
+.detail-card{
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 12px 30px rgba(0,0,0,0.08);
+  margin-bottom:15px;
+}
+
+.detail-head{
+  text-align:center;
+  padding-bottom:18px;
+  border-bottom:1px solid #eee;
+}
+
+.detail-avatar{
+  width:70px;
+  height:70px;
+  border-radius:22px;
+  background:#fff1f1;
+  color:#ff0000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  font-weight:600;
+  margin:0 auto 10px;
+}
+
+.detail-name{
+  font-size:18px;
+  font-weight:600;
+}
+
+.detail-sub{
+  color:#888;
+  font-size:10px;
+  margin-top:4px;
+}
+
+.detail-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:11px 0;
+  border-bottom:1px solid #f2f2f2;
+}
+
+.detail-row:last-child{
+  border-bottom:none;
+}
+
+.detail-label{
+  color:#888;
+  font-size:11px;
+}
+
+.detail-value{
+  font-size:11px;
+  font-weight:600;
+  text-align:right;
+}
+
+/* =========================================================
+   STATISTICS
+========================================================= */
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.stat-card{
+  background:#fff;
+  border-radius:17px;
+  padding:15px;
+  box-shadow:0 9px 22px rgba(0,0,0,0.06);
+}
+
+.stat-label{
+  font-size:9px;
+  color:#888;
+}
+
+.stat-value{
+  font-size:21px;
+  font-weight:600;
+  margin-top:3px;
+}
+
+/* =========================================================
+   PAYMENT
+========================================================= */
+.payment-card{
+  background:#fff;
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:11px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.07);
+}
+
+.payment-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.payment-name{
+  font-size:13px;
+  font-weight:600;
+}
+
+.payment-id{
+  font-size:9px;
+  color:#999;
+  margin-top:3px;
+}
+
+.payment-amount{
+  font-size:14px;
+  font-weight:600;
+  color:#222;
+  margin-top:10px;
+}
+
+.payment-date{
+  font-size:9px;
+  color:#888;
+  margin-top:3px;
+}
+
+.payment-actions{
+  display:flex;
+  gap:8px;
+  margin-top:13px;
+}
+
+.small-btn{
+  flex:1;
+  border:none;
+  border-radius:11px;
+  padding:10px;
+  font-size:9px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.small-btn.primary{
+  background:linear-gradient(135deg,#ff0000,#ff4d4d);
+  color:#fff;
+}
+
+.small-btn.secondary{
+  background:#f5f5f5;
+  color:#555;
+}
+
+/* =========================================================
+   CHAT
+========================================================= */
+.chat-panel{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  width:380px;
+  max-width:calc(100% - 40px);
+  height:620px;
+  max-height:calc(100vh - 40px);
+  background:#fff;
+  border-radius:25px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.20);
+  z-index:5000;
+  display:none;
+  overflow:hidden;
+}
+
+.chat-panel.active{
+  display:flex;
+  flex-direction:column;
+  animation:chatIn 0.25s ease;
+}
+
+@keyframes chatIn{
+  from{
+    opacity:0;
+    transform:translateY(20px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.chat-header{
+  padding:16px;
+  background:#fff;
+  border-bottom:1px solid #eee;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.chat-header-title{
+  font-size:15px;
+  font-weight:600;
+}
+
+.chat-close{
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:11px;
+  background:#f5f5f5;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.chat-tabs{
+  display:flex;
+  padding:10px;
+  gap:7px;
+  border-bottom:1px solid #eee;
+  overflow-x:auto;
+}
+
+.chat-tab{
+  border:none;
+  background:#f5f5f5;
+  padding:8px 12px;
+  border-radius:20px;
+  font-size:9px;
+  color:#777;
+  white-space:nowrap;
+  cursor:pointer;
+}
+
+.chat-tab.active{
+  background:#ff0000;
+  color:#fff;
+}
+
+.chat-list{
+  flex:1;
+  overflow-y:auto;
+  padding:10px;
+}
+
+.chat-item{
+  display:flex;
+  gap:10px;
+  padding:12px;
+  border-radius:15px;
+  cursor:pointer;
+}
+
+.chat-item:hover{
+  background:#fafafa;
+}
+
+.chat-item.unread{
+  background:#fff5f5;
+}
+
+.chat-avatar{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:#fff1f1;
+  color:#ff0000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+  font-weight:600;
+  flex:none;
+}
+
+.chat-info{
+  min-width:0;
+  flex:1;
+}
+
+.chat-name-row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.chat-name{
+  font-size:11px;
+  font-weight:600;
+}
+
+.chat-time{
+  font-size:8px;
+  color:#aaa;
+}
+
+.chat-message{
+  font-size:9px;
+  color:#888;
+  margin-top:4px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.chat-room{
+  display:none;
+  flex:1;
+  flex-direction:column;
+}
+
+.chat-room.active{
+  display:flex;
+}
+
+.chat-room-header{
+  padding:11px 14px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.chat-back{
+  border:none;
+  background:none;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.chat-room-name{
+  font-size:12px;
+  font-weight:600;
+}
+
+.chat-room-status{
+  font-size:8px;
+  color:#888;
+}
+
+.messages{
+  flex:1;
+  padding:15px;
+  overflow-y:auto;
+  background:#fafafa;
+}
+
+.message{
+  max-width:78%;
+  padding:9px 11px;
+  border-radius:13px;
+  font-size:10px;
+  margin-bottom:8px;
+  line-height:1.5;
+}
+
+.message.in{
+  background:#fff;
+  box-shadow:0 4px 10px rgba(0,0,0,0.04);
+  border-bottom-left-radius:4px;
+}
+
+.message.out{
+  margin-left:auto;
+  background:#ff0000;
+  color:#fff;
+  border-bottom-right-radius:4px;
+}
+
+.message-time{
+  display:block;
+  font-size:7px;
+  opacity:0.6;
+  margin-top:3px;
+  text-align:right;
+}
+
+.chat-input{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  padding:10px;
+  border-top:1px solid #eee;
+  background:#fff;
+}
+
+.chat-input input{
+  flex:1;
+  height:38px;
+  border:none;
+  outline:none;
+  background:#f5f5f5;
+  border-radius:13px;
+  padding:0 12px;
+  font-size:10px;
+}
+
+.chat-send{
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:13px;
+  background:#ff0000;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+.notification-panel{
+  position:fixed;
+  top:78px;
+  right:20px;
+  width:340px;
+  max-width:calc(100% - 40px);
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 20px 50px rgba(0,0,0,0.16);
+  z-index:4500;
+  display:none;
+  overflow:hidden;
+}
+
+.notification-panel.active{
+  display:block;
+  animation:panelIn 0.2s ease;
+}
+
+@keyframes panelIn{
+  from{
+    opacity:0;
+    transform:translateY(-8px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.notification-head{
+  padding:15px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.notification-title{
+  font-size:13px;
+  font-weight:600;
+}
+
+.notification-list{
+  max-height:400px;
+  overflow-y:auto;
+}
+
+.notification-item{
+  padding:13px 15px;
+  border-bottom:1px solid #f1f1f1;
+  cursor:pointer;
+}
+
+.notification-item:hover{
+  background:#fafafa;
+}
+
+.notification-item.unread{
+  background:#fff7f7;
+}
+
+.notification-type{
+  font-size:9px;
+  font-weight:600;
+  color:#ff0000;
+}
+
+.notification-text{
+  font-size:10px;
+  color:#555;
+  margin-top:4px;
+  line-height:1.5;
+}
+
+.notification-time{
+  font-size:8px;
+  color:#aaa;
+  margin-top:5px;
+}
+
+/* =========================================================
+   BACKEND
+========================================================= */
+
+async function workerRequest(payload){
+
+  const response = await fetch(
+    WORKER_URL,
+    {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(payload)
+    }
+  );
+
+  if(!response.ok){
+    throw new Error("Server error "+response.status);
+  }
+
+  const result = await response.json();
+
+  if(result && result.status === "error"){
+    throw new Error(result.msg || "Request gagal.");
+  }
+
+  return result || {};
+
+}
+
+
+async function loadBackendData(){
+
+  try{
+
+    const result = await workerRequest({
+      action:"admin_lpk_data",
+      username:admin.username,
+      zona:admin.zona
+    });
+
+    if(result.admin){
+      admin = {...admin,...result.admin};
+    }
+
+    users = Array.isArray(result.users) ? result.users : [];
+    companies = Array.isArray(result.companies) ? result.companies : [];
+    payments = Array.isArray(result.payments) ? result.payments : [];
+    chats = Array.isArray(result.chats) ? result.chats : [];
+    messagesData = result.messages || {};
+
+    initAdmin();
+    updateBadges();
+
+  }catch(error){
+
+    console.error("ADMIN LPK BACKEND:",error);
+    showToast(error.message || "Gagal mengambil data backend.");
+
+  }
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+.logout-wrap{
+  position:relative;
+  z-index:3;
+  padding:0 20px 35px;
+}
+
+.logout-btn{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:15px;
+  background:#fff;
+  color:#ff0000;
+  font-weight:600;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  cursor:pointer;
+}
+
+/* =========================================================
+   EMPTY
+========================================================= */
+.empty{
+  text-align:center;
+  padding:40px 20px;
+  color:#999;
+  font-size:11px;
+}
+
+.empty-icon{
+  font-size:30px;
+  margin-bottom:8px;
+}
+
+/* =========================================================
+   LOADING
+========================================================= */
+.loading{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(255,255,255,0.95);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.loading-text span{
+  display:inline-block;
+  font-weight:600;
+  color:#ff0000;
+  font-size:16px;
+  opacity:0;
+  animation:fadeSlide 1.5s infinite;
+}
+
+.loading-text span:nth-child(1){animation-delay:0s;}
+.loading-text span:nth-child(2){animation-delay:0.1s;}
+.loading-text span:nth-child(3){animation-delay:0.2s;}
+.loading-text span:nth-child(4){animation-delay:0.3s;}
+.loading-text span:nth-child(5){animation-delay:0.4s;}
+.loading-text span:nth-child(6){animation-delay:0.5s;}
+.loading-text span:nth-child(7){animation-delay:0.6s;}
+.loading-text span:nth-child(8){animation-delay:0.7s;}
+.loading-text span:nth-child(9){animation-delay:0.8s;}
+.loading-text span:nth-child(10){animation-delay:0.9s;}
+.loading-text span:nth-child(11){animation-delay:1s;}
+.loading-text span:nth-child(12){animation-delay:1.1s;}
+
+@keyframes fadeSlide{
+  0%{
+    opacity:0;
+    transform:translateX(20px);
+  }
+  50%{
+    opacity:1;
+    transform:translateX(0);
+  }
+  100%{
+    opacity:0;
+    transform:translateX(-10px);
+  }
+}
+
+/* =========================================================
+   DESKTOP
+========================================================= */
+@media(min-width:800px){
+
+  .dashboard,
+  .view{
+    max-width:900px;
+    margin:0 auto;
+  }
+
+  .menu-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+
+  .menu-card:nth-child(4),
+  .menu-card:nth-child(5){
+    grid-column:auto;
+  }
+
+  .menu-card.full{
+    grid-column:auto;
+  }
+
+  .welcome{
+    max-width:900px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+@media(max-width:520px){
+
+  .topbar{
+    padding:16px;
+  }
+
+  .logo img{
+    width:125px;
+  }
+
+  .clock-time{
+    font-size:15px;
+  }
+
+  .clock-date{
+    font-size:8px;
+  }
+
+  .icon-btn{
+    width:39px;
+    height:39px;
+    border-radius:12px;
+  }
+
+  .top-actions{
+    gap:6px;
+  }
+
+  .welcome{
+    padding:0 16px;
+  }
+
+  .welcome h2{
+    font-size:20px;
+  }
+
+  .dashboard,
+  .view{
+    padding-left:16px;
+    padding-right:16px;
+  }
+
+  .menu-grid{
+    gap:12px;
+  }
+
+  .menu-card{
+    min-height:145px;
+    padding:17px 14px;
+  }
+
+  .menu-title{
+    font-size:13px;
+  }
+
+  .menu-desc{
+    font-size:9px;
+  }
+
+  .chat-panel{
+    right:0;
+    bottom:0;
+    width:100%;
+    max-width:none;
+    height:100vh;
+    max-height:none;
+    border-radius:0;
+  }
+
+  .notification-panel{
+    top:68px;
+    right:12px;
+    width:calc(100% - 24px);
+    max-width:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =======================================================
+     WAVE
+======================================================= -->
+<div class="wave"></div>
+<div class="wave"></div>
+<div class="wave"></div>
+<div class="wave"></div>
+<div class="wave"></div>
+
+
+<!-- =======================================================
+     TOPBAR
+======================================================= -->
+<div class="topbar">
+
+  <div class="logo">
+    <img src="jelas.png" alt="Logo">
+  </div>
+
+  <div class="clock">
+    <div class="clock-time" id="clockTime">00:00:00</div>
+    <div class="clock-date" id="clockDate">-</div>
+  </div>
+
+  <div class="top-actions">
+
+    <!-- CHAT -->
+    <button class="icon-btn" onclick="toggleChat()" title="Chat">
+
+      <svg viewBox="0 0 24 24">
+        <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H8l-4 3v-5.5A7.5 7.5 0 1 1 20 11.5Z"></path>
+      </svg>
+
+      <span class="badge" id="chatBadge">0</span>
+
+    </button>
+
+
+    <!-- NOTIFICATION -->
+    <button class="icon-btn" onclick="toggleNotification()" title="Notifikasi">
+
+      <svg viewBox="0 0 24 24">
+        <path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+        <path d="M10 21h4"></path>
+      </svg>
+
+      <span class="badge" id="notificationBadge">0</span>
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     NOTIFICATION PANEL
+======================================================= -->
+<div class="notification-panel" id="notificationPanel">
+
+  <div class="notification-head">
+
+    <div class="notification-title">
+      Notifikasi
+    </div>
+
+    <button
+      onclick="closeNotification()"
+      style="border:none;background:none;color:#999;cursor:pointer;">
+      ✕
+    </button>
+
+  </div>
+
+  <div class="notification-list" id="notificationList"></div>
+
+</div>
+
+
+<!-- =======================================================
+     WELCOME
+======================================================= -->
+<div class="welcome">
+
+  <h4>Selamat Datang</h4>
+
+  <h2 id="namaAdmin">
+    Admin LPK
+  </h2>
+
+</div>
+
+
+<!-- =======================================================
+     DASHBOARD UTAMA
+======================================================= -->
+<div class="dashboard" id="dashboard">
+
+  <div class="menu-grid">
+
+    <!-- ===================================================
+         1. PERUSAHAAN
+    ==================================================== -->
+    <div class="menu-card" onclick="openView('perusahaan')">
+
+      <div class="menu-icon">
+
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="9" width="18" height="12"></rect>
+          <rect x="7" y="4" width="10" height="5"></rect>
+          <line x1="8" y1="13" x2="8" y2="17"></line>
+          <line x1="12" y1="13" x2="12" y2="17"></line>
+          <line x1="16" y1="13" x2="16" y2="17"></line>
+        </svg>
+
+      </div>
+
+      <div class="menu-title">
+        PERUSAHAAN
+      </div>
+
+      <div class="menu-desc">
+        Penempatan dan data karyawan berdasarkan perusahaan.
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         2. INFORMASI PERUSAHAAN
+    ==================================================== -->
+    <div class="menu-card" onclick="openView('infoPerusahaan')">
+
+      <div class="menu-icon">
+
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="4" width="18" height="17" rx="2"></rect>
+          <line x1="7" y1="9" x2="17" y2="9"></line>
+          <line x1="7" y1="13" x2="17" y2="13"></line>
+          <line x1="7" y1="17" x2="13" y2="17"></line>
+        </svg>
+
+      </div>
+
+      <div class="menu-title">
+        INFORMASI PERUSAHAAN
+      </div>
+
+      <div class="menu-desc">
+        Melihat seluruh perusahaan yang terdaftar.
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         3. USER AKTIF
+    ==================================================== -->
+    <div class="menu-card" onclick="openView('userAktif')">
+
+      <div class="menu-icon">
+
+        <svg viewBox="0 0 24 24">
+          <circle cx="9" cy="8" r="4"></circle>
+          <path d="M2 21c0-4 3-6 7-6"></path>
+          <circle cx="17" cy="10" r="3"></circle>
+          <path d="M14 21c0-3 2-5 5-5 2 0 3 .7 4 2"></path>
+        </svg>
+
+      </div>
+
+      <div class="menu-title">
+        USER AKTIF
+      </div>
+
+      <div class="menu-desc">
+        Aktif bekerja dan aktif menunggu penempatan.
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         4. USER BELUM BEKERJA
+    ==================================================== -->
+    <div class="menu-card" onclick="openView('userBelumBekerja')">
+
+      <div class="menu-icon">
+
+        <svg viewBox="0 0 24 24">
+          <circle cx="9" cy="8" r="4"></circle>
+          <path d="M2 21c0-4 3-6 7-6"></path>
+          <circle cx="17" cy="17" r="4"></circle>
+          <line x1="17" y1="14.5" x2="17" y2="17"></line>
+          <circle cx="17" cy="19.2" r=".5"></circle>
+        </svg>
+
+      </div>
+
+      <div class="menu-title">
+        USER BELUM BEKERJA
+      </div>
+
+      <div class="menu-desc">
+        User non-aktif yang belum masuk proses interview.
+      </div>
+
+    </div>
+
+
+    <!-- ===================================================
+         5. INFORMASI PEMBAYARAN
+    ==================================================== -->
+    <div class="menu-card" onclick="openView('pembayaran')">
+
+      <div class="menu-icon">
+
+        <svg viewBox="0 0 24 24">
+          <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+          <line x1="7" y1="15" x2="11" y2="15"></line>
+        </svg>
+
+      </div>
+
+      <div class="menu-title">
+        INFORMASI PEMBAYARAN
+      </div>
+
+      <div class="menu-desc">
+        Pembayaran dan bukti transaksi user.
+      </div>
+
+      <div class="menu-count" id="paymentCount">
+        0
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     VIEW: PERUSAHAAN
+======================================================= -->
+<div class="view" id="viewPerusahaan">
+
+  <div class="view-header">
+
+    <button class="back-btn" onclick="backDashboard()">
+
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+
+    </button>
+
+    <div>
+
+      <div class="view-title">
+        Perusahaan
+      </div>
+
+      <div class="view-subtitle">
+        Penempatan dan karyawan
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="search-box">
+
+    <svg viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M16 16l5 5"></path>
+    </svg>
+
+    <input
+      type="text"
+      id="searchPerusahaan"
+      placeholder="Cari user atau perusahaan..."
+      oninput="searchPerusahaan()">
+
+  </div>
+
+
+  <div id="perusahaanContent"></div>
+
+</div>
+
+
+<!-- =======================================================
+     VIEW: INFORMASI PERUSAHAAN
+======================================================= -->
+<div class="view" id="viewInfoPerusahaan">
+
+  <div class="view-header">
+
+    <button class="back-btn" onclick="backDashboard()">
+
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+
+    </button>
+
+    <div>
+
+      <div class="view-title">
+        Informasi Perusahaan
+      </div>
+
+      <div class="view-subtitle">
+        Data perusahaan terdaftar
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="search-box">
+
+    <svg viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M16 16l5 5"></path>
+    </svg>
+
+    <input
+      type="text"
+      id="searchInfoPerusahaan"
+      placeholder="Cari perusahaan..."
+      oninput="searchInfoPerusahaan()">
+
+  </div>
+
+
+  <div id="infoPerusahaanContent"></div>
+
+</div>
+
+
+<!-- =======================================================
+     VIEW: USER AKTIF
+======================================================= -->
+<div class="view" id="viewUserAktif">
+
+  <div class="view-header">
+
+    <button class="back-btn" onclick="backDashboard()">
+
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+
+    </button>
+
+    <div>
+
+      <div class="view-title">
+        User Aktif
+      </div>
+
+      <div class="view-subtitle">
+        Aktif bekerja dan aktif menunggu
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="filter-row">
+
+    <button
+      class="filter-btn active"
+      onclick="filterAktif('SEMUA',this)">
+      SEMUA
+    </button>
+
+    <button
+      class="filter-btn"
+      onclick="filterAktif('AKTIF BEKERJA',this)">
+      AKTIF BEKERJA
+    </button>
+
+    <button
+      class="filter-btn"
+      onclick="filterAktif('AKTIF MENUNGGU',this)">
+      AKTIF MENUNGGU
+    </button>
+
+  </div>
+
+
+  <div class="search-box">
+
+    <svg viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M16 16l5 5"></path>
+    </svg>
+
+    <input
+      type="text"
+      id="searchUserAktif"
+      placeholder="Cari nama / NIK / perusahaan..."
+      oninput="renderUserAktif()">
+
+  </div>
+
+
+  <div id="userAktifContent"></div>
+
+</div>
+
+
+<!-- =======================================================
+     VIEW: USER BELUM BEKERJA
+======================================================= -->
+<div class="view" id="viewUserBelumBekerja">
+
+  <div class="view-header">
+
+    <button class="back-btn" onclick="backDashboard()">
+
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+
+    </button>
+
+    <div>
+
+      <div class="view-title">
+        User Belum Bekerja
+      </div>
+
+      <div class="view-subtitle">
+        User non-aktif sesuai zona Admin LPK
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="search-box">
+
+    <svg viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M16 16l5 5"></path>
+    </svg>
+
+    <input
+      type="text"
+      id="searchUserBelum"
+      placeholder="Cari nama / NIK / username..."
+      oninput="renderUserBelumBekerja()">
+
+  </div>
+
+
+  <div id="userBelumBekerjaContent"></div>
+
+</div>
+
+
+<!-- =======================================================
+     VIEW: PEMBAYARAN
+======================================================= -->
+<div class="view" id="viewPembayaran">
+
+  <div class="view-header">
+
+    <button class="back-btn" onclick="backDashboard()">
+
+      <svg viewBox="0 0 24 24">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+
+    </button>
+
+    <div>
+
+      <div class="view-title">
+        Informasi Pembayaran
+      </div>
+
+      <div class="view-subtitle">
+        Pembayaran user sesuai zona
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="filter-row">
+
+    <button
+      class="filter-btn active"
+      onclick="filterPembayaran('SEMUA',this)">
+      SEMUA
+    </button>
+
+    <button
+      class="filter-btn"
+      onclick="filterPembayaran('MENUNGGU',this)">
+      MENUNGGU
+    </button>
+
+    <button
+      class="filter-btn"
+      onclick="filterPembayaran('LUNAS',this)">
+      LUNAS
+    </button>
+
+    <button
+      class="filter-btn"
+      onclick="filterPembayaran('DITOLAK',this)">
+      DITOLAK
+    </button>
+
+  </div>
+
+
+  <div class="search-box">
+
+    <svg viewBox="0 0 24 24">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M16 16l5 5"></path>
+    </svg>
+
+    <input
+      type="text"
+      id="searchPembayaran"
+      placeholder="Cari nama / NIK / ID pembayaran..."
+      oninput="renderPembayaran()">
+
+  </div>
+
+
+  <div id="pembayaranContent"></div>
+
+</div>
+
+
+<!-- =======================================================
+     CHAT PANEL
+======================================================= -->
+<div class="chat-panel" id="chatPanel">
+
+  <div class="chat-header">
+
+    <div class="chat-header-title">
+      Chat
+    </div>
+
+    <button class="chat-close" onclick="closeChat()">
+      ✕
+    </button>
+
+  </div>
+
+
+  <!-- CHAT LIST -->
+  <div id="chatListArea">
+
+    <div class="chat-tabs">
+
+      <button
+        class="chat-tab active"
+        onclick="filterChat('USER',this)">
+        USER
+      </button>
+
+      <button
+        class="chat-tab"
+        onclick="filterChat('MITRA',this)">
+        MITRA
+      </button>
+
+      <button
+        class="chat-tab"
+        onclick="filterChat('DIREKTUR',this)">
+        DIREKTUR
+      </button>
+
+    </div>
+
+    <div class="chat-list" id="chatList"></div>
+
+  </div>
+
+
+  <!-- CHAT ROOM -->
+  <div class="chat-room" id="chatRoom">
+
+    <div class="chat-room-header">
+
+      <button class="chat-back" onclick="closeChatRoom()">
+        ←
+      </button>
+
+      <div>
+
+        <div class="chat-room-name" id="chatRoomName">
+          -
+        </div>
+
+        <div class="chat-room-status" id="chatRoomStatus">
+          -
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="messages" id="messages"></div>
+
+
+    <div class="chat-input">
+
+      <input
+        type="text"
+        id="chatMessage"
+        placeholder="Ketik pesan..."
+        onkeydown="chatEnter(event)">
+
+      <button
+        class="chat-send"
+        onclick="sendMessage()">
+        ➤
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =======================================================
+     LOGOUT
+======================================================= -->
+<div class="logout-wrap">
+
+  <button class="logout-btn" onclick="logout()">
+    LOGOUT
+  </button>
+
+</div>
+
+
+<!-- =======================================================
+     LOADING
+======================================================= -->
+<div class="loading" id="loading">
+
+  <div class="loading-text">
+
+    <span>H</span>
+    <span>A</span>
+    <span>R</span>
+    <span>A</span>
+    <span>P</span>
+    <span> </span>
+    <span>T</span>
+    <span>U</span>
+    <span>N</span>
+    <span>G</span>
+    <span>G</span>
+    <span>U</span>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   CONFIG
+   BELUM DIHUBUNGKAN KE WORKER
+========================================================= */
+
+const WORKER_URL = "https://admin-lpk.yayasangawerancagepasundan.workers.dev/";
+
+
+/* =========================================================
+   ADMIN LOGIN
+========================================================= */
+
+const adminLogin =
+  JSON.parse(
+    localStorage.getItem("adminSecurity") || "{}"
+  );
+
+
+let admin = {
+  username: adminLogin.username || "",
+  nama: "",
+  role: adminLogin.role || "ADMIN LPK",
+  zona: ""
+};
+
+
+/* =========================================================
+   DATA BACKEND
+========================================================= */
+
+let users = [];
+let companies = [];
+let payments = [];
+let chats = [];
+let messagesData = {};
+
+
+let currentChatType = "USER";
+let currentChatId = "";
+let currentAktifFilter = "SEMUA";
+let currentPaymentFilter = "SEMUA";
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+function showLoad(){
+
+  document.getElementById("loading").style.display="flex";
+
+}
+
+
+function hideLoad(){
+
+  document.getElementById("loading").style.display="none";
+
+}
+
+
+/* =========================================================
+   CLOCK
+========================================================= */
+
+function updateClock(){
+
+  const now = new Date();
+
+  document.getElementById("clockTime").innerText =
+    now.toLocaleTimeString("id-ID",{
+      hour:"2-digit",
+      minute:"2-digit",
+      second:"2-digit"
+    });
+
+  document.getElementById("clockDate").innerText =
+    now.toLocaleDateString("id-ID",{
+      weekday:"long",
+      day:"2-digit",
+      month:"long",
+      year:"numeric"
+    });
+
+}
+
+
+setInterval(updateClock,1000);
+
+updateClock();
+
+
+/* =========================================================
+   INIT ADMIN
+========================================================= */
+
+function initAdmin(){
+
+  /*
+    NANTI:
+    data admin akan diambil dari backend
+    berdasarkan username yang login.
+  */
+
+  document.getElementById("namaAdmin").innerText =
+    admin.nama ||
+    admin.username ||
+    "Admin LPK";
+
+}
+
+
+initAdmin();
+
+
+/* =========================================================
+   VIEW CONTROL
+========================================================= */
+
+const views = {
+
+  perusahaan:
+    "viewPerusahaan",
+
+  infoPerusahaan:
+    "viewInfoPerusahaan",
+
+  userAktif:
+    "viewUserAktif",
+
+  userBelumBekerja:
+    "viewUserBelumBekerja",
+
+  pembayaran:
+    "viewPembayaran"
+
+};
+
+
+function openView(name){
+
+  document.getElementById("dashboard").style.display="none";
+
+  Object.values(views).forEach(id=>{
+
+    document.getElementById(id).classList.remove("active");
+
+  });
+
+
+  document.getElementById(views[name]).classList.add("active");
+
+
+  if(name==="perusahaan"){
+    renderPerusahaan();
+  }
+
+  if(name==="infoPerusahaan"){
+    renderInfoPerusahaan();
+  }
+
+  if(name==="userAktif"){
+    renderUserAktif();
+  }
+
+  if(name==="userBelumBekerja"){
+    renderUserBelumBekerja();
+  }
+
+  if(name==="pembayaran"){
+    renderPembayaran();
+  }
+
+}
+
+
+function backDashboard(){
+
+  Object.values(views).forEach(id=>{
+
+    document.getElementById(id).classList.remove("active");
+
+  });
+
+  document.getElementById("dashboard").style.display="block";
+
+}
+
+
+/* =========================================================
+   USER BELUM BEKERJA
+   HANYA NON-AKTIF
+   SESUAI ZONA ADMIN
+========================================================= */
+
+function renderUserBelumBekerja(){
+
+  const box =
+    document.getElementById(
+      "userBelumBekerjaContent"
+    );
+
+  const search =
+    (
+      document.getElementById(
+        "searchUserBelum"
+      ).value || ""
+    ).toLowerCase();
+
+
+  const data =
+    users.filter(u=>{
+
+      const zonaMatch =
+        !admin.zona ||
+        u.zona === admin.zona;
+
+      const statusMatch =
+        u.status === "TIDAK AKTIF";
+
+      const searchMatch =
+        (
+          u.nama+
+          " "+
+          u.nik+
+          " "+
+          u.username
+        )
+        .toLowerCase()
+        .includes(search);
+
+      return zonaMatch &&
+             statusMatch &&
+             searchMatch;
+
+    });
+
+
+  if(!data.length){
+
+    box.innerHTML = emptyHTML(
+      "Tidak ada user belum bekerja"
+    );
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    data.map(u=>userListHTML(u)).join("");
+
+}
+
+
+/* =========================================================
+   USER AKTIF
+========================================================= */
+
+function renderUserAktif(){
+
+  const box =
+    document.getElementById(
+      "userAktifContent"
+    );
+
+  const search =
+    (
+      document.getElementById(
+        "searchUserAktif"
+      ).value || ""
+    ).toLowerCase();
+
+
+  const data =
+    users.filter(u=>{
+
+      const zonaMatch =
+        !admin.zona ||
+        u.zona === admin.zona;
+
+      const statusMatch =
+        currentAktifFilter==="SEMUA" ||
+        u.status===currentAktifFilter;
+
+      const searchMatch =
+        (
+          u.nama+
+          " "+
+          u.nik+
+          " "+
+          u.perusahaan
+        )
+        .toLowerCase()
+        .includes(search);
+
+      return zonaMatch &&
+             statusMatch &&
+             (
+               u.status==="AKTIF BEKERJA" ||
+               u.status==="AKTIF MENUNGGU"
+             ) &&
+             searchMatch;
+
+    });
+
+
+  if(!data.length){
+
+    box.innerHTML =
+      emptyHTML("Tidak ada user aktif");
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    data.map(u=>userListHTML(u)).join("");
+
+}
+
+
+function filterAktif(status,button){
+
+  currentAktifFilter=status;
+
+  document
+    .querySelectorAll("#viewUserAktif .filter-btn")
+    .forEach(btn=>btn.classList.remove("active"));
+
+  button.classList.add("active");
+
+  renderUserAktif();
+
+}
+
+
+/* =========================================================
+   USER LIST HTML
+========================================================= */
+
+function userListHTML(u){
+
+  const initials =
+    (u.nama || "U")
+    .split(" ")
+    .map(x=>x[0])
+    .join("")
+    .substring(0,2)
+    .toUpperCase();
+
+
+  let statusClass="orange";
+
+  if(u.status==="AKTIF BEKERJA"){
+    statusClass="green";
+  }
+
+  if(u.status==="TIDAK AKTIF"){
+    statusClass="red";
+  }
+
+
+  return `
+
+    <div
+      class="list-card"
+      onclick="openUserDetail('${escapeAttr(u.username)}')">
+
+      <div class="list-main">
+
+        <div class="list-avatar">
+          ${initials}
+        </div>
+
+        <div class="list-info">
+
+          <div class="list-name">
+            ${escapeHTML(u.nama)}
+          </div>
+
+          <div class="list-detail">
+            ${escapeHTML(u.nik)}
+          </div>
+
+          <span class="status ${statusClass}">
+            ${escapeHTML(u.status)}
+          </span>
+
+          ${
+            u.perusahaan
+            ?
+            `
+            <div class="list-detail">
+              ${escapeHTML(u.perusahaan)}
+            </div>
+            `
+            :
+            ""
+          }
+
+        </div>
+
+        <svg
+          class="list-arrow"
+          viewBox="0 0 24 24">
+
+          <path d="M9 18l6-6-6-6"></path>
+
+        </svg>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   DETAIL USER
+========================================================= */
+
+function openUserDetail(username){
+
+  const u =
+    users.find(
+      x=>x.username===username
+    );
+
+  if(!u) return;
+
+
+  const detail =
+    document.createElement("div");
+
+  detail.id="temporaryDetailView";
+
+  detail.className="view active";
+
+  detail.innerHTML=`
+
+    <div class="view-header">
+
+      <button
+        class="back-btn"
+        onclick="closeUserDetail()">
+
+        <svg viewBox="0 0 24 24">
+          <path d="M15 18l-6-6 6-6"></path>
+        </svg>
+
+      </button>
+
+      <div>
+
+        <div class="view-title">
+          Detail User
+        </div>
+
+        <div class="view-subtitle">
+          Informasi user
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="detail-card">
+
+      <div class="detail-head">
+
+        <div class="detail-avatar">
+
+          ${
+            (u.nama || "U")
+            .split(" ")
+            .map(x=>x[0])
+            .join("")
+            .substring(0,2)
+            .toUpperCase()
+          }
+
+        </div>
+
+        <div class="detail-name">
+          ${escapeHTML(u.nama)}
+        </div>
+
+        <div class="detail-sub">
+          ${escapeHTML(u.username)}
+        </div>
+
+        <span class="status ${
+          u.status==="AKTIF BEKERJA"
+          ?"green"
+          :
+          u.status==="TIDAK AKTIF"
+          ?"red"
+          :"orange"
+        }">
+          ${escapeHTML(u.status)}
+        </span>
+
+      </div>
+
+
+      <div class="detail-row">
+        <div class="detail-label">NIK</div>
+        <div class="detail-value">${escapeHTML(u.nik)}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Zona</div>
+        <div class="detail-value">${escapeHTML(u.zona)}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Posisi</div>
+        <div class="detail-value">${escapeHTML(u.posisi)}</div>
+      </div>
+
+      <div class="detail-row">
+        <div class="detail-label">Perusahaan</div>
+        <div class="detail-value">${escapeHTML(u.perusahaan || "-")}</div>
+      </div>
+
+    </div>
+
+
+    ${
+      u.status==="AKTIF BEKERJA"
+      ?
+      `
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <div class="stat-label">Hadir</div>
+          <div class="stat-value">22</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Terlambat</div>
+          <div class="stat-value">3</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Izin</div>
+          <div class="stat-value">2</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">Bolos</div>
+          <div class="stat-value">1</div>
+        </div>
+
+      </div>
+
+      `
+      :
+      ""
+    }
+
+  `;
+
+
+  document.body.appendChild(detail);
+
+}
+
+
+function closeUserDetail(){
+
+  const el =
+    document.getElementById(
+      "temporaryDetailView"
+    );
+
+  if(el) el.remove();
+
+}
+
+
+/* =========================================================
+   PERUSAHAAN
+========================================================= */
+
+function renderPerusahaan(){
+
+  const box =
+    document.getElementById(
+      "perusahaanContent"
+    );
+
+  const search =
+    (
+      document.getElementById(
+        "searchPerusahaan"
+      ).value || ""
+    ).toLowerCase();
+
+
+  /*
+    Perusahaan hanya menampilkan
+    perusahaan dari Master Perusahaan.
+
+    Untuk penempatan,
+    user yang dipilih harus:
+    AKTIF MENUNGGU
+  */
+
+
+  const waitingUsers =
+    users.filter(u=>{
+
+      return (
+        (!admin.zona || u.zona===admin.zona) &&
+        u.status==="AKTIF MENUNGGU"
+      );
+
+    });
+
+
+  let html = `
+
+    <div class="detail-card">
+
+      <div style="
+        font-size:13px;
+        font-weight:600;
+        margin-bottom:5px;">
+        PENEMPATAN USER
+      </div>
+
+      <div style="
+        font-size:10px;
+        color:#888;
+        line-height:1.5;">
+        Pilih user yang berstatus
+        AKTIF MENUNGGU,
+        kemudian pilih perusahaan.
+      </div>
+
+    </div>
+
+  `;
+
+
+  if(search){
+
+    const foundUsers =
+      waitingUsers.filter(u=>{
+
+        return (
+          u.nama+
+          " "+
+          u.nik+
+          " "+
+          u.username+
+          " "+
+          u.perusahaan
+        )
+        .toLowerCase()
+        .includes(search);
+
+      });
+
+
+    if(foundUsers.length){
+
+      html += foundUsers
+        .map(u=>userListHTML(u))
+        .join("");
+
+    }
+
+  }
+
+
+  html += `
+
+    <div style="
+      font-size:13px;
+      font-weight:600;
+      margin:20px 0 10px;">
+      DAFTAR PERUSAHAAN
+    </div>
+
+  `;
+
+
+  const foundCompanies =
+    companies.filter(c=>{
+
+      return c.nama
+        .toLowerCase()
+        .includes(search);
+
+    });
+
+
+  if(!foundCompanies.length){
+
+    html += emptyHTML(
+      "Perusahaan tidak ditemukan"
+    );
+
+  }else{
+
+    html += foundCompanies
+      .map(c=>companyHTML(c))
+      .join("");
+
+  }
+
+
+  box.innerHTML=html;
+
+}
+
+
+function searchPerusahaan(){
+
+  renderPerusahaan();
+
+}
+
+
+function companyHTML(c){
+
+  return `
+
+    <div
+      class="company-card"
+      onclick="openCompanyDetail('${escapeAttr(c.nama)}')">
+
+      <div class="company-name">
+        ${escapeHTML(c.nama)}
+      </div>
+
+      <div class="company-count">
+        ${c.jumlah} karyawan kita
+      </div>
+
+      <div class="company-action">
+        LIHAT KARYAWAN →
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   INFORMASI PERUSAHAAN
+========================================================= */
+
+function renderInfoPerusahaan(){
+
+  const box =
+    document.getElementById(
+      "infoPerusahaanContent"
+    );
+
+  const search =
+    (
+      document.getElementById(
+        "searchInfoPerusahaan"
+      ).value || ""
+    ).toLowerCase();
+
+
+  const data =
+    companies.filter(c=>
+      c.nama.toLowerCase().includes(search)
+    );
+
+
+  if(!data.length){
+
+    box.innerHTML =
+      emptyHTML(
+        "Perusahaan tidak ditemukan"
+      );
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    data.map(c=>`
+
+      <div class="company-card">
+
+        <div class="company-name">
+          ${escapeHTML(c.nama)}
+        </div>
+
+        <div class="company-count">
+          ${c.jumlah} karyawan kita
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+function searchInfoPerusahaan(){
+
+  renderInfoPerusahaan();
+
+}
+
+
+/* =========================================================
+   DETAIL PERUSAHAAN
+========================================================= */
+
+function openCompanyDetail(nama){
+
+  const companyUsers =
+    users.filter(u=>{
+
+      return (
+        u.perusahaan===nama &&
+        u.status==="AKTIF BEKERJA" &&
+        (!admin.zona || u.zona===admin.zona)
+      );
+
+    });
+
+
+  const detail =
+    document.createElement("div");
+
+  detail.id="temporaryDetailView";
+
+  detail.className="view active";
+
+  detail.innerHTML=`
+
+    <div class="view-header">
+
+      <button
+        class="back-btn"
+        onclick="closeUserDetail()">
+
+        <svg viewBox="0 0 24 24">
+          <path d="M15 18l-6-6 6-6"></path>
+        </svg>
+
+      </button>
+
+      <div>
+
+        <div class="view-title">
+          ${escapeHTML(nama)}
+        </div>
+
+        <div class="view-subtitle">
+          ${companyUsers.length} karyawan kita
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="search-box">
+
+      <svg viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="7"></circle>
+        <path d="M16 16l5 5"></path>
+      </svg>
+
+      <input
+        type="text"
+        placeholder="Cari nama / NIK..."
+        oninput="filterCompanyUsers(this,'${escapeAttr(nama)}')">
+
+    </div>
+
+
+    <div id="companyUsersContent">
+
+      ${
+        companyUsers.length
+        ?
+        companyUsers
+          .map(u=>userListHTML(u))
+          .join("")
+        :
+        emptyHTML(
+          "Belum ada karyawan"
+        )
+      }
+
+    </div>
+
+  `;
+
+
+  document.body.appendChild(detail);
+
+}
+
+
+function filterCompanyUsers(input,nama){
+
+  const search =
+    input.value.toLowerCase();
+
+  const box =
+    document.getElementById(
+      "companyUsersContent"
+    );
+
+  const data =
+    users.filter(u=>{
+
+      return (
+        u.perusahaan===nama &&
+        u.status==="AKTIF BEKERJA" &&
+        (!admin.zona || u.zona===admin.zona) &&
+        (
+          u.nama+
+          " "+
+          u.nik
+        )
+        .toLowerCase()
+        .includes(search)
+      );
+
+    });
+
+
+  box.innerHTML =
+    data.length
+    ?
+    data.map(u=>userListHTML(u)).join("")
+    :
+    emptyHTML("User tidak ditemukan");
+
+}
+
+
+/* =========================================================
+   PEMBAYARAN
+========================================================= */
+
+function renderPembayaran(){
+
+  const box =
+    document.getElementById(
+      "pembayaranContent"
+    );
+
+  const search =
+    (
+      document.getElementById(
+        "searchPembayaran"
+      ).value || ""
+    ).toLowerCase();
+
+
+  const data =
+    payments.filter(p=>{
+
+      const zonaMatch =
+        !admin.zona ||
+        p.zona===admin.zona;
+
+      const statusMatch =
+        currentPaymentFilter==="SEMUA" ||
+        p.status===currentPaymentFilter;
+
+      const searchMatch =
+        (
+          p.nama+
+          " "+
+          p.username+
+          " "+
+          p.id
+        )
+        .toLowerCase()
+        .includes(search);
+
+      return zonaMatch &&
+             statusMatch &&
+             searchMatch;
+
+    });
+
+
+  if(!data.length){
+
+    box.innerHTML =
+      emptyHTML(
+        "Tidak ada data pembayaran"
+      );
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    data.map(paymentHTML).join("");
+
+}
+
+
+function filterPembayaran(status,button){
+
+  currentPaymentFilter=status;
+
+  document
+    .querySelectorAll("#viewPembayaran .filter-btn")
+    .forEach(btn=>
+      btn.classList.remove("active")
+    );
+
+  button.classList.add("active");
+
+  renderPembayaran();
+
+}
+
+
+function paymentHTML(p){
+
+  let statusClass="orange";
+
+  if(p.status==="LUNAS"){
+    statusClass="green";
+  }
+
+  if(p.status==="DITOLAK"){
+    statusClass="red";
+  }
+
+
+  return `
+
+    <div class="payment-card">
+
+      <div class="payment-top">
+
+        <div>
+
+          <div class="payment-name">
+            ${escapeHTML(p.nama)}
+          </div>
+
+          <div class="payment-id">
+            ${escapeHTML(p.id)}
+          </div>
+
+        </div>
+
+        <span class="status ${statusClass}">
+          ${escapeHTML(p.status)}
+        </span>
+
+      </div>
+
+
+      <div class="payment-amount">
+        ${formatRupiah(p.nominal)}
+      </div>
+
+      <div class="payment-date">
+        ${escapeHTML(p.tanggal)}
+      </div>
+
+
+      <div class="payment-actions">
+
+        <button
+          class="small-btn secondary"
+          onclick="event.stopPropagation();viewPayment('${escapeAttr(p.id)}')">
+          LIHAT
+        </button>
+
+        ${
+          p.status==="MENUNGGU"
+          ?
+          `
+          <button
+            class="small-btn primary"
+            onclick="event.stopPropagation();confirmPayment('${escapeAttr(p.id)}')">
+            KONFIRMASI
+          </button>
+          `
+          :
+          ""
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   PAYMENT DETAIL
+========================================================= */
+
+function viewPayment(id){
+
+  const p =
+    payments.find(
+      x=>x.id===id
+    );
+
+  if(!p) return;
+
+
+  alert(
+    "Detail Pembayaran\n\n"+
+    "Nama: "+p.nama+"\n"+
+    "ID: "+p.id+"\n"+
+    "Nominal: "+formatRupiah(p.nominal)+"\n"+
+    "Status: "+p.status+"\n"+
+    "Tanggal: "+p.tanggal+
+    "\n\n"+
+    "Bukti pembayaran nantinya dibuka melalui R2."
+  );
+
+}
+
+
+/* =========================================================
+   KONFIRMASI PEMBAYARAN
+   PENTING:
+   ADMIN TIDAK MENGUBAH STATUS USER SECARA LANGSUNG.
+
+   NANTI:
+   ADMIN → KONFIRMASI PEMBAYARAN
+   BACKEND → validasi
+   BACKEND → ubah status user
+========================================================= */
+
+async function confirmPayment(id){
+
+  const p =
+    payments.find(
+      x=>x.id===id
+    );
+
+  if(!p) return;
+
+
+  const yakin =
+    confirm(
+      "Konfirmasi pembayaran "+p.nama+"?"
+    );
+
+  if(!yakin) return;
+
+
+  /*
+    NANTI DIGANTI REQUEST KE WORKER:
+
+    {
+      action:"confirm_payment",
+      payment_id:id
+    }
+
+    Backend yang akan:
+    1. Validasi pembayaran
+    2. Catat admin yang melakukan konfirmasi
+    3. Mengubah status user
+    4. User masuk tahap pelatihan
+    5. Tidak menerima status dari frontend
+  */
+
+
+  try{
+
+    await workerRequest({
+      action:"admin_lpk_confirm_payment",
+      payment_id:id,
+      admin_username:admin.username,
+      admin_zona:admin.zona
+    });
+
+    await loadBackendData();
+
+    showToast("Pembayaran berhasil dikonfirmasi.");
+
+  }catch(error){
+
+    showToast(error.message || "Konfirmasi pembayaran gagal.");
+
+  }
+
+}
+
+
+/* =========================================================
+   CHAT
+========================================================= */
+
+function toggleChat(){
+
+  const panel =
+    document.getElementById(
+      "chatPanel"
+    );
+
+  document
+    .getElementById(
+      "notificationPanel"
+    )
+    .classList.remove("active");
+
+
+  panel.classList.toggle("active");
+
+
+  if(panel.classList.contains("active")){
+
+    closeChatRoom();
+
+    renderChat();
+
+  }
+
+}
+
+
+function closeChat(){
+
+  document
+    .getElementById(
+      "chatPanel"
+    )
+    .classList.remove("active");
+
+}
+
+
+function filterChat(type,button){
+
+  currentChatType=type;
+
+  document
+    .querySelectorAll(".chat-tab")
+    .forEach(btn=>
+      btn.classList.remove("active")
+    );
+
+  button.classList.add("active");
+
+  closeChatRoom();
+
+  renderChat();
+
+}
+
+
+function renderChat(){
+
+  const box =
+    document.getElementById(
+      "chatList"
+    );
+
+
+  const data =
+    chats.filter(
+      c=>c.type===currentChatType
+    );
+
+
+  if(!data.length){
+
+    box.innerHTML =
+      emptyHTML(
+        "Tidak ada percakapan"
+      );
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    data.map(c=>`
+
+      <div
+        class="chat-item ${c.unread?"unread":""}"
+        onclick="openChatRoom('${escapeAttr(c.id)}')">
+
+        <div class="chat-avatar">
+
+          ${
+            (c.nama || "U")
+            .split(" ")
+            .map(x=>x[0])
+            .join("")
+            .substring(0,2)
+            .toUpperCase()
+          }
+
+        </div>
+
+        <div class="chat-info">
+
+          <div class="chat-name-row">
+
+            <div class="chat-name">
+              ${escapeHTML(c.nama)}
+            </div>
+
+            <div class="chat-time">
+              ${escapeHTML(c.time)}
+            </div>
+
+          </div>
+
+          <div class="chat-message">
+            ${escapeHTML(c.message)}
+          </div>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+function openChatRoom(id){
+
+  const chat =
+    chats.find(
+      c=>c.id===id
+    );
+
+  if(!chat) return;
+
+
+  currentChatId=id;
+
+
+  document
+    .getElementById(
+      "chatListArea"
+    )
+    .style.display="none";
+
+
+  const room =
+    document.getElementById(
+      "chatRoom"
+    );
+
+  room.classList.add("active");
+
+
+  document.getElementById(
+    "chatRoomName"
+  ).innerText=chat.nama;
+
+  document.getElementById(
+    "chatRoomStatus"
+  ).innerText=chat.detail;
+
+
+  chat.unread=false;
+
+  renderMessages();
+
+  updateBadges();
+
+}
+
+
+function closeChatRoom(){
+
+  document
+    .getElementById(
+      "chatListArea"
+    )
+    .style.display="block";
+
+
+  document
+    .getElementById(
+      "chatRoom"
+    )
+    .classList.remove("active");
+
+}
+
+
+function renderMessages(){
+
+  const box =
+    document.getElementById(
+      "messages"
+    );
+
+  const data =
+    messagesData[currentChatId] || [];
+
+
+  box.innerHTML =
+    data.map(m=>`
+
+      <div class="message ${m.from}">
+
+        ${escapeHTML(m.text)}
+
+        <span class="message-time">
+          ${escapeHTML(m.time)}
+        </span>
+
+      </div>
+
+    `).join("");
+
+
+  box.scrollTop=box.scrollHeight;
+
+}
+
+
+function chatEnter(event){
+
+  if(event.key==="Enter"){
+
+    event.preventDefault();
+
+    sendMessage();
+
+  }
+
+}
+
+
+async function sendMessage(){
+
+  const input =
+    document.getElementById(
+      "chatMessage"
+    );
+
+  const text =
+    input.value.trim();
+
+  if(!text) return;
+
+  if(!currentChatId){
+    showToast("Pilih percakapan terlebih dahulu.");
+    return;
+  }
+
+  try{
+
+    await workerRequest({
+      action:"admin_lpk_send_message",
+      chat_id:currentChatId,
+      message:text,
+      admin_username:admin.username,
+      admin_zona:admin.zona
+    });
+
+    input.value="";
+
+    await loadBackendData();
+
+    if(currentChatId){
+      renderMessages();
+    }
+
+  }catch(error){
+
+    showToast(error.message || "Pesan gagal dikirim.");
+
+  }
+
+}
+
+
+/* =========================================================
+   NOTIFICATION
+========================================================= */
+
+function toggleNotification(){
+
+  const panel =
+    document.getElementById(
+      "notificationPanel"
+    );
+
+
+  document
+    .getElementById(
+      "chatPanel"
+    )
+    .classList.remove("active");
+
+
+  panel.classList.toggle("active");
+
+
+  if(panel.classList.contains("active")){
+
+    renderNotifications();
+
+  }
+
+}
+
+
+function closeNotification(){
+
+  document
+    .getElementById(
+      "notificationPanel"
+    )
+    .classList.remove("active");
+
+}
+
+
+function renderNotifications(){
+
+  const box =
+    document.getElementById(
+      "notificationList"
+    );
+
+
+  const list=[];
+
+
+  /*
+    NANTI DATA ASLI DARI BACKEND:
+
+    - pembayaran baru
+    - chat Direktur
+    - pesan baru
+    - dll
+
+  */
+
+
+  payments
+    .filter(p=>
+      p.status==="MENUNGGU" &&
+      (!admin.zona || p.zona===admin.zona)
+    )
+    .forEach(p=>{
+
+      list.push({
+
+        type:"PEMBAYARAN BARU",
+
+        text:
+          p.nama+
+          " telah mengupload pembayaran "+
+          formatRupiah(p.nominal),
+
+        time:p.tanggal,
+
+        unread:true
+
+      });
+
+    });
+
+
+  chats
+    .filter(c=>
+      c.unread
+    )
+    .forEach(c=>{
+
+      list.push({
+
+        type:
+          c.type==="DIREKTUR"
+          ?"PESAN DIREKTUR"
+          :"PESAN BARU",
+
+        text:
+          c.nama+
+          ": "+
+          c.message,
+
+        time:c.time,
+
+        unread:true
+
+      });
+
+    });
+
+
+  if(!list.length){
+
+    box.innerHTML =
+      emptyHTML(
+        "Tidak ada notifikasi"
+      );
+
+    return;
+
+  }
+
+
+  box.innerHTML =
+    list.map(n=>`
+
+      <div
+        class="notification-item ${
+          n.unread?"unread":""
+        }">
+
+        <div class="notification-type">
+          ${escapeHTML(n.type)}
+        </div>
+
+        <div class="notification-text">
+          ${escapeHTML(n.text)}
+        </div>
+
+        <div class="notification-time">
+          ${escapeHTML(n.time)}
+        </div>
+
+      </div>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+function updateBadges(){
+
+  const unreadChat =
+    chats.filter(
+      c=>c.unread
+    ).length;
+
+
+  const pendingPayment =
+    payments.filter(p=>
+      p.status==="MENUNGGU" &&
+      (!admin.zona || p.zona===admin.zona)
+    ).length;
+
+
+  const notificationCount =
+    unreadChat+
+    pendingPayment;
+
+
+  const chatBadge =
+    document.getElementById(
+      "chatBadge"
+    );
+
+  const notificationBadge =
+    document.getElementById(
+      "notificationBadge"
+    );
+
+  const paymentCount =
+    document.getElementById(
+      "paymentCount"
+    );
+
+
+  chatBadge.innerText=unreadChat;
+
+  chatBadge.style.display =
+    unreadChat
+    ?"flex"
+    :"none";
+
+
+  notificationBadge.innerText=
+    notificationCount;
+
+  notificationBadge.style.display =
+    notificationCount
+    ?"flex"
+    :"none";
+
+
+  paymentCount.innerText=
+    pendingPayment;
+
+  paymentCount.style.display =
+    pendingPayment
+    ?"flex"
+    :"none";
+
+}
+
+
+updateBadges();
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout(){
+
+  const yakin =
+    confirm(
+      "Apakah Anda yakin ingin logout?"
+    );
+
+  if(!yakin) return;
+
+
+  localStorage.removeItem(
+    "adminSecurity"
+  );
+
+  localStorage.removeItem(
+    "user"
+  );
+
+
+  location.href="index.html";
+
+}
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function formatRupiah(value){
+
+  return new Intl.NumberFormat(
+    "id-ID",
+    {
+      style:"currency",
+      currency:"IDR",
+      maximumFractionDigits:0
+    }
+  ).format(value || 0);
+
+}
+
+
+function emptyHTML(text){
+
+  return `
+
+    <div class="empty">
+
+      <div class="empty-icon">
+        ○
+      </div>
+
+      ${escapeHTML(text)}
+
+    </div>
+
+  `;
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttr(value){
+
+  return String(value ?? "")
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'");
+
+}
+
+
+/* =========================================================
+   CLOSE POPUP KETIKA KLIK DI LUAR
+========================================================= */
+
+document.addEventListener(
+  "click",
+  function(e){
+
+    const notification =
+      document.getElementById(
+        "notificationPanel"
+      );
+
+    const notificationButton =
+      e.target.closest(
+        ".top-actions"
+      );
+
+
+    if(
+      notification.classList.contains("active") &&
+      !notification.contains(e.target) &&
+      !notificationButton
+    ){
+
+      notification.classList.remove(
+        "active"
+      );
+
+    }
+
+  }
+);
+
+
+document.addEventListener("DOMContentLoaded",()=>{
+  loadBackendData();
+});
+
+</script>
+
+</body>
+</html>
