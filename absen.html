@@ -79,15 +79,65 @@ button{
   font-size:16px;
   border-radius:10px;
   cursor:pointer;
+  font-family:'Poppins',sans-serif;
 }
 
-/* LOADING (TIDAK DIUBAH) */
+button:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
+
+/* =====================================================
+   PILIHAN SHIFT
+   MENYATU DENGAN CARD UTAMA
+   ===================================================== */
+
+.shift-panel{
+  display:none;
+  margin-top:15px;
+  padding-top:15px;
+  border-top:1px solid #eeeeee;
+}
+
+.shift-title{
+  text-align:center;
+  font-size:14px;
+  font-weight:600;
+  margin-bottom:10px;
+}
+
+.shift-subtitle{
+  text-align:center;
+  font-size:12px;
+  color:#777;
+  margin-bottom:12px;
+}
+
+.shift-buttons{
+  display:flex;
+  gap:8px;
+}
+
+.shift-buttons button{
+  flex:1;
+  padding:12px 8px;
+  font-size:14px;
+  border-radius:10px;
+}
+
+.shift-buttons button.active{
+  box-shadow:0 0 0 2px #ff0000 inset;
+}
+
+/* LOADING */
 .loading{
   position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
   background:rgba(255,255,255,0.95);
-  display:none;
+  display:flex;
   justify-content:center;
   align-items:center;
   flex-direction:column;
@@ -102,6 +152,7 @@ button{
   opacity:0;
   animation:fadeSlide 1.5s infinite;
 }
+
 .wait-text span:nth-child(1){animation-delay:0s;}
 .wait-text span:nth-child(2){animation-delay:0.1s;}
 .wait-text span:nth-child(3){animation-delay:0.2s;}
@@ -116,16 +167,29 @@ button{
 .wait-text span:nth-child(12){animation-delay:1.1s;}
 
 @keyframes fadeSlide{
-  0%{opacity:0; transform:translateX(20px);}
-  50%{opacity:1; transform:translateX(0);}
-  100%{opacity:0; transform:translateX(-10px);}
+  0%{
+    opacity:0;
+    transform:translateX(20px);
+  }
+
+  50%{
+    opacity:1;
+    transform:translateX(0);
+  }
+
+  100%{
+    opacity:0;
+    transform:translateX(-10px);
+  }
 }
 
 /* RESULT */
 .result{
   position:fixed;
-  top:0; left:0;
-  width:100%; height:100%;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
   background:rgba(0,0,0,0.5);
   display:none;
   justify-content:center;
@@ -144,16 +208,32 @@ button{
   font-size:60px;
 }
 
-.success{ animation:angguk 0.6s infinite alternate; }
-.fail{ animation:geleng 0.6s infinite alternate; }
+.success{
+  animation:angguk 0.6s infinite alternate;
+}
+
+.fail{
+  animation:geleng 0.6s infinite alternate;
+}
 
 @keyframes angguk{
-  from{transform:rotate(0deg);}
-  to{transform:rotate(10deg);}
+  from{
+    transform:rotate(0deg);
+  }
+
+  to{
+    transform:rotate(10deg);
+  }
 }
+
 @keyframes geleng{
-  from{transform:rotate(-10deg);}
-  to{transform:rotate(10deg);}
+  from{
+    transform:rotate(-10deg);
+  }
+
+  to{
+    transform:rotate(10deg);
+  }
 }
 
 /* WAVE (WAJIB 5 LAYER - TIDAK DIUBAH) */
@@ -168,286 +248,1346 @@ button{
 
 <body>
 
+<!-- =====================================================
+     CARD UTAMA
+     ===================================================== -->
+
 <div class="card">
 
   <!-- HEADER -->
   <div class="header">
+
     <img src="jelas.png" class="logo">
+
     <div class="photo">
       <img id="fotoUser" src="">
     </div>
+
   </div>
 
-  <!-- DATA -->
+
+  <!-- DATA USER -->
   <div class="data" id="dataUser"></div>
 
-  <!-- BUTTON -->
+
+  <!-- TOMBOL ABSEN -->
   <div class="btn">
-    <button onclick="absen()">ABSEN SEKARANG</button>
+
+    <button
+      id="btnAbsen"
+      onclick="absen()"
+      disabled
+    >
+      ABSEN SEKARANG
+    </button>
+
+  </div>
+
+
+  <!-- =================================================
+       PILIH SHIFT
+       TERINTEGRASI DENGAN CARD
+       ================================================= -->
+
+  <div
+    class="shift-panel"
+    id="shiftPanel"
+  >
+
+    <div class="shift-title">
+      PILIH SHIFT
+    </div>
+
+    <div
+      class="shift-subtitle"
+      id="shiftSubtitle"
+    >
+      Silakan pilih shift Anda
+    </div>
+
+    <div
+      class="shift-buttons"
+      id="shiftButtons"
+    ></div>
+
   </div>
 
 </div>
 
-<!-- LOADING -->
-<div class="loading" id="loading">
-  <img src="jelas.png" class="logo"> 
-  <div class="wait-text"> 
-    <span>H</span><span>A</span><span>R</span><span>A</span><span>P</span> 
-    <span>&nbsp;</span> 
-    <span>T</span><span>U</span><span>N</span><span>G</span><span>G</span><span>U</span> 
-  </div> 
+
+<!-- =====================================================
+     LOADING
+     ===================================================== -->
+
+<div
+  class="loading"
+  id="loading"
+>
+
+  <img
+    src="jelas.png"
+    class="logo"
+  >
+
+  <div class="wait-text">
+
+    <span>H</span>
+    <span>A</span>
+    <span>R</span>
+    <span>A</span>
+    <span>P</span>
+
+    <span>&nbsp;</span>
+
+    <span>T</span>
+    <span>U</span>
+    <span>N</span>
+    <span>G</span>
+    <span>G</span>
+    <span>U</span>
+
+  </div>
+
 </div>
 
-<!-- RESULT -->
-<div class="result" id="result">
+
+<!-- =====================================================
+     RESULT
+     ===================================================== -->
+
+<div
+  class="result"
+  id="result"
+>
+
   <div class="box">
-    <div class="face" id="face">😊</div>
+
+    <div
+      class="face"
+      id="face"
+    >
+      😊
+    </div>
+
     <div id="msg"></div>
+
   </div>
+
 </div>
 
-<!-- 🔥 5 WAVE FIX -->
+
+<!-- =====================================================
+     5 WAVE
+     ===================================================== -->
+
 <div class="wave">
+
 <svg viewBox="0 0 1440 320">
 
-<path fill="#ff0000" fill-opacity="0.15">
-<animate attributeName="d" dur="12s" repeatCount="indefinite"
-values="M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z;
+<path
+  fill="#ff0000"
+  fill-opacity="0.15"
+>
+
+<animate
+  attributeName="d"
+  dur="12s"
+  repeatCount="indefinite"
+  values="
+M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z;
 M0,160 C500,260 900,80 1440,160 L1440,320 L0,320 Z;
 M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
+
 </path>
 
-<path fill="#ff0000" fill-opacity="0.25">
-<animate attributeName="d" dur="10s" repeatCount="indefinite"
-values="M0,180 C400,80 1000,280 1440,180 L1440,320 L0,320 Z;
+
+<path
+  fill="#ff0000"
+  fill-opacity="0.25"
+>
+
+<animate
+  attributeName="d"
+  dur="10s"
+  repeatCount="indefinite"
+  values="
+M0,180 C400,80 1000,280 1440,180 L1440,320 L0,320 Z;
 M0,140 C600,300 900,60 1440,140 L1440,320 L0,320 Z;
 M0,180 C400,80 1000,280 1440,180 L1440,320 L0,320 Z"/>
+
 </path>
 
-<path fill="#ff0000" fill-opacity="0.35">
-<animate attributeName="d" dur="8s" repeatCount="indefinite"
-values="M0,220 C300,150 1200,250 1440,220 L1440,320 L0,320 Z;
+
+<path
+  fill="#ff0000"
+  fill-opacity="0.35"
+>
+
+<animate
+  attributeName="d"
+  dur="8s"
+  repeatCount="indefinite"
+  values="
+M0,220 C300,150 1200,250 1440,220 L1440,320 L0,320 Z;
 M0,180 C500,280 1000,120 1440,180 L1440,320 L0,320 Z;
 M0,220 C300,150 1200,250 1440,220 L1440,320 L0,320 Z"/>
+
 </path>
 
-<path fill="#ff0000" fill-opacity="0.45">
-<animate attributeName="d" dur="6s" repeatCount="indefinite"
-values="M0,240 C400,180 1000,300 1440,240 L1440,320 L0,320 Z;
+
+<path
+  fill="#ff0000"
+  fill-opacity="0.45"
+>
+
+<animate
+  attributeName="d"
+  dur="6s"
+  repeatCount="indefinite"
+  values="
+M0,240 C400,180 1000,300 1440,240 L1440,320 L0,320 Z;
 M0,200 C600,320 900,160 1440,200 L1440,320 L0,320 Z;
 M0,240 C400,180 1000,300 1440,240 L1440,320 L0,320 Z"/>
+
 </path>
 
-<path fill="#ff0000" fill-opacity="0.6">
-<animate attributeName="d" dur="4s" repeatCount="indefinite"
-values="M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z;
+
+<path
+  fill="#ff0000"
+  fill-opacity="0.6"
+>
+
+<animate
+  attributeName="d"
+  dur="4s"
+  repeatCount="indefinite"
+  values="
+M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z;
 M0,220 C500,340 1000,180 1440,220 L1440,320 L0,320 Z;
 M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z"/>
+
 </path>
 
 </svg>
+
 </div>
 
+
 <script>
-const URL = "https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
 
-/* ================= SESSION ================= */
-let raw = localStorage.getItem("user");
-let parsed = raw ? JSON.parse(raw) : null;
+/* =====================================================
+   URL BACKEND
+   ===================================================== */
 
-// 🔥 SIMPAN DEVICE_ID ASLI (JANGAN SAMPAI HILANG)
-let device_id = parsed ? parsed.device_id : "";
+const URL =
+"https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
 
-let user = parsed ? {
-  username: parsed.username,
-  device_id: parsed.device_id
-} : null;
 
-/* FORMAT TANGGAL */
+/* =====================================================
+   SESSION
+   ===================================================== */
+
+let raw =
+localStorage.getItem("user");
+
+let parsed =
+raw ? JSON.parse(raw) : null;
+
+
+/*
+ * DEVICE ID ASLI
+ * JANGAN DIUBAH
+ */
+
+let device_id =
+parsed
+  ? parsed.device_id
+  : "";
+
+
+let user =
+parsed
+  ? {
+      username: parsed.username,
+      device_id: parsed.device_id
+    }
+  : null;
+
+
+/*
+ * SHIFT YANG DIPILIH USER
+ *
+ * Nilai:
+ * SHIFT 1
+ * SHIFT 2
+ * SHIFT 3
+ *
+ * atau null untuk NON-SHIFT
+ */
+
+let selectedShift = null;
+
+
+/* =====================================================
+   FORMAT TANGGAL
+   ===================================================== */
+
 function formatTanggal(t){
-  if(!t) return "-";
-  let d = new Date(t);
-  return d.toLocaleDateString("id-ID");
+
+  if(!t){
+    return "-";
+  }
+
+  let d =
+    new Date(t);
+
+  return d.toLocaleDateString(
+    "id-ID"
+  );
+
 }
 
-/* ================= LOAD USER (LIVE) ================= */
+
+/* =====================================================
+   LOADING
+   ===================================================== */
+
+function tampilLoading(){
+
+  document
+    .getElementById("loading")
+    .style.display = "flex";
+
+}
+
+
+function tutupLoading(){
+
+  document
+    .getElementById("loading")
+    .style.display = "none";
+
+}
+
+
+/* =====================================================
+   LOAD USER LIVE
+   ===================================================== */
+
 async function loadUser(){
 
+  /*
+   * Loading harus langsung aktif
+   * ketika halaman dibuka.
+   */
+
+  tampilLoading();
+
+
+  /*
+   * Belum ada session.
+   */
+
   if(!user){
-    document.getElementById("dataUser").innerText="User tidak ditemukan";
-    return;
+
+    document
+      .getElementById("dataUser")
+      .innerText =
+        "User tidak ditemukan";
+
+    /*
+     * Tombol tetap disabled.
+     */
+
+    return false;
+
   }
+
 
   try{
 
-    let res = await fetch(URL,{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        action:"get_user",
-        username:user.username,
-        device_id:device_id
-      })
-    });
+    /*
+     * AMBIL DATA LIVE DARI BACKEND
+     */
 
-    let data = await res.json();
+    let res =
+      await fetch(
+        URL,
+        {
+          method:"POST",
 
-    if(data.status === "ok"){
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
 
-      user = {
-        ...data.data,
-        username: user.username,
-        device_id: device_id
-      };
+          body:JSON.stringify({
 
-      document.getElementById("dataUser").innerHTML = `
-        <div class="row"><div class="label">NIK</div><div class="value">: ${user.nik}</div></div>
-        <div class="row"><div class="label">Nama</div><div class="value">: ${user.nama}</div></div>
-        <div class="row"><div class="label">Tempat Lahir</div><div class="value">: ${user.tempat}</div></div>
-        <div class="row"><div class="label">Tanggal Lahir</div><div class="value">: ${formatTanggal(user.tgl_lahir)}</div></div>
-        <div class="row"><div class="label">Umur</div><div class="value">: ${user.umur}</div></div>
-        <div class="row"><div class="label">Jenis Kelamin</div><div class="value">: ${user.jk}</div></div>
-        <div class="row"><div class="label">Alamat</div><div class="value">: ${user.alamat}</div></div>
-        <div class="row"><div class="label">Status</div><div class="value">: ${user.status_perkawinan}</div></div>
-        <div class="row"><div class="label">Zona</div><div class="value">: ${user.zona}</div></div>
+            action:"get_user",
+
+            username:
+              user.username,
+
+            device_id:
+              device_id
+
+          })
+
+        }
+      );
+
+
+    /*
+     * HTTP ERROR
+     */
+
+    if(!res.ok){
+
+      throw new Error(
+        "HTTP " + res.status
+      );
+
+    }
+
+
+    let data =
+      await res.json();
+
+
+    /*
+     * BACKEND ERROR
+     */
+
+    if(data.status !== "ok"){
+
+      document
+        .getElementById("dataUser")
+        .innerText =
+          data.msg ||
+          "Gagal load user";
+
+      return false;
+
+    }
+
+
+    /*
+     * SIMPAN SELURUH DATA LIVE
+     *
+     * Ini penting supaya:
+     *
+     * jenis_shift
+     * jadwal shift
+     * absensi
+     * tracking
+     * perusahaan
+     * device
+     * dan data lain
+     *
+     * semuanya berasal dari backend.
+     */
+
+    user = {
+
+      ...data.data,
+
+      username:
+        user.username,
+
+      device_id:
+        device_id
+
+    };
+
+
+    /* =================================================
+       VALIDASI JENIS SHIFT
+       ================================================= */
+
+    if(
+      user.jenis_shift !== "3-SHIFT" &&
+      user.jenis_shift !== "2-SHIFT" &&
+      user.jenis_shift !== "NON-SHIFT"
+    ){
+
+      document
+        .getElementById("dataUser")
+        .innerText =
+          "Jenis shift tidak valid";
+
+      return false;
+
+    }
+
+
+    /* =================================================
+       TAMPILKAN DATA USER
+       ================================================= */
+
+    document
+      .getElementById("dataUser")
+      .innerHTML = `
+
+        <div class="row">
+          <div class="label">NIK</div>
+          <div class="value">
+            : ${user.nik || "-"}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="label">Nama</div>
+          <div class="value">
+            : ${user.nama || "-"}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="label">Tempat Lahir</div>
+          <div class="value">
+            : ${user.tempat || "-"}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="label">Tanggal Lahir</div>
+          <div class="value">
+            : ${formatTanggal(
+              user.tgl_lahir
+            )}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="label">Umur</div>
+          <div class="value">
+            : ${user.umur || "-"}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="label">Jenis Kelamin</div>
+          <div class="value">
+            : ${user.jk || "-"}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="label">Alamat</div>
+          <div class="value">
+            : ${user.alamat || "-"}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="label">Status</div>
+          <div class="value">
+            : ${user.status_perkawinan || "-"}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="label">Zona</div>
+          <div class="value">
+            : ${user.zona || "-"}
+          </div>
+        </div>
+
       `;
 
-      document.getElementById("fotoUser").src = user.foto || "";
 
-    }else{
-      document.getElementById("dataUser").innerText = data.msg || "Gagal load user";
-    }
+    /*
+     * FOTO USER
+     */
+
+    document
+      .getElementById("fotoUser")
+      .src =
+        user.foto || "";
+
+
+    /*
+     * SIAPKAN UI SHIFT
+     */
+
+    siapkanShiftUI();
+
+
+    /*
+     * SEMUA DATA LIVE SUDAH SELESAI
+     *
+     * BARU SEKARANG:
+     * - tombol aktif
+     * - loading ditutup
+     */
+
+    document
+      .getElementById("btnAbsen")
+      .disabled = false;
+
+
+    tutupLoading();
+
+
+    return true;
+
 
   }catch(e){
-    document.getElementById("dataUser").innerText = "Koneksi gagal";
+
+    console.error(
+      "LOAD USER ERROR:",
+      e
+    );
+
+
+    document
+      .getElementById("dataUser")
+      .innerText =
+        "Koneksi gagal";
+
+
+    /*
+     * Loading tetap tampil karena
+     * data live belum berhasil dimuat.
+     */
+
+    return false;
+
   }
+
 }
 
-/* ================= ABSEN ================= */
+
+/* =====================================================
+   SIAPKAN UI SHIFT
+   ===================================================== */
+
+function siapkanShiftUI(){
+
+  let panel =
+    document.getElementById(
+      "shiftPanel"
+    );
+
+  let buttons =
+    document.getElementById(
+      "shiftButtons"
+    );
+
+
+  /*
+   * Bersihkan terlebih dahulu.
+   */
+
+  buttons.innerHTML = "";
+
+  selectedShift = null;
+
+
+  /*
+   * NON-SHIFT
+   *
+   * Tidak ada pilihan shift.
+   */
+
+  if(
+    user.jenis_shift ===
+    "NON-SHIFT"
+  ){
+
+    panel.style.display =
+      "none";
+
+    return;
+
+  }
+
+
+  /*
+   * 3-SHIFT
+   */
+
+  if(
+    user.jenis_shift ===
+    "3-SHIFT"
+  ){
+
+    panel.style.display =
+      "block";
+
+    document
+      .getElementById(
+        "shiftSubtitle"
+      )
+      .innerText =
+        "Pilih shift yang Anda jalankan";
+
+
+    buatTombolShift(
+      buttons,
+      "SHIFT 1",
+      "SHIFT 1"
+    );
+
+    buatTombolShift(
+      buttons,
+      "SHIFT 2",
+      "SHIFT 2"
+    );
+
+    buatTombolShift(
+      buttons,
+      "SHIFT 3",
+      "SHIFT 3"
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * 2-SHIFT
+   */
+
+  if(
+    user.jenis_shift ===
+    "2-SHIFT"
+  ){
+
+    panel.style.display =
+      "block";
+
+    document
+      .getElementById(
+        "shiftSubtitle"
+      )
+      .innerText =
+        "Pilih shift yang Anda jalankan";
+
+
+    buatTombolShift(
+      buttons,
+      "SHIFT 1",
+      "SHIFT 1"
+    );
+
+    buatTombolShift(
+      buttons,
+      "SHIFT 2",
+      "SHIFT 2"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   BUAT TOMBOL SHIFT
+   ===================================================== */
+
+function buatTombolShift(
+  container,
+  text,
+  value
+){
+
+  let button =
+    document.createElement(
+      "button"
+    );
+
+
+  button.type =
+    "button";
+
+
+  button.innerText =
+    text;
+
+
+  button.onclick =
+    function(){
+
+      pilihShift(
+        value,
+        button
+      );
+
+    };
+
+
+  container.appendChild(
+    button
+  );
+
+}
+
+
+/* =====================================================
+   PILIH SHIFT
+   ===================================================== */
+
+function pilihShift(
+  value,
+  button
+){
+
+  selectedShift =
+    value;
+
+
+  /*
+   * Hapus active dari semua
+   */
+
+  let buttons =
+    document.querySelectorAll(
+      "#shiftButtons button"
+    );
+
+
+  buttons.forEach(
+    function(btn){
+
+      btn.classList.remove(
+        "active"
+      );
+
+    }
+  );
+
+
+  /*
+   * Tandai shift terpilih
+   */
+
+  button.classList.add(
+    "active"
+  );
+
+
+  /*
+   * Setelah shift dipilih,
+   * langsung jalankan proses absen.
+   */
+
+  prosesAbsen(
+    selectedShift
+  );
+
+}
+
+
+/* =====================================================
+   ABSEN
+   ===================================================== */
+
 async function absen(){
 
-  document.getElementById("loading").style.display="flex";
+  /*
+   * Jangan izinkan proses sebelum
+   * data live selesai.
+   */
 
-  navigator.geolocation.getCurrentPosition(async (pos)=>{
+  if(!user){
 
-    let lat = pos.coords.latitude;
-    let lng = pos.coords.longitude;
+    return;
 
-    try{
+  }
 
-      let res = await fetch(URL,{
-        method:"POST",
-        headers:{
-          "Content-Type":"text/plain;charset=utf-8"
-        },
-        body: JSON.stringify({
-          action:"absen",
-          username:user.username,
-          device_id:device_id,
-          lat: lat,
-          lng: lng
-        })
-      });
 
-      let data = await res.json();
+  /*
+   * NON-SHIFT
+   *
+   * Langsung proses.
+   */
 
-      document.getElementById("loading").style.display="none";
+  if(
+    user.jenis_shift ===
+    "NON-SHIFT"
+  ){
 
-      let result = document.getElementById("result");
-      let face = document.getElementById("face");
-      let msg = document.getElementById("msg");
+    prosesAbsen(
+      null
+    );
 
-      result.style.display="flex";
+    return;
 
-      // 🔥 ================= TAMBAHAN (FIX BUG) =================
-      if(data.status === "need_keterangan"){
+  }
 
-        // simpan data untuk halaman keterangan
-        localStorage.setItem("pending_absen", JSON.stringify({
-          username: user.username,
-          device_id: device_id,
-          lat: lat,
-          lng: lng
-        }));
 
-        face.innerText="⚠️";
-        face.className="face fail";
-        msg.innerText="BELUM JAM PULANG";
+  /*
+   * 2-SHIFT / 3-SHIFT
+   *
+   * Pastikan user memilih shift.
+   */
 
-        setTimeout(()=>{
-          window.location.href="keterangan_keluar.html";
-        },1500);
+  if(
+    user.jenis_shift ===
+      "2-SHIFT" ||
+    user.jenis_shift ===
+      "3-SHIFT"
+  ){
 
-        return;
-      }
-      // 🔥 ================= END =================
+    /*
+     * Kalau panel sedang tertutup,
+     * buka pilihan shift.
+     */
 
-      if(data.status === "ok"){
-        face.innerText="😊";
-        face.className="face success";
-        msg.innerText="ABSEN BERHASIL";
+    let panel =
+      document.getElementById(
+        "shiftPanel"
+      );
 
-        setTimeout(()=>{
-          window.location.href="dashboard-user.html";
-        },1500);
 
-      }else{
-        face.innerText="😕";
-        face.className="face fail";
-        msg.innerText=data.msg || "ABSEN GAGAL";
+    if(
+      panel.style.display !==
+      "block"
+    ){
 
-        setTimeout(()=>{
-          location.reload();
-        },1500);
-      }
+      panel.style.display =
+        "block";
 
-    }catch(err){
-
-      document.getElementById("loading").style.display="none";
-
-      let result = document.getElementById("result");
-      let face = document.getElementById("face");
-      let msg = document.getElementById("msg");
-
-      result.style.display="flex";
-
-      face.innerText="😕";
-      face.className="face fail";
-      msg.innerText="SERVER ERROR";
-
-      setTimeout(()=>{
-        location.reload();
-      },1500);
     }
 
-  }, (err)=>{
 
-    document.getElementById("loading").style.display="none";
+    /*
+     * Scroll kecil ke area
+     * pilihan shift jika diperlukan.
+     */
 
-    let result = document.getElementById("result");
-    let face = document.getElementById("face");
-    let msg = document.getElementById("msg");
+    panel.scrollIntoView({
+      behavior:"smooth",
+      block:"nearest"
+    });
 
-    result.style.display="flex";
-
-    face.innerText="😕";
-    face.className="face fail";
-    msg.innerText="GPS tidak diizinkan";
-
-    setTimeout(()=>{
-      location.reload();
-    },1500);
-
-  },{
-    enableHighAccuracy:true
-  });
+  }
 
 }
 
-/* ================= START ================= */
+
+/* =====================================================
+   PROSES ABSEN
+   ===================================================== */
+
+async function prosesAbsen(
+  selectedShift
+){
+
+  /*
+   * Pastikan shift benar
+   * sebelum dikirim ke backend.
+   */
+
+  if(
+    user.jenis_shift ===
+      "2-SHIFT" ||
+    user.jenis_shift ===
+      "3-SHIFT"
+  ){
+
+    if(
+      selectedShift !==
+        "SHIFT 1" &&
+      selectedShift !==
+        "SHIFT 2" &&
+      selectedShift !==
+        "SHIFT 3"
+    ){
+
+      return;
+
+    }
+
+
+    /*
+     * 2-SHIFT tidak boleh SHIFT 3.
+     */
+
+    if(
+      user.jenis_shift ===
+        "2-SHIFT" &&
+      selectedShift ===
+        "SHIFT 3"
+    ){
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+   * Loading proses GPS + backend
+   */
+
+  tampilLoading();
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    async function(pos){
+
+      let lat =
+        pos.coords.latitude;
+
+      let lng =
+        pos.coords.longitude;
+
+
+      try{
+
+        /*
+         * PAYLOAD DASAR
+         */
+
+        let payload = {
+
+          action:
+            "absen",
+
+          username:
+            user.username,
+
+          device_id:
+            device_id,
+
+          lat:
+            lat,
+
+          lng:
+            lng
+
+        };
+
+
+        /*
+         * SHIFT HANYA UNTUK
+         * 2-SHIFT / 3-SHIFT
+         */
+
+        if(
+          user.jenis_shift ===
+            "2-SHIFT" ||
+          user.jenis_shift ===
+            "3-SHIFT"
+        ){
+
+          payload.shift =
+            selectedShift;
+
+        }
+
+
+        /*
+         * KIRIM KE BACKEND
+         */
+
+        let res =
+          await fetch(
+            URL,
+            {
+              method:"POST",
+
+              headers:{
+                "Content-Type":
+                  "text/plain;charset=utf-8"
+              },
+
+              body:
+                JSON.stringify(
+                  payload
+                )
+
+            }
+          );
+
+
+        if(!res.ok){
+
+          throw new Error(
+            "HTTP " +
+            res.status
+          );
+
+        }
+
+
+        let data =
+          await res.json();
+
+
+        /*
+         * REQUEST SELESAI
+         */
+
+        tutupLoading();
+
+
+        let result =
+          document.getElementById(
+            "result"
+          );
+
+        let face =
+          document.getElementById(
+            "face"
+          );
+
+        let msg =
+          document.getElementById(
+            "msg"
+          );
+
+
+        result.style.display =
+          "flex";
+
+
+        /* =============================================
+           PULANG AWAL / BUTUH KETERANGAN
+           ============================================= */
+
+        if(
+          data.status ===
+          "need_keterangan"
+        ){
+
+          localStorage.setItem(
+            "pending_absen",
+            JSON.stringify({
+
+              username:
+                user.username,
+
+              device_id:
+                device_id,
+
+              lat:
+                lat,
+
+              lng:
+                lng
+
+            })
+          );
+
+
+          face.innerText =
+            "⚠️";
+
+          face.className =
+            "face fail";
+
+
+          msg.innerText =
+            "BELUM JAM PULANG";
+
+
+          setTimeout(
+            function(){
+
+              window.location.href =
+                "keterangan_keluar.html";
+
+            },
+            1500
+          );
+
+
+          return;
+
+        }
+
+
+        /* =============================================
+           BERHASIL
+           ============================================= */
+
+        if(
+          data.status ===
+          "ok"
+        ){
+
+          face.innerText =
+            "😊";
+
+          face.className =
+            "face success";
+
+
+          msg.innerText =
+            "ABSEN BERHASIL";
+
+
+          setTimeout(
+            function(){
+
+              window.location.href =
+                "dashboard-user.html";
+
+            },
+            1500
+          );
+
+
+        }else{
+
+          /* ===========================================
+             GAGAL
+             =========================================== */
+
+          face.innerText =
+            "😕";
+
+          face.className =
+            "face fail";
+
+
+          msg.innerText =
+            data.msg ||
+            "ABSEN GAGAL";
+
+
+          setTimeout(
+            function(){
+
+              location.reload();
+
+            },
+            1500
+          );
+
+        }
+
+
+      }catch(err){
+
+        console.error(
+          "ABSEN ERROR:",
+          err
+        );
+
+
+        tutupLoading();
+
+
+        let result =
+          document.getElementById(
+            "result"
+          );
+
+        let face =
+          document.getElementById(
+            "face"
+          );
+
+        let msg =
+          document.getElementById(
+            "msg"
+          );
+
+
+        result.style.display =
+          "flex";
+
+
+        face.innerText =
+          "😕";
+
+        face.className =
+          "face fail";
+
+
+        msg.innerText =
+          "SERVER ERROR";
+
+
+        setTimeout(
+          function(){
+
+            location.reload();
+
+          },
+          1500
+        );
+
+      }
+
+    },
+
+
+    /* ===============================================
+       GPS ERROR
+       =============================================== */
+
+    function(err){
+
+      tutupLoading();
+
+
+      let result =
+        document.getElementById(
+          "result"
+        );
+
+      let face =
+        document.getElementById(
+          "face"
+        );
+
+      let msg =
+        document.getElementById(
+          "msg"
+        );
+
+
+      result.style.display =
+        "flex";
+
+
+      face.innerText =
+        "😕";
+
+      face.className =
+        "face fail";
+
+
+      msg.innerText =
+        "GPS tidak diizinkan";
+
+
+      setTimeout(
+        function(){
+
+          location.reload();
+
+        },
+        1500
+      );
+
+    },
+
+
+    {
+      enableHighAccuracy:true
+    }
+
+  );
+
+}
+
+
+/* =====================================================
+   START
+   ===================================================== */
+
 loadUser();
+
 </script>
+
 </body>
 </html>
