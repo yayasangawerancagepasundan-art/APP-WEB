@@ -1,316 +1,1119 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Simple Dashboard</title>
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#020807"
+    >
+
+    <title>System Dashboard</title>
+
 
     <style>
+
+        /* ==================================================
+           RESET
+        ================================================== */
+
         * {
             box-sizing: border-box;
         }
 
+
+        html,
         body {
             margin: 0;
-            min-height: 100vh;
-            background: #020807;
-            color: #d8fff4;
-            font-family: Arial, sans-serif;
+            padding: 0;
+            min-height: 100%;
         }
 
-        /* =========================
+
+        body {
+
+            min-height: 100vh;
+
+            background: #020807;
+
+            color: #d8fff4;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+
+        /* ==================================================
            DASHBOARD
-        ========================= */
+        ================================================== */
 
         .dashboard {
+
             min-height: 100vh;
-            padding: 30px;
+
+            padding: 23px 26px 35px;
         }
 
-        /* =========================
+
+        /* ==================================================
            HEADER
-        ========================= */
+        ================================================== */
 
         .header {
+
+            height: 53px;
+
             display: flex;
-            justify-content: space-between;
+
             align-items: center;
 
-            padding: 15px 20px;
+            justify-content: space-between;
+
+            padding: 0 20px;
+
+            background: #020b09;
 
             border: 1px solid #123b34;
-            background: #06110f;
         }
 
+
         .logo {
+
             color: #00e6a8;
+
             font-size: 18px;
+
             font-weight: bold;
+
             letter-spacing: 2px;
         }
 
+
+        /* ==================================================
+           HEADER RIGHT
+        ================================================== */
+
+        .header-right {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 20px;
+
+            position: relative;
+        }
+
+
+        /* ONLINE */
+
         .status {
+
             color: #00e6a8;
+
             font-size: 12px;
         }
 
+
         .status::before {
+
             content: "";
+
             display: inline-block;
 
             width: 7px;
+
             height: 7px;
 
-            margin-right: 6px;
+            margin-right: 7px;
 
             background: #00e6a8;
+
             border-radius: 50%;
 
-            box-shadow: 0 0 8px #00e6a8;
+            box-shadow:
+                0 0 8px #00e6a8;
         }
 
-        /* =========================
-           TITLE
-        ========================= */
 
-        .title {
-            margin-top: 30px;
-        }
+        /* ==================================================
+           THREE DOT BUTTON
+        ================================================== */
 
-        .title h1 {
-            margin: 0;
+        .menu-button {
 
-            font-size: 24px;
-            letter-spacing: 2px;
+            width: 32px;
+
+            height: 32px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: transparent;
+
+            border: 1px solid transparent;
 
             color: #00e6a8;
-        }
 
-        .title p {
-            color: #6e958b;
-            font-size: 13px;
-        }
+            font-size: 22px;
 
-        /* =========================
-           CARD
-        ========================= */
+            cursor: pointer;
 
-        .card {
-            max-width: 600px;
-
-            margin-top: 25px;
-            padding: 25px;
-
-            background: #071310;
-
-            border: 1px solid #12483e;
-            border-radius: 8px;
-
-            box-shadow:
-                0 0 20px rgba(0, 230, 168, 0.05);
-        }
-
-        .card h2 {
-            margin-top: 0;
-
-            color: #9ddace;
-
-            font-size: 15px;
-            letter-spacing: 1px;
-        }
-
-        /* =========================
-           BUTTON
-        ========================= */
-
-        .button {
-            display: block;
-
-            width: 100%;
-
-            margin-top: 12px;
-            padding: 14px;
-
-            text-align: center;
-            text-decoration: none;
-
-            border-radius: 5px;
-
-            font-size: 13px;
-            font-weight: bold;
+            border-radius: 4px;
 
             transition: 0.2s;
         }
 
-        .button:hover {
+
+        .menu-button:hover {
+
+            background: #071914;
+
+            border-color: #165348;
+        }
+
+
+        /* ==================================================
+           DROPDOWN MENU
+        ================================================== */
+
+        .dropdown {
+
+            display: none;
+
+            position: absolute;
+
+            top: 42px;
+
+            right: 0;
+
+            width: 190px;
+
+            padding: 7px;
+
+            background: #06110f;
+
+            border: 1px solid #165348;
+
+            box-shadow:
+                0 10px 30px rgba(0, 0, 0, 0.5);
+
+            z-index: 1000;
+        }
+
+
+        .dropdown.show {
+
+            display: block;
+        }
+
+
+        .dropdown a {
+
+            display: block;
+
+            padding: 11px 12px;
+
+            color: #91bdb2;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            border-bottom: 1px solid #0c2822;
+
+            transition: 0.2s;
+        }
+
+
+        .dropdown a:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .dropdown a:hover {
+
+            background: #0a211c;
+
+            color: #00e6a8;
+
+            padding-left: 16px;
+        }
+
+
+        /* ==================================================
+           TITLE
+        ================================================== */
+
+        .title {
+
+            margin-top: 30px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .title h1 {
+
+            margin: 0;
+
+            color: #00e6a8;
+
+            font-size: 24px;
+
+            letter-spacing: 2px;
+        }
+
+
+        .title p {
+
+            margin-top: 10px;
+
+            color: #65948a;
+
+            font-size: 13px;
+        }
+
+
+        /* ==================================================
+           THREE COLUMNS
+        ================================================== */
+
+        .menu-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            width: 100%;
+        }
+
+
+        /* ==================================================
+           MENU COLUMN
+        ================================================== */
+
+        .menu-column {
+
+            min-height: 260px;
+
+            padding: 20px;
+
+            background: #06110f;
+
+            border: 1px solid #12483e;
+
+            border-radius: 8px;
+
+            box-shadow:
+                0 0 20px rgba(
+                    0,
+                    230,
+                    168,
+                    0.03
+                );
+        }
+
+
+        .column-title {
+
+            margin: 0 0 17px;
+
+            padding-bottom: 12px;
+
+            color: #9ddace;
+
+            font-size: 14px;
+
+            letter-spacing: 1.5px;
+
+            border-bottom:
+                1px solid #123b34;
+        }
+
+
+        /* ==================================================
+           MENU ITEM
+        ================================================== */
+
+        .menu-item {
+
+            display: flex;
+
+            align-items: center;
+
+            width: 100%;
+
+            min-height: 48px;
+
+            margin-bottom: 10px;
+
+            padding: 0 13px;
+
+            background: #081815;
+
+            border: 1px solid #123b34;
+
+            border-radius: 5px;
+
+            color: #a8d2c8;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            transition: 0.2s;
+        }
+
+
+        .menu-item:hover {
+
+            background: #0b211c;
+
+            color: #00e6a8;
+
+            border-color: #19705e;
+
             transform: translateY(-2px);
 
-            opacity: 0.85;
+            box-shadow:
+                0 4px 15px
+                rgba(0, 230, 168, 0.08);
         }
 
-        /* YOUTUBE */
 
-        .youtube {
-            background: #ff0000;
-            color: white;
+        /* ==================================================
+           ICON
+        ================================================== */
+
+        .menu-icon {
+
+            width: 30px;
+
+            height: 30px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-right: 11px;
+
+            background: #071f1a;
+
+            border: 1px solid #164b40;
+
+            color: #00e6a8;
+
+            border-radius: 4px;
+
+            font-size: 12px;
         }
 
-        /* FACEBOOK */
 
-        .facebook {
-            background: #1877f2;
-            color: white;
+        .menu-text {
+
+            flex: 1;
         }
 
-        /* GOOGLE */
 
-        .google {
-            background: #ffffff;
-            color: #222222;
+        .arrow {
+
+            color: #497b70;
+
+            font-size: 14px;
         }
 
-        /* =========================
+
+        /* ==================================================
+           DIRECT LINK COLORS
+        ================================================== */
+
+        .youtube:hover {
+
+            border-color: #ff0000;
+
+            color: #ff5555;
+        }
+
+
+        .youtube .menu-icon {
+
+            color: #ff4444;
+        }
+
+
+        .facebook:hover {
+
+            border-color: #1877f2;
+
+            color: #4f9aff;
+        }
+
+
+        .facebook .menu-icon {
+
+            color: #4f9aff;
+        }
+
+
+        .google:hover {
+
+            border-color: #ffffff;
+
+            color: #ffffff;
+        }
+
+
+        /* ==================================================
            FOOTER
-        ========================= */
+        ================================================== */
 
         .footer {
+
             margin-top: 30px;
+
+            padding-top: 15px;
+
+            border-top:
+                1px solid #0c2822;
 
             color: #456e64;
 
-            font-size: 11px;
+            font-size: 10px;
+
+            display: flex;
+
+            justify-content: space-between;
         }
 
-        /* =========================
+
+        /* ==================================================
+           TABLET
+        ================================================== */
+
+        @media (max-width: 900px) {
+
+            .menu-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        /* ==================================================
            MOBILE
-        ========================= */
+        ================================================== */
 
         @media (max-width: 600px) {
 
             .dashboard {
+
                 padding: 15px;
             }
 
+
             .header {
-                padding: 12px;
+
+                padding: 0 12px;
             }
 
+
             .logo {
+
                 font-size: 14px;
             }
 
+
+            .status {
+
+                font-size: 10px;
+            }
+
+
             .title h1 {
+
                 font-size: 20px;
             }
 
-            .card {
-                padding: 18px;
+
+            .menu-grid {
+
+                grid-template-columns: 1fr;
+
+                gap: 14px;
+            }
+
+
+            .menu-column {
+
+                min-height: auto;
+
+                padding: 17px;
+            }
+
+
+            .footer {
+
+                display: block;
+
+                line-height: 2;
             }
 
         }
+
     </style>
+
 </head>
 
 
 <body>
 
-    <div class="dashboard">
 
-        <!-- =========================
-             HEADER
-        ========================= -->
+<div class="dashboard">
 
-        <div class="header">
 
-            <div class="logo">
-                SYSTEM.CORE
-            </div>
+    <!-- ==================================================
+         HEADER
+    ================================================== -->
+
+    <header class="header">
+
+
+        <div class="logo">
+
+            SYSTEM.CORE
+
+        </div>
+
+
+        <div class="header-right">
+
 
             <div class="status">
+
                 ONLINE
+
             </div>
 
+
+            <!-- THREE DOT -->
+
+            <button
+                class="menu-button"
+                id="menuButton"
+                aria-label="Menu"
+            >
+
+                ⋮
+
+            </button>
+
+
+            <!-- DROPDOWN -->
+
+            <div
+                class="dropdown"
+                id="dropdownMenu"
+            >
+
+                <a href="index.html">
+                    🏠 Dashboard
+                </a>
+
+                <a href="profile.html">
+                    👤 Profil
+                </a>
+
+                <a href="settings.html">
+                    ⚙ Pengaturan
+                </a>
+
+                <a href="help.html">
+                    ❓ Bantuan
+                </a>
+
+                <a href="logout.html">
+                    ↪ Keluar
+                </a>
+
+            </div>
+
+
         </div>
 
-
-        <!-- =========================
-             TITLE
-        ========================= -->
-
-        <div class="title">
-
-            <h1>
-                SYSTEM OVERVIEW
-            </h1>
-
-            <p>
-                Simple Dashboard
-            </p>
-
-        </div>
+    </header>
 
 
-        <!-- =========================
-             DIRECT LINK CARD
-        ========================= -->
 
-        <div class="card">
+    <!-- ==================================================
+         TITLE
+    ================================================== -->
 
-            <h2>
+    <section class="title">
+
+        <h1>
+            SYSTEM OVERVIEW
+        </h1>
+
+        <p>
+            Simple Dashboard
+        </p>
+
+    </section>
+
+
+
+    <!-- ==================================================
+         THREE COLUMNS
+    ================================================== -->
+
+    <main class="menu-grid">
+
+
+        <!-- ==================================================
+             COLUMN 1
+        ================================================== -->
+
+        <section class="menu-column">
+
+
+            <h2 class="column-title">
+
+                MENU UTAMA
+
+            </h2>
+
+
+            <!-- ABSENSI -->
+
+            <a
+                class="menu-item"
+                href="absensi.html"
+            >
+
+                <span class="menu-icon">
+                    ✓
+                </span>
+
+                <span class="menu-text">
+                    Web Absensi
+                </span>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- DASHBOARD -->
+
+            <a
+                class="menu-item"
+                href="dashboard-user.html"
+            >
+
+                <span class="menu-icon">
+                    ▦
+                </span>
+
+                <span class="menu-text">
+                    Dashboard User
+                </span>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- PROFIL -->
+
+            <a
+                class="menu-item"
+                href="profil.html"
+            >
+
+                <span class="menu-icon">
+                    👤
+                </span>
+
+                <span class="menu-text">
+                    Profil
+                </span>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- DATA -->
+
+            <a
+                class="menu-item"
+                href="data.html"
+            >
+
+                <span class="menu-icon">
+                    ▤
+                </span>
+
+                <span class="menu-text">
+                    Data Saya
+                </span>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+
+        </section>
+
+
+
+        <!-- ==================================================
+             COLUMN 2
+        ================================================== -->
+
+        <section class="menu-column">
+
+
+            <h2 class="column-title">
+
                 DIRECT LINK
+
             </h2>
 
 
             <!-- YOUTUBE -->
 
             <a
-                class="button youtube"
+                class="menu-item youtube"
                 href="https://www.youtube.com/"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                BUKA YOUTUBE
+
+                <span class="menu-icon">
+                    ▶
+                </span>
+
+                <span class="menu-text">
+                    YouTube
+                </span>
+
+                <span class="arrow">
+                    ↗
+                </span>
+
             </a>
 
 
             <!-- FACEBOOK -->
 
             <a
-                class="button facebook"
+                class="menu-item facebook"
                 href="https://www.facebook.com/"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                BUKA FACEBOOK
+
+                <span class="menu-icon">
+                    f
+                </span>
+
+                <span class="menu-text">
+                    Facebook
+                </span>
+
+                <span class="arrow">
+                    ↗
+                </span>
+
             </a>
 
 
             <!-- GOOGLE -->
 
             <a
-                class="button google"
+                class="menu-item google"
                 href="https://www.google.com/"
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                BUKA GOOGLE
+
+                <span class="menu-icon">
+                    G
+                </span>
+
+                <span class="menu-text">
+                    Google
+                </span>
+
+                <span class="arrow">
+                    ↗
+                </span>
+
             </a>
 
-        </div>
+
+            <!-- WHATSAPP -->
+
+            <a
+                class="menu-item"
+                href="https://web.whatsapp.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+
+                <span class="menu-icon">
+                    W
+                </span>
+
+                <span class="menu-text">
+                    WhatsApp Web
+                </span>
+
+                <span class="arrow">
+                    ↗
+                </span>
+
+            </a>
 
 
-        <!-- =========================
-             FOOTER
-        ========================= -->
+        </section>
 
-        <div class="footer">
 
+
+        <!-- ==================================================
+             COLUMN 3
+        ================================================== -->
+
+        <section class="menu-column">
+
+
+            <h2 class="column-title">
+
+                MENU LAINNYA
+
+            </h2>
+
+
+            <!-- MENU 1 -->
+
+            <a
+                class="menu-item"
+                href="pengumuman.html"
+            >
+
+                <span class="menu-icon">
+                    !
+                </span>
+
+                <span class="menu-text">
+                    Pengumuman
+                </span>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- MENU 2 -->
+
+            <a
+                class="menu-item"
+                href="dokumen.html"
+            >
+
+                <span class="menu-icon">
+                    □
+                </span>
+
+                <span class="menu-text">
+                    Dokumen
+                </span>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- MENU 3 -->
+
+            <a
+                class="menu-item"
+                href="kontak.html"
+            >
+
+                <span class="menu-icon">
+                    ☎
+                </span>
+
+                <span class="menu-text">
+                    Kontak
+                </span>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+
+            <!-- MENU 4 -->
+
+            <a
+                class="menu-item"
+                href="bantuan.html"
+            >
+
+                <span class="menu-icon">
+                    ?
+                </span>
+
+                <span class="menu-text">
+                    Bantuan
+                </span>
+
+                <span class="arrow">
+                    →
+                </span>
+
+            </a>
+
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ==================================================
+         FOOTER
+    ================================================== -->
+
+    <footer class="footer">
+
+        <span>
             SYSTEM.CORE • DASHBOARD v1.0
+        </span>
 
-        </div>
+        <span>
+            ALL SYSTEMS NOMINAL
+        </span>
 
-    </div>
+    </footer>
+
+
+</div>
+
+
+
+<script>
+
+    /* ==================================================
+       THREE DOT MENU
+    ================================================== */
+
+    const menuButton =
+        document.getElementById(
+            "menuButton"
+        );
+
+    const dropdownMenu =
+        document.getElementById(
+            "dropdownMenu"
+        );
+
+
+    menuButton.addEventListener(
+        "click",
+        function(event) {
+
+            event.stopPropagation();
+
+            dropdownMenu.classList.toggle(
+                "show"
+            );
+
+        }
+    );
+
+
+    /* ==================================================
+       CLICK OUTSIDE
+    ================================================== */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+            if (
+                !dropdownMenu.contains(event.target) &&
+                event.target !== menuButton
+            ) {
+
+                dropdownMenu.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+
+    /* ==================================================
+       ESC CLOSE MENU
+    ================================================== */
+
+    document.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Escape") {
+
+                dropdownMenu.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+</script>
 
 
 </body>
