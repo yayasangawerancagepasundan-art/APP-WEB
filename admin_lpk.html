@@ -737,13 +737,31 @@ body{
 }
 
 .chat-close{
-  width:34px;
-  height:34px;
+  width:42px;
+  height:42px;
   border:none;
-  border-radius:11px;
-  background:#f5f5f5;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
   cursor:pointer;
-  font-size:18px;
+  flex:0 0 auto;
+}
+
+.chat-close svg{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:#555;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.chat-close:active{
+  transform:translateX(-2px) scale(.95);
 }
 
 .chat-tabs{
@@ -1054,6 +1072,42 @@ async function workerRequest(payload){
 }
 
 
+function normalizeAdminZone(value){
+
+  return String(value || "")
+    .trim()
+    .replace(/\s+/g," ");
+
+}
+
+
+function adminZoneMatch(value){
+
+  const zone = normalizeAdminZone(admin.zona);
+
+  if(!zone) return false;
+
+  return normalizeAdminZone(value) === zone;
+
+}
+
+
+function companyZoneMatch(company){
+
+  if(adminZoneMatch(company && company.zona)) return true;
+
+  const nama = normalizeAdminZone(company && company.nama);
+
+  if(!nama) return false;
+
+  return users.some(u =>
+    normalizeAdminZone(u.perusahaan) === nama &&
+    adminZoneMatch(u.zona)
+  );
+
+}
+
+
 async function loadBackendData(){
 
   try{
@@ -1067,6 +1121,13 @@ async function loadBackendData(){
     if(result.admin){
       admin = {...admin,...result.admin};
     }
+
+    admin.zona = normalizeAdminZone(
+      admin.zona ||
+      adminLogin.zona ||
+      adminLogin.zone ||
+      ""
+    );
 
     users = Array.isArray(result.users) ? result.users : [];
     companies = Array.isArray(result.companies) ? result.companies : [];
@@ -2177,13 +2238,15 @@ body{
 
   <div class="chat-header">
 
+    <button class="chat-close" onclick="closeChat()" aria-label="Kembali ke Dashboard">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M15 18l-6-6 6-6"></path>
+      </svg>
+    </button>
+
     <div class="chat-header-title">
       Chat
     </div>
-
-    <button class="chat-close" onclick="closeChat()">
-      ✕
-    </button>
 
   </div>
 
@@ -2327,7 +2390,7 @@ let admin = {
   username: adminLogin.username || "",
   nama: "",
   role: adminLogin.role || "ADMIN LPK",
-  zona: ""
+  zona: String(adminLogin.zona || adminLogin.zone || "").trim().replace(/\s+/g," ")
 };
 
 
@@ -2404,14 +2467,31 @@ updateClock();
 function initAdmin(){
 
   /*
-    NANTI:
-    data admin akan diambil dari backend
-    berdasarkan username yang login.
+    TAMPILKAN NAMA ADMIN, BUKAN USERNAME.
+    Prioritas:
+    1. nama dari backend admin_lpk_data
+    2. nama dari data login userLogin
+    3. fallback aman jika nama belum tersedia
   */
 
+  let namaTampil = String(admin.nama || "").trim();
+
+  if(!namaTampil){
+    try{
+      const loginData = JSON.parse(
+        localStorage.getItem("userLogin") || "null"
+      );
+
+      namaTampil = String(
+        loginData?.user?.nama ||
+        loginData?.nama ||
+        ""
+      ).trim();
+    }catch(e){}
+  }
+
   document.getElementById("namaAdmin").innerText =
-    admin.nama ||
-    admin.username ||
+    namaTampil ||
     "Admin LPK";
 
 }
@@ -2519,8 +2599,7 @@ function renderUserBelumBekerja(){
     users.filter(u=>{
 
       const zonaMatch =
-        !admin.zona ||
-        u.zona === admin.zona;
+        adminZoneMatch(u.zona);
 
       const statusMatch =
         u.status === "TIDAK AKTIF";
@@ -2583,8 +2662,7 @@ function renderUserAktif(){
     users.filter(u=>{
 
       const zonaMatch =
-        !admin.zona ||
-        u.zona === admin.zona;
+        adminZoneMatch(u.zona);
 
       const statusMatch =
         currentAktifFilter==="SEMUA" ||
@@ -2925,7 +3003,7 @@ function renderPerusahaan(){
     users.filter(u=>{
 
       return (
-        (!admin.zona || u.zona===admin.zona) &&
+        adminZoneMatch(u.zona) &&
         u.status==="AKTIF MENUNGGU"
       );
 
@@ -3140,7 +3218,7 @@ function openCompanyDetail(nama){
       return (
         u.perusahaan===nama &&
         u.status==="AKTIF BEKERJA" &&
-        (!admin.zona || u.zona===admin.zona)
+        adminZoneMatch(u.zona)
       );
 
     });
@@ -3237,7 +3315,7 @@ function filterCompanyUsers(input,nama){
       return (
         u.perusahaan===nama &&
         u.status==="AKTIF BEKERJA" &&
-        (!admin.zona || u.zona===admin.zona) &&
+        adminZoneMatch(u.zona) &&
         (
           u.nama+
           " "+
@@ -3283,8 +3361,7 @@ function renderPembayaran(){
     payments.filter(p=>{
 
       const zonaMatch =
-        !admin.zona ||
-        p.zona===admin.zona;
+        adminZoneMatch(p.zona);
 
       const statusMatch =
         currentPaymentFilter==="SEMUA" ||
@@ -3556,6 +3633,10 @@ function closeChat(){
       "chatPanel"
     )
     .classList.remove("active");
+
+  // Tombol kembali dari Chat selalu mengembalikan Admin LPK ke Dashboard utama.
+  closeChatRoom();
+  backDashboard();
 
 }
 
@@ -3872,7 +3953,7 @@ function renderNotifications(){
   payments
     .filter(p=>
       p.status==="MENUNGGU" &&
-      (!admin.zona || p.zona===admin.zona)
+      adminZoneMatch(p.zona)
     )
     .forEach(p=>{
 
@@ -3965,9 +4046,9 @@ function renderNotifications(){
 ========================================================= */
 
 function updateDashboardSummary(){
-  const zoneMatch = u => !admin.zona || u.zona === admin.zona;
+  const zoneMatch = u => adminZoneMatch(u.zona);
   const scopedUsers = users.filter(zoneMatch);
-  const scopedCompanies = companies.filter(c => !admin.zona || !c.zona || c.zona === admin.zona);
+  const scopedCompanies = companies.filter(companyZoneMatch);
   const active = scopedUsers.filter(u =>
     u.status === "AKTIF BEKERJA" || u.status === "AKTIF MENUNGGU"
   ).length;
@@ -3986,7 +4067,7 @@ function updateDashboardSummary(){
   set("summaryInactive",inactive);
   set("summaryPending",pending);
   set("heroRole",admin.role || "ADMIN LPK");
-  set("heroZona","Zona: "+(admin.zona || "Semua Zona"));
+  set("heroZona","Zona: "+(admin.zona || "Zona belum terbaca"));
 }
 
 function updateBadges(){
@@ -4000,7 +4081,7 @@ function updateBadges(){
   const pendingPayment =
     payments.filter(p=>
       p.status==="MENUNGGU" &&
-      (!admin.zona || p.zona===admin.zona)
+      adminZoneMatch(p.zona)
     ).length;
 
 
