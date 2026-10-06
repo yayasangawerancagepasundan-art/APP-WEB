@@ -618,59 +618,126 @@ async function login(){
 
       localStorage.removeItem("user");
       localStorage.removeItem("userLogin");
+      localStorage.removeItem("adminSecurity");
+
+      /*
+       * =====================================================
+       * ROLE
+       * =====================================================
+       */
+
+      let role = (data.user.role || "")
+        .toLowerCase()
+        .trim();
+
+      /*
+       * =====================================================
+       * ADMIN → SECURITY NFC
+       * =====================================================
+       */
+
+      if(data.user.require_nfc === true){
+
+        let nextPage = "";
+
+        if(role === "admin lpk"){
+          nextPage = "admin_lpk.html";
+        }
+        else if(role === "admin mitra"){
+          nextPage = "admin_mitra.html";
+        }
+        else if(role === "super admin"){
+          nextPage = "superadmin.html";
+        }
+        else{
+          showPopup("error","ROLE ADMIN TIDAK DIKENAL");
+          return;
+        }
+
+        /*
+         * Simpan username + tujuan dashboard.
+         * TIDAK menyimpan NFC_UID.
+         */
+        localStorage.setItem("adminSecurity", JSON.stringify({
+          username: data.user.username,
+          role: data.user.role,
+          next: nextPage
+        }));
+
+        /*
+         * Masuk ke halaman keamanan NFC
+         */
+        setTimeout(()=>{
+          window.location.href =
+            "security_admin.html?next=" +
+            encodeURIComponent(nextPage);
+        },2000);
+
+        return;
+      }
+
+      /*
+       * =====================================================
+       * USER / ROLE LAIN
+       * ALUR LAMA
+       * =====================================================
+       */
 
       localStorage.setItem("user", JSON.stringify({
         username: data.user.username,
-        device_id: DEVICE_ID
+        device_id: data.user.device_id || DEVICE_ID
       }));
 
-      let role = (data.user.role || "").toLowerCase().trim();
-
       setTimeout(()=>{
-        if(role === "admin lpk"){
-          window.location.href = "admin_lpk.html";
-        }
-        else if(role === "hrd"){
+
+        if(role === "hrd"){
           window.location.href = "hrd.html";
-        }
-        else if(role === "admin mitra"){
-          window.location.href = "admin_mitra.html";
         }
         else if(role === "direktur"){
           window.location.href = "direktur.html";
         }
-        else if(role === "super admin"){
-          window.location.href = "superadmin.html";
-        }
         else{
           window.location.href = "dashboard-user.html";
         }
+
       },2000);
 
     }
 
     else if(data.status === "device_mismatch"){
+
       setTimeout(()=>{
-        showPopup("error", data.msg || "Akun sudah terdaftar di perangkat lain");
+        showPopup(
+          "error",
+          data.msg ||
+          "Akun sudah terdaftar di perangkat lain"
+        );
       },1000);
+
     }
 
     else{
+
       setTimeout(()=>{
-        showPopup("error", data.msg || "Login gagal");
+        showPopup(
+          "error",
+          data.msg || "Login gagal"
+        );
       },1000);
+
     }
 
   }catch(e){
+
     document.getElementById("loading").style.display = "none";
 
     setTimeout(()=>{
       showPopup("network","Koneksi gagal");
     },1000);
+
   }
 
 }
-
 // 🔥 WAJIB
 window.login = login;
 
