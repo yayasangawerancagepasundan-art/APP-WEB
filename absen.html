@@ -88,22 +88,22 @@ button:disabled{
 }
 
 /* =====================================================
-   PILIHAN SHIFT
-   MENYATU DENGAN CARD UTAMA
+   PILIH SHIFT
+   MENYATU DENGAN UI CARD
    ===================================================== */
 
 .shift-panel{
   display:none;
-  margin-top:15px;
+  margin-top:20px;
   padding-top:15px;
   border-top:1px solid #eeeeee;
 }
 
 .shift-title{
   text-align:center;
-  font-size:14px;
+  font-size:15px;
   font-weight:600;
-  margin-bottom:10px;
+  margin-bottom:5px;
 }
 
 .shift-subtitle{
@@ -120,13 +120,9 @@ button:disabled{
 
 .shift-buttons button{
   flex:1;
-  padding:12px 8px;
+  padding:14px 8px;
   font-size:14px;
   border-radius:10px;
-}
-
-.shift-buttons button.active{
-  box-shadow:0 0 0 2px #ff0000 inset;
 }
 
 /* LOADING */
@@ -171,12 +167,10 @@ button:disabled{
     opacity:0;
     transform:translateX(20px);
   }
-
   50%{
     opacity:1;
     transform:translateX(0);
   }
-
   100%{
     opacity:0;
     transform:translateX(-10px);
@@ -217,23 +211,13 @@ button:disabled{
 }
 
 @keyframes angguk{
-  from{
-    transform:rotate(0deg);
-  }
-
-  to{
-    transform:rotate(10deg);
-  }
+  from{transform:rotate(0deg);}
+  to{transform:rotate(10deg);}
 }
 
 @keyframes geleng{
-  from{
-    transform:rotate(-10deg);
-  }
-
-  to{
-    transform:rotate(10deg);
-  }
+  from{transform:rotate(-10deg);}
+  to{transform:rotate(10deg);}
 }
 
 /* WAVE (WAJIB 5 LAYER - TIDAK DIUBAH) */
@@ -248,10 +232,6 @@ button:disabled{
 
 <body>
 
-<!-- =====================================================
-     CARD UTAMA
-     ===================================================== -->
-
 <div class="card">
 
   <!-- HEADER -->
@@ -265,13 +245,19 @@ button:disabled{
 
   </div>
 
-
-  <!-- DATA USER -->
+  <!-- DATA -->
   <div class="data" id="dataUser"></div>
 
+  <!-- =================================================
+       ABSEN NORMAL
+       HANYA UNTUK NON-SHIFT
+       ================================================= -->
 
-  <!-- TOMBOL ABSEN -->
-  <div class="btn">
+  <div
+    class="btn"
+    id="normalAbsen"
+    style="display:none;"
+  >
 
     <button
       id="btnAbsen"
@@ -286,7 +272,7 @@ button:disabled{
 
   <!-- =================================================
        PILIH SHIFT
-       TERINTEGRASI DENGAN CARD
+       UNTUK 2-SHIFT / 3-SHIFT
        ================================================= -->
 
   <div
@@ -336,9 +322,7 @@ button:disabled{
     <span>R</span>
     <span>A</span>
     <span>P</span>
-
     <span>&nbsp;</span>
-
     <span>T</span>
     <span>U</span>
     <span>N</span>
@@ -377,95 +361,66 @@ button:disabled{
 
 
 <!-- =====================================================
-     5 WAVE
+     WAVE 5 LAYER
      ===================================================== -->
 
 <div class="wave">
 
 <svg viewBox="0 0 1440 320">
 
-<path
-  fill="#ff0000"
-  fill-opacity="0.15"
->
-
+<path fill="#ff0000" fill-opacity="0.15">
 <animate
   attributeName="d"
   dur="12s"
   repeatCount="indefinite"
   values="
-M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z;
-M0,160 C500,260 900,80 1440,160 L1440,320 L0,320 Z;
-M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
-
+  M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z;
+  M0,160 C500,260 900,80 1440,160 L1440,320 L0,320 Z;
+  M0,200 C300,100 1100,260 1440,200 L1440,320 L0,320 Z"/>
 </path>
 
-
-<path
-  fill="#ff0000"
-  fill-opacity="0.25"
->
-
+<path fill="#ff0000" fill-opacity="0.25">
 <animate
   attributeName="d"
   dur="10s"
   repeatCount="indefinite"
   values="
-M0,180 C400,80 1000,280 1440,180 L1440,320 L0,320 Z;
-M0,140 C600,300 900,60 1440,140 L1440,320 L0,320 Z;
-M0,180 C400,80 1000,280 1440,180 L1440,320 L0,320 Z"/>
-
+  M0,180 C400,80 1000,280 1440,180 L1440,320 L0,320 Z;
+  M0,140 C600,300 900,60 1440,140 L1440,320 L0,320 Z;
+  M0,180 C400,80 1000,280 1440,180 L1440,320 L0,320 Z"/>
 </path>
 
-
-<path
-  fill="#ff0000"
-  fill-opacity="0.35"
->
-
+<path fill="#ff0000" fill-opacity="0.35">
 <animate
   attributeName="d"
   dur="8s"
   repeatCount="indefinite"
   values="
-M0,220 C300,150 1200,250 1440,220 L1440,320 L0,320 Z;
-M0,180 C500,280 1000,120 1440,180 L1440,320 L0,320 Z;
-M0,220 C300,150 1200,250 1440,220 L1440,320 L0,320 Z"/>
-
+  M0,220 C300,150 1200,250 1440,220 L1440,320 L0,320 Z;
+  M0,180 C500,280 1000,120 1440,180 L1440,320 L0,320 Z;
+  M0,220 C300,150 1200,250 1440,220 L1440,320 L0,320 Z"/>
 </path>
 
-
-<path
-  fill="#ff0000"
-  fill-opacity="0.45"
->
-
+<path fill="#ff0000" fill-opacity="0.45">
 <animate
   attributeName="d"
   dur="6s"
   repeatCount="indefinite"
   values="
-M0,240 C400,180 1000,300 1440,240 L1440,320 L0,320 Z;
-M0,200 C600,320 900,160 1440,200 L1440,320 L0,320 Z;
-M0,240 C400,180 1000,300 1440,240 L1440,320 L0,320 Z"/>
-
+  M0,240 C400,180 1000,300 1440,240 L1440,320 L0,320 Z;
+  M0,200 C600,320 900,160 1440,200 L1440,320 L0,320 Z;
+  M0,240 C400,180 1000,300 1440,240 L1440,320 L0,320 Z"/>
 </path>
 
-
-<path
-  fill="#ff0000"
-  fill-opacity="0.6"
->
-
+<path fill="#ff0000" fill-opacity="0.6">
 <animate
   attributeName="d"
   dur="4s"
   repeatCount="indefinite"
   values="
-M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z;
-M0,220 C500,340 1000,180 1440,220 L1440,320 L0,320 Z;
-M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z"/>
-
+  M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z;
+  M0,220 C500,340 1000,180 1440,220 L1440,320 L0,320 Z;
+  M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z"/>
 </path>
 
 </svg>
@@ -474,10 +429,6 @@ M0,260 C300,200 1100,320 1440,260 L1440,320 L0,320 Z"/>
 
 
 <script>
-
-/* =====================================================
-   URL BACKEND
-   ===================================================== */
 
 const URL =
 "https://young-river-168a.yayasangawerancagepasundan.workers.dev/";
@@ -494,10 +445,7 @@ let parsed =
 raw ? JSON.parse(raw) : null;
 
 
-/*
- * DEVICE ID ASLI
- * JANGAN DIUBAH
- */
+/* DEVICE ID ASLI */
 
 let device_id =
 parsed
@@ -508,21 +456,14 @@ parsed
 let user =
 parsed
   ? {
-      username: parsed.username,
-      device_id: parsed.device_id
+      username:parsed.username,
+      device_id:parsed.device_id
     }
   : null;
 
 
 /*
- * SHIFT YANG DIPILIH USER
- *
- * Nilai:
- * SHIFT 1
- * SHIFT 2
- * SHIFT 3
- *
- * atau null untuk NON-SHIFT
+ * SHIFT YANG DIPILIH
  */
 
 let selectedShift = null;
@@ -556,7 +497,8 @@ function tampilLoading(){
 
   document
     .getElementById("loading")
-    .style.display = "flex";
+    .style.display =
+      "flex";
 
 }
 
@@ -565,7 +507,8 @@ function tutupLoading(){
 
   document
     .getElementById("loading")
-    .style.display = "none";
+    .style.display =
+      "none";
 
 }
 
@@ -577,16 +520,11 @@ function tutupLoading(){
 async function loadUser(){
 
   /*
-   * Loading harus langsung aktif
-   * ketika halaman dibuka.
+   * HARAP TUNGGU langsung tampil.
    */
 
   tampilLoading();
 
-
-  /*
-   * Belum ada session.
-   */
 
   if(!user){
 
@@ -595,20 +533,12 @@ async function loadUser(){
       .innerText =
         "User tidak ditemukan";
 
-    /*
-     * Tombol tetap disabled.
-     */
-
     return false;
 
   }
 
 
   try{
-
-    /*
-     * AMBIL DATA LIVE DARI BACKEND
-     */
 
     let res =
       await fetch(
@@ -637,10 +567,6 @@ async function loadUser(){
       );
 
 
-    /*
-     * HTTP ERROR
-     */
-
     if(!res.ok){
 
       throw new Error(
@@ -653,10 +579,6 @@ async function loadUser(){
     let data =
       await res.json();
 
-
-    /*
-     * BACKEND ERROR
-     */
 
     if(data.status !== "ok"){
 
@@ -672,19 +594,7 @@ async function loadUser(){
 
 
     /*
-     * SIMPAN SELURUH DATA LIVE
-     *
-     * Ini penting supaya:
-     *
-     * jenis_shift
-     * jadwal shift
-     * absensi
-     * tracking
-     * perusahaan
-     * device
-     * dan data lain
-     *
-     * semuanya berasal dari backend.
+     * SIMPAN DATA LIVE
      */
 
     user = {
@@ -700,9 +610,9 @@ async function loadUser(){
     };
 
 
-    /* =================================================
-       VALIDASI JENIS SHIFT
-       ================================================= */
+    /*
+     * JENIS SHIFT WAJIB VALID
+     */
 
     if(
       user.jenis_shift !== "3-SHIFT" &&
@@ -720,9 +630,9 @@ async function loadUser(){
     }
 
 
-    /* =================================================
-       TAMPILKAN DATA USER
-       ================================================= */
+    /*
+     * TAMPIL DATA USER
+     */
 
     document
       .getElementById("dataUser")
@@ -797,7 +707,7 @@ async function loadUser(){
 
 
     /*
-     * FOTO USER
+     * FOTO
      */
 
     document
@@ -807,27 +717,31 @@ async function loadUser(){
 
 
     /*
-     * SIAPKAN UI SHIFT
+     * SIAPKAN UI SESUAI JENIS SHIFT
      */
 
-    siapkanShiftUI();
+    siapkanUIShift();
 
 
     /*
-     * SEMUA DATA LIVE SUDAH SELESAI
-     *
-     * BARU SEKARANG:
-     * - tombol aktif
-     * - loading ditutup
+     * DATA LIVE SUDAH SIAP
      */
 
-    document
-      .getElementById("btnAbsen")
-      .disabled = false;
+    if(
+      user.jenis_shift ===
+      "NON-SHIFT"
+    ){
+
+      document
+        .getElementById(
+          "btnAbsen"
+        )
+        .disabled = false;
+
+    }
 
 
     tutupLoading();
-
 
     return true;
 
@@ -847,8 +761,7 @@ async function loadUser(){
 
 
     /*
-     * Loading tetap tampil karena
-     * data live belum berhasil dimuat.
+     * Loading tetap tampil.
      */
 
     return false;
@@ -862,7 +775,12 @@ async function loadUser(){
    SIAPKAN UI SHIFT
    ===================================================== */
 
-function siapkanShiftUI(){
+function siapkanUIShift(){
+
+  let normal =
+    document.getElementById(
+      "normalAbsen"
+    );
 
   let panel =
     document.getElementById(
@@ -875,25 +793,27 @@ function siapkanShiftUI(){
     );
 
 
-  /*
-   * Bersihkan terlebih dahulu.
-   */
-
   buttons.innerHTML = "";
+
 
   selectedShift = null;
 
 
   /*
+   * ==============================================
    * NON-SHIFT
+   * ==============================================
    *
-   * Tidak ada pilihan shift.
+   * Tampilkan tombol ABSEN SEKARANG.
    */
 
   if(
     user.jenis_shift ===
     "NON-SHIFT"
   ){
+
+    normal.style.display =
+      "block";
 
     panel.style.display =
       "none";
@@ -904,50 +824,12 @@ function siapkanShiftUI(){
 
 
   /*
-   * 3-SHIFT
-   */
-
-  if(
-    user.jenis_shift ===
-    "3-SHIFT"
-  ){
-
-    panel.style.display =
-      "block";
-
-    document
-      .getElementById(
-        "shiftSubtitle"
-      )
-      .innerText =
-        "Pilih shift yang Anda jalankan";
-
-
-    buatTombolShift(
-      buttons,
-      "SHIFT 1",
-      "SHIFT 1"
-    );
-
-    buatTombolShift(
-      buttons,
-      "SHIFT 2",
-      "SHIFT 2"
-    );
-
-    buatTombolShift(
-      buttons,
-      "SHIFT 3",
-      "SHIFT 3"
-    );
-
-    return;
-
-  }
-
-
-  /*
+   * ==============================================
    * 2-SHIFT
+   * ==============================================
+   *
+   * Sembunyikan ABSEN SEKARANG.
+   * Tampilkan Shift 1 dan Shift 2.
    */
 
   if(
@@ -955,8 +837,12 @@ function siapkanShiftUI(){
     "2-SHIFT"
   ){
 
+    normal.style.display =
+      "none";
+
     panel.style.display =
       "block";
+
 
     document
       .getElementById(
@@ -972,10 +858,66 @@ function siapkanShiftUI(){
       "SHIFT 1"
     );
 
+
     buatTombolShift(
       buttons,
       "SHIFT 2",
       "SHIFT 2"
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+   * ==============================================
+   * 3-SHIFT
+   * ==============================================
+   *
+   * Sembunyikan ABSEN SEKARANG.
+   * Tampilkan Shift 1, 2 dan 3.
+   */
+
+  if(
+    user.jenis_shift ===
+    "3-SHIFT"
+  ){
+
+    normal.style.display =
+      "none";
+
+    panel.style.display =
+      "block";
+
+
+    document
+      .getElementById(
+        "shiftSubtitle"
+      )
+      .innerText =
+        "Pilih shift yang Anda jalankan";
+
+
+    buatTombolShift(
+      buttons,
+      "SHIFT 1",
+      "SHIFT 1"
+    );
+
+
+    buatTombolShift(
+      buttons,
+      "SHIFT 2",
+      "SHIFT 2"
+    );
+
+
+    buatTombolShift(
+      buttons,
+      "SHIFT 3",
+      "SHIFT 3"
     );
 
   }
@@ -989,7 +931,7 @@ function siapkanShiftUI(){
 
 function buatTombolShift(
   container,
-  text,
+  label,
   value
 ){
 
@@ -1004,15 +946,14 @@ function buatTombolShift(
 
 
   button.innerText =
-    text;
+    label;
 
 
   button.onclick =
     function(){
 
-      pilihShift(
-        value,
-        button
+      prosesAbsen(
+        value
       );
 
     };
@@ -1026,69 +967,14 @@ function buatTombolShift(
 
 
 /* =====================================================
-   PILIH SHIFT
-   ===================================================== */
-
-function pilihShift(
-  value,
-  button
-){
-
-  selectedShift =
-    value;
-
-
-  /*
-   * Hapus active dari semua
-   */
-
-  let buttons =
-    document.querySelectorAll(
-      "#shiftButtons button"
-    );
-
-
-  buttons.forEach(
-    function(btn){
-
-      btn.classList.remove(
-        "active"
-      );
-
-    }
-  );
-
-
-  /*
-   * Tandai shift terpilih
-   */
-
-  button.classList.add(
-    "active"
-  );
-
-
-  /*
-   * Setelah shift dipilih,
-   * langsung jalankan proses absen.
-   */
-
-  prosesAbsen(
-    selectedShift
-  );
-
-}
-
-
-/* =====================================================
    ABSEN
    ===================================================== */
 
 async function absen(){
 
   /*
-   * Jangan izinkan proses sebelum
-   * data live selesai.
+   * Fungsi ini hanya digunakan
+   * untuk NON-SHIFT.
    */
 
   if(!user){
@@ -1098,72 +984,19 @@ async function absen(){
   }
 
 
-  /*
-   * NON-SHIFT
-   *
-   * Langsung proses.
-   */
-
   if(
-    user.jenis_shift ===
+    user.jenis_shift !==
     "NON-SHIFT"
   ){
-
-    prosesAbsen(
-      null
-    );
 
     return;
 
   }
 
 
-  /*
-   * 2-SHIFT / 3-SHIFT
-   *
-   * Pastikan user memilih shift.
-   */
-
-  if(
-    user.jenis_shift ===
-      "2-SHIFT" ||
-    user.jenis_shift ===
-      "3-SHIFT"
-  ){
-
-    /*
-     * Kalau panel sedang tertutup,
-     * buka pilihan shift.
-     */
-
-    let panel =
-      document.getElementById(
-        "shiftPanel"
-      );
-
-
-    if(
-      panel.style.display !==
-      "block"
-    ){
-
-      panel.style.display =
-        "block";
-
-    }
-
-
-    /*
-     * Scroll kecil ke area
-     * pilihan shift jika diperlukan.
-     */
-
-    panel.scrollIntoView({
-      behavior:"smooth",
-      block:"nearest"
-    });
-
-  }
+  prosesAbsen(
+    null
+  );
 
 }
 
@@ -1177,15 +1010,31 @@ async function prosesAbsen(
 ){
 
   /*
-   * Pastikan shift benar
-   * sebelum dikirim ke backend.
+   * Validasi shift dari frontend.
    */
 
   if(
     user.jenis_shift ===
-      "2-SHIFT" ||
+    "2-SHIFT"
+  ){
+
+    if(
+      selectedShift !==
+        "SHIFT 1" &&
+      selectedShift !==
+        "SHIFT 2"
+    ){
+
+      return;
+
+    }
+
+  }
+
+
+  if(
     user.jenis_shift ===
-      "3-SHIFT"
+    "3-SHIFT"
   ){
 
     if(
@@ -1201,27 +1050,12 @@ async function prosesAbsen(
 
     }
 
-
-    /*
-     * 2-SHIFT tidak boleh SHIFT 3.
-     */
-
-    if(
-      user.jenis_shift ===
-        "2-SHIFT" &&
-      selectedShift ===
-        "SHIFT 3"
-    ){
-
-      return;
-
-    }
-
   }
 
 
   /*
-   * Loading proses GPS + backend
+   * Loading proses GPS
+   * dan request backend.
    */
 
   tampilLoading();
@@ -1241,7 +1075,7 @@ async function prosesAbsen(
       try{
 
         /*
-         * PAYLOAD DASAR
+         * PAYLOAD
          */
 
         let payload = {
@@ -1265,8 +1099,8 @@ async function prosesAbsen(
 
 
         /*
-         * SHIFT HANYA UNTUK
-         * 2-SHIFT / 3-SHIFT
+         * SHIFT hanya untuk
+         * 2-SHIFT / 3-SHIFT.
          */
 
         if(
@@ -1281,10 +1115,6 @@ async function prosesAbsen(
 
         }
 
-
-        /*
-         * KIRIM KE BACKEND
-         */
 
         let res =
           await fetch(
@@ -1321,7 +1151,7 @@ async function prosesAbsen(
 
 
         /*
-         * REQUEST SELESAI
+         * BACKEND SELESAI
          */
 
         tutupLoading();
@@ -1347,9 +1177,9 @@ async function prosesAbsen(
           "flex";
 
 
-        /* =============================================
-           PULANG AWAL / BUTUH KETERANGAN
-           ============================================= */
+        /*
+         * PULANG AWAL
+         */
 
         if(
           data.status ===
@@ -1403,9 +1233,9 @@ async function prosesAbsen(
         }
 
 
-        /* =============================================
-           BERHASIL
-           ============================================= */
+        /*
+         * BERHASIL
+         */
 
         if(
           data.status ===
@@ -1436,9 +1266,9 @@ async function prosesAbsen(
 
         }else{
 
-          /* ===========================================
-             GAGAL
-             =========================================== */
+          /*
+           * GAGAL
+           */
 
           face.innerText =
             "😕";
@@ -1520,9 +1350,9 @@ async function prosesAbsen(
     },
 
 
-    /* ===============================================
-       GPS ERROR
-       =============================================== */
+    /*
+     * GPS ERROR
+     */
 
     function(err){
 
