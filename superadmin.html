@@ -6,4 +6,137 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Dashboard User</title>
+<title>Dashboard User</title><nav class="nav">
+    <a class="active" href="#"><span>▣</span> Dashboard</a>
+    <a href="#"><span>◫</span> Karyawan <b>128</b></a>
+    <a href="#"><span>◉</span> Absensi</a>
+    <a href="#"><span>₿</span> Payroll</a>
+    <a href="#"><span>⌁</span> Aktivitas</a>
+    <div class="nav-label">SYSTEM MODULES</div>
+    <a href="#"><span>⚙️</span> Pengaturan</a>
+    <a href="#"><span>◈</span> Hak Akses</a>
+    <a href="#"><span>⌘</span> Database</a>
+    <a href="#"><span>↻</span> Backup</a>
+  </nav>
+
+  <div class="admin-card">
+    <div class="avatar">SA</div>
+    <div>
+      <strong>SUPER ADMIN</strong>
+      <small>root@company.local</small>
+    </div>
+    <span class="online"></span>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <div class="crumb"><span class="dot"></span> SECURE SESSION <span>/</span> SUPER ADMIN</div>
+    <div class="top-actions">
+      <div class="search">⌕ <input id="search" placeholder="Search system..." /></div>
+      <button class="icon-btn" title="Notifikasi">◌<i></i></button>
+      <button class="profile">SA</button>
+    </div>
+  </header>
+
+  <section class="content">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">SYSTEM OVERVIEW</p>
+        <h1>Command Center</h1>
+        <p class="sub">Monitoring database karyawan, absensi, payroll, dan aktivitas sistem.</p>
+      </div>
+      <div class="head-actions">
+        <span class="live"><span></span> LIVE</span>
+        <button class="btn primary" id="refreshBtn">↻ REFRESH</button>
+      </div>
+    </div>
+
+    <section class="metrics">
+      <article class="metric green">
+        <div class="metric-title">TOTAL KARYAWAN <span>◈</span></div>
+        <div class="metric-value" data-count="128">0</div>
+        <div class="metric-foot"><em>+8.4%</em> dibanding bulan lalu</div>
+      </article>
+      <article class="metric cyan">
+        <div class="metric-title">HADIR HARI INI <span>◎</span></div>
+        <div class="metric-value" data-count="116">0</div>
+        <div class="metric-foot"><em>90.6%</em> dari total karyawan</div>
+      </article>
+      <article class="metric amber">
+        <div class="metric-title">TOTAL PAYROLL <span>▣</span></div>
+        <div class="metric-value money">Rp 248.6M</div>
+        <div class="metric-foot"><em>+5.2%</em> periode berjalan</div>
+      </article>
+    </section>
+
+    <section class="grid">
+      <div class="panel logs">
+        <div class="panel-head">
+          <div><span class="status-dot"></span><strong>ACTIVITY LOGS</strong></div>
+          <button class="ghost" id="viewAll">VIEW ALL →</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>USER</th><th>ACTION</th><th>MODULE</th><th>TIME</th><th>STATUS</th></tr></thead>
+            <tbody id="activityBody">
+              <tr><td><b>Andi Pratama</b><small>admin</small></td><td>Update Data</td><td>Karyawan</td><td>20:01:42</td><td><span class="pill ok">SUCCESS</span></td></tr>
+              <tr><td><b>Siti Rahma</b><small>hrd</small></td><td>Approve Payroll</td><td>Payroll</td><td>19:58:13</td><td><span class="pill ok">SUCCESS</span></td></tr>
+              <tr><td><b>System</b><small>service</small></td><td>Database Backup</td><td>Database</td><td>19:45:08</td><td><span class="pill ok">SUCCESS</span></td></tr>
+              <tr><td><b>Budi Santoso</b><small>operator</small></td><td>Scan Attendance</td><td>Absensi</td><td>19:41:33</td><td><span class="pill info">SYNCED</span></td></tr>
+              <tr><td><b>Rina Admin</b><small>admin</small></td><td>Login</td><td>Security</td><td>19:38:12</td><td><span class="pill ok">SUCCESS</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="right-col">
+        <div class="panel">
+          <div class="panel-head"><strong>SYSTEM STATUS</strong><span class="chip">ONLINE</span></div>
+          <div class="status-list">
+            <div><span>Database Server</span><b class="green-text">ONLINE</b><i class="bar"><i style="width:96%"></i></i></div>
+            <div><span>Attendance API</span><b class="green-text">ONLINE</b><i class="bar"><i style="width:91%"></i></i></div>
+            <div><span>Payroll Service</span><b class="cyan-text">SYNCED</b><i class="bar"><i style="width:87%"></i></i></div>
+            <div><span>Backup Node</span><b class="amber-text">READY</b><i class="bar"><i style="width:74%"></i></i></div>
+          </div>
+        </div>
+
+        <div class="panel alert">
+          <div class="alert-icon">!</div>
+          <div>
+            <strong>SECURITY NOTICE</strong>
+            <p>Privilege escalation requires verification before sensitive system changes.</p>
+            <button class="btn danger" id="privilegeBtn">ELEVATE PRIVILEGES</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="lower-grid">
+      <div class="panel chart-panel">
+        <div class="panel-head"><strong>ATTENDANCE FLOW</strong><span class="muted">7 DAYS</span></div>
+        <div class="chart">
+          <div class="y"><span>128</span><span>96</span><span>64</span><span>32</span><span>0</span></div>
+          <div class="bars">
+            <div style="height:67%"><b>86</b><span>MON</span></div>
+            <div style="height:79%"><b>101</b><span>TUE</span></div>
+            <div style="height:72%"><b>92</b><span>WED</span></div>
+            <div style="height:88%"><b>113</b><span>THU</span></div>
+            <div style="height:84%"><b>108</b><span>FRI</span></div>
+            <div style="height:52%"><b>66</b><span>SAT</span></div>
+            <div style="height:18%"><b>23</b><span>SUN</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="panel quick">
+        <div class="panel-head"><strong>QUICK ACTIONS</strong></div>
+        <button class="quick-btn" data-msg="Membuka modul pendaftaran karyawan">＋ <span>Tambah Karyawan</span><b>→</b></button>
+        <button class="quick-btn" data-msg="Membuka laporan absensi">▤ <span>Laporan Absensi</span><b>→</b></button>
+        <button class="quick-btn" data-msg="Membuka proses payroll">₿ <span>Proses Payroll</span><b>→</b></button>
+        <button class="quick-btn" data-msg="Membuka konfigurasi sistem">⚙️ <span>System Settings</span><b>→</b></button>
+      </div>
+    </section>
+
+    <footer>SUPER ADMIN CONSOLE v1.0.0 <span>•</span> SECURE NODE <span>•</span> <span id="clock"></span></footer>
+  </section>
+</main>
