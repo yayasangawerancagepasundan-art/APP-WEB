@@ -1123,10 +1123,7 @@ async function loadBackendData(){
     }
 
     admin.zona = normalizeAdminZone(
-      admin.zona ||
-      adminLogin.zona ||
-      adminLogin.zone ||
-      ""
+      admin.zona || ""
     );
 
     users = Array.isArray(result.users) ? result.users : [];
@@ -1168,6 +1165,54 @@ async function loadBackendData(){
   font-weight:600;
   box-shadow:0 8px 20px rgba(0,0,0,0.08);
   cursor:pointer;
+}
+
+.home-logout-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.home-btn,
+.logout-btn{
+  min-height:48px;
+}
+
+.home-btn{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:15px;
+  background:#fff;
+  color:#222;
+  font-weight:600;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.home-btn svg{
+  width:18px;
+  height:18px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.home-btn:active,
+.logout-btn:active{
+  transform:translateY(1px);
+}
+
+@media(max-width:380px){
+  .home-logout-row{
+    grid-template-columns:1fr;
+  }
 }
 
 /* =========================================================
@@ -2334,9 +2379,31 @@ body{
 ======================================================= -->
 <div class="logout-wrap">
 
-  <button class="logout-btn" onclick="logout()">
-    LOGOUT
-  </button>
+  <div class="home-logout-row">
+
+    <button
+      class="home-btn"
+      type="button"
+      onclick="homeDashboard()"
+      title="Kembali ke Dashboard Admin LPK">
+
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 10.5 12 3l9 7.5"></path>
+        <path d="M5.5 9.5V21h13V9.5"></path>
+        <path d="M9.5 21v-6h5v6"></path>
+      </svg>
+
+      HOME
+    </button>
+
+    <button
+      class="logout-btn"
+      type="button"
+      onclick="logout()">
+      LOGOUT
+    </button>
+
+  </div>
 
 </div>
 
@@ -2370,7 +2437,8 @@ body{
 
 /* =========================================================
    CONFIG
-   BELUM DIHUBUNGKAN KE WORKER
+   DATA OPERASIONAL DAN IDENTITAS ADMIN DIAMBIL LIVE
+   DARI BACKEND WORKER
 ========================================================= */
 
 const WORKER_URL = "https://admin-lpk.yayasangawerancagepasundan.workers.dev/";
@@ -2387,10 +2455,10 @@ const adminLogin =
 
 
 let admin = {
-  username: adminLogin.username || "",
+  username: String(adminLogin.username || "").trim(),
   nama: "",
-  role: adminLogin.role || "ADMIN LPK",
-  zona: String(adminLogin.zona || adminLogin.zone || "").trim().replace(/\s+/g," ")
+  role: "",
+  zona: ""
 };
 
 
@@ -2467,31 +2535,13 @@ updateClock();
 function initAdmin(){
 
   /*
-    TAMPILKAN NAMA ADMIN, BUKAN USERNAME.
-    Prioritas:
-    1. nama dari backend admin_lpk_data
-    2. nama dari data login userLogin
-    3. fallback aman jika nama belum tersedia
+    IDENTITAS ADMIN SELALU DARI BACKEND LIVE.
+    localStorage tidak dipakai sebagai sumber nama,
+    role, atau zona.
   */
 
-  let namaTampil = String(admin.nama || "").trim();
-
-  if(!namaTampil){
-    try{
-      const loginData = JSON.parse(
-        localStorage.getItem("userLogin") || "null"
-      );
-
-      namaTampil = String(
-        loginData?.user?.nama ||
-        loginData?.nama ||
-        ""
-      ).trim();
-    }catch(e){}
-  }
-
   document.getElementById("namaAdmin").innerText =
-    namaTampil ||
+    String(admin.nama || "").trim() ||
     "Admin LPK";
 
 }
@@ -2560,6 +2610,32 @@ function openView(name){
 
 }
 
+
+function homeDashboard(){
+
+  const chatPanel =
+    document.getElementById("chatPanel");
+
+  const notificationPanel =
+    document.getElementById("notificationPanel");
+
+  if(chatPanel){
+    chatPanel.classList.remove("active");
+  }
+
+  if(notificationPanel){
+    notificationPanel.classList.remove("active");
+  }
+
+  closeChatRoom();
+  backDashboard();
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
 
 function backDashboard(){
 
