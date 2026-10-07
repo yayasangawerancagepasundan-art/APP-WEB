@@ -734,6 +734,35 @@ body{
 .chat-header-title{
   font-size:15px;
   font-weight:600;
+  flex:1;
+  text-align:center;
+}
+
+.chat-plus{
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:14px;
+  background:#fff;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+
+.chat-plus svg{
+  width:21px;
+  height:21px;
+  fill:none;
+  stroke:#ff0000;
+  stroke-width:2;
+  stroke-linecap:round;
+}
+
+.chat-plus:active{
+  transform:scale(.95);
 }
 
 .chat-close{
@@ -956,6 +985,267 @@ body{
   cursor:pointer;
 }
 
+.chat-bottom-back{
+  width:100%;
+  min-height:42px;
+  border:none;
+  border-top:1px solid #eee;
+  background:#fff;
+  color:#555;
+  font-size:10px;
+  font-weight:600;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+}
+
+.chat-bottom-back svg{
+  width:16px;
+  height:16px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.chat-bottom-back:active{
+  background:#fafafa;
+}
+
+
+/* =========================================================
+   CHAT NAVIGATION
+   Navigasi tetap tersedia di DAFTAR CHAT dan PERCAKAPAN
+========================================================= */
+#chatListArea{
+  flex:1;
+  min-height:0;
+  display:flex;
+  flex-direction:column;
+}
+
+#chatListArea .chat-list{
+  flex:1;
+  min-height:0;
+  overflow-y:auto;
+}
+
+.chat-navigation{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:6px;
+  padding:9px 10px;
+  border-top:1px solid #eee;
+  background:#fff;
+  flex-shrink:0;
+}
+
+.chat-navigation button{
+  height:38px;
+  border:1px solid #eee;
+  border-radius:12px;
+  background:#f8f8f8;
+  color:#555;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.2px;
+  cursor:pointer;
+}
+
+.chat-navigation button:active{
+  transform:scale(.98);
+  background:#f1f1f1;
+}
+
+.chat-room-navigation{
+  flex-shrink:0;
+}
+
+/* =========================================================
+   NEW CHAT MODAL
+========================================================= */
+.new-chat-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.28);
+  z-index:6000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.new-chat-modal.active{
+  display:flex;
+}
+
+.new-chat-card{
+  width:420px;
+  max-width:100%;
+  max-height:calc(100vh - 40px);
+  background:#fff;
+  border-radius:22px;
+  box-shadow:0 25px 70px rgba(0,0,0,.22);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.new-chat-head{
+  padding:16px;
+  border-bottom:1px solid #eee;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.new-chat-title{
+  font-size:14px;
+  font-weight:600;
+}
+
+.new-chat-close{
+  width:38px;
+  height:38px;
+  border:none;
+  border-radius:12px;
+  background:#f5f5f5;
+  cursor:pointer;
+  font-size:18px;
+  color:#555;
+}
+
+.new-chat-tabs{
+  display:flex;
+  gap:7px;
+  padding:10px;
+  border-bottom:1px solid #eee;
+  overflow-x:auto;
+}
+
+.new-chat-tab{
+  border:none;
+  background:#f5f5f5;
+  color:#777;
+  border-radius:20px;
+  padding:8px 12px;
+  font-size:9px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+.new-chat-tab.active{
+  background:#ff0000;
+  color:#fff;
+}
+
+.new-chat-recipients{
+  min-height:120px;
+  max-height:260px;
+  overflow-y:auto;
+  padding:8px;
+}
+
+.new-chat-recipient{
+  width:100%;
+  border:none;
+  background:#fff;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px;
+  border-radius:14px;
+  cursor:pointer;
+  text-align:left;
+}
+
+.new-chat-recipient:hover,
+.new-chat-recipient.selected{
+  background:#fff5f5;
+}
+
+.new-chat-recipient-avatar{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  background:#fff1f1;
+  color:#ff0000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:11px;
+  font-weight:600;
+  flex:none;
+}
+
+.new-chat-recipient-info{
+  min-width:0;
+  flex:1;
+}
+
+.new-chat-recipient-name{
+  font-size:11px;
+  font-weight:600;
+}
+
+.new-chat-recipient-meta{
+  margin-top:3px;
+  font-size:8px;
+  color:#999;
+}
+
+.new-chat-compose{
+  padding:12px;
+  border-top:1px solid #eee;
+}
+
+.new-chat-selected{
+  font-size:9px;
+  color:#777;
+  margin-bottom:7px;
+}
+
+.new-chat-message{
+  width:100%;
+  min-height:70px;
+  resize:none;
+  border:1px solid #eee;
+  outline:none;
+  border-radius:13px;
+  padding:10px;
+  font-size:10px;
+}
+
+.new-chat-actions{
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+}
+
+.new-chat-cancel,
+.new-chat-send{
+  flex:1;
+  min-height:40px;
+  border:none;
+  border-radius:12px;
+  font-size:10px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.new-chat-cancel{
+  background:#f5f5f5;
+  color:#555;
+}
+
+.new-chat-send{
+  background:#ff0000;
+  color:#fff;
+}
+
 /* =========================================================
    NOTIFICATION
 ========================================================= */
@@ -1131,6 +1421,7 @@ async function loadBackendData(){
     payments = Array.isArray(result.payments) ? result.payments : [];
     chats = Array.isArray(result.chats) ? result.chats : [];
     messagesData = result.messages || {};
+    notificationsData = Array.isArray(result.notifications) ? result.notifications : [];
 
     initAdmin();
     updateDashboardSummary();
@@ -2293,6 +2584,13 @@ body{
       Chat
     </div>
 
+    <button class="chat-plus" onclick="openNewChat()" aria-label="Mulai chat baru" title="Mulai chat baru">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 5v14"></path>
+        <path d="M5 12h14"></path>
+      </svg>
+    </button>
+
   </div>
 
 
@@ -2322,6 +2620,12 @@ body{
     </div>
 
     <div class="chat-list" id="chatList"></div>
+
+    <div class="chat-navigation" aria-label="Navigasi pesan">
+      <button type="button" onclick="homeDashboard()">KEMBALI</button>
+      <button type="button" onclick="homeDashboard()">HOME</button>
+      <button type="button" onclick="logout()">LOGOUT</button>
+    </div>
 
   </div>
 
@@ -2369,10 +2673,58 @@ body{
 
     </div>
 
+    <button class="chat-bottom-back" type="button" onclick="closeChatRoom()">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M19 12H5"></path>
+        <path d="m12 19-7-7 7-7"></path>
+      </svg>
+      KEMBALI KE DAFTAR CHAT
+    </button>
+
+    <div class="chat-navigation chat-room-navigation" aria-label="Navigasi percakapan">
+      <button type="button" onclick="homeDashboard()">KEMBALI</button>
+      <button type="button" onclick="homeDashboard()">HOME</button>
+      <button type="button" onclick="logout()">LOGOUT</button>
+    </div>
+
   </div>
 
 </div>
 
+
+<!-- =======================================================
+     NEW CHAT MODAL
+======================================================= -->
+<div class="new-chat-modal" id="newChatModal">
+
+  <div class="new-chat-card">
+
+    <div class="new-chat-head">
+      <div class="new-chat-title">Mulai Chat Baru</div>
+      <button class="new-chat-close" type="button" onclick="closeNewChat()" aria-label="Tutup">×</button>
+    </div>
+
+    <div class="new-chat-tabs">
+      <button class="new-chat-tab active" onclick="filterNewChatRecipients('USER',this)">USER</button>
+      <button class="new-chat-tab" onclick="filterNewChatRecipients('ADMIN_MITRA',this)">MITRA</button>
+      <button class="new-chat-tab" onclick="filterNewChatRecipients('DIREKTUR',this)">DIREKTUR</button>
+    </div>
+
+    <div class="new-chat-recipients" id="newChatRecipients"></div>
+
+    <div class="new-chat-compose">
+      <div class="new-chat-selected" id="newChatSelected">Pilih penerima chat terlebih dahulu.</div>
+      <textarea class="new-chat-message" id="newChatMessage" placeholder="Tulis pesan pertama..."></textarea>
+
+      <div class="new-chat-actions">
+        <button class="new-chat-cancel" type="button" onclick="closeNewChat()">BATAL</button>
+        <button class="new-chat-send" type="button" onclick="startNewChat()">KIRIM & MULAI</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
 
 <!-- =======================================================
      LOGOUT
@@ -2471,10 +2823,14 @@ let companies = [];
 let payments = [];
 let chats = [];
 let messagesData = {};
+let notificationsData = [];
 
 
 let currentChatType = "USER";
 let currentChatId = "";
+let newChatRecipients = [];
+let newChatRecipient = null;
+let currentNewChatType = "USER";
 let currentAktifFilter = "SEMUA";
 let currentPaymentFilter = "SEMUA";
 
@@ -2627,6 +2983,7 @@ function homeDashboard(){
     notificationPanel.classList.remove("active");
   }
 
+  closeNewChat();
   closeChatRoom();
   backDashboard();
 
@@ -3710,7 +4067,7 @@ function closeChat(){
     )
     .classList.remove("active");
 
-  // Tombol kembali dari Chat selalu mengembalikan Admin LPK ke Dashboard utama.
+  closeNewChat();
   closeChatRoom();
   backDashboard();
 
@@ -3873,6 +4230,210 @@ function closeChatRoom(){
 }
 
 
+async function openNewChat(){
+
+  const modal = document.getElementById("newChatModal");
+  const box = document.getElementById("newChatRecipients");
+
+  if(!modal || !box) return;
+
+  modal.classList.add("active");
+  newChatRecipient = null;
+  currentNewChatType = "USER";
+  document.getElementById("newChatSelected").innerText =
+    "Pilih penerima chat terlebih dahulu.";
+  document.getElementById("newChatMessage").value = "";
+
+  document.querySelectorAll(".new-chat-tab").forEach((btn,index)=>{
+    btn.classList.toggle("active",index===0);
+  });
+
+  box.innerHTML = emptyHTML("Memuat penerima chat...");
+
+  try{
+
+    const result = await workerRequest({
+      action:"admin_lpk_chat_recipients",
+      admin_username:admin.username,
+      username:admin.username,
+      admin_zona:admin.zona
+    });
+
+    newChatRecipients =
+      Array.isArray(result.recipients)
+      ? result.recipients
+      : [];
+
+    renderNewChatRecipients();
+
+  }catch(error){
+
+    box.innerHTML = emptyHTML(
+      error.message || "Gagal mengambil penerima chat."
+    );
+
+  }
+}
+
+
+function closeNewChat(){
+
+  const modal = document.getElementById("newChatModal");
+  if(modal) modal.classList.remove("active");
+
+  newChatRecipient = null;
+
+}
+
+
+function normalizeNewChatRole(role){
+
+  const value = String(role || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g,"_");
+
+  if(value === "ADMIN_MITRA" || value === "MITRA") return "ADMIN_MITRA";
+  if(value === "DIREKTUR") return "DIREKTUR";
+  return value;
+}
+
+
+function filterNewChatRecipients(type,button){
+
+  currentNewChatType = type;
+
+  document.querySelectorAll(".new-chat-tab").forEach(btn=>
+    btn.classList.remove("active")
+  );
+
+  if(button) button.classList.add("active");
+
+  newChatRecipient = null;
+  document.getElementById("newChatSelected").innerText =
+    "Pilih penerima chat terlebih dahulu.";
+
+  renderNewChatRecipients();
+}
+
+
+function renderNewChatRecipients(){
+
+  const box = document.getElementById("newChatRecipients");
+  if(!box) return;
+
+  const data = newChatRecipients.filter(r=>{
+    const role = normalizeNewChatRole(r.role);
+    if(currentNewChatType === "USER") return role === "USER";
+    return role === currentNewChatType;
+  });
+
+  if(!data.length){
+    box.innerHTML = emptyHTML("Tidak ada penerima chat.");
+    return;
+  }
+
+  box.innerHTML = data.map(r=>{
+    const initials = String(r.nama || r.username || "U")
+      .split(" ")
+      .map(x=>x[0])
+      .join("")
+      .substring(0,2)
+      .toUpperCase();
+
+    const selected =
+      newChatRecipient &&
+      newChatRecipient.username === r.username
+      ? " selected"
+      : "";
+
+    return `
+      <button class="new-chat-recipient${selected}" type="button"
+        onclick="selectNewChatRecipient('${escapeAttr(r.username)}')">
+        <div class="new-chat-recipient-avatar">${escapeHTML(initials)}</div>
+        <div class="new-chat-recipient-info">
+          <div class="new-chat-recipient-name">${escapeHTML(r.nama || r.username)}</div>
+          <div class="new-chat-recipient-meta">${escapeHTML(r.role || "")} ${r.zona ? "• "+escapeHTML(r.zona) : ""}</div>
+        </div>
+      </button>
+    `;
+  }).join("");
+}
+
+
+function selectNewChatRecipient(username){
+
+  const recipient = newChatRecipients.find(r=>
+    String(r.username) === String(username)
+  );
+
+  if(!recipient) return;
+
+  newChatRecipient = recipient;
+
+  document.getElementById("newChatSelected").innerText =
+    "Penerima: " + (recipient.nama || recipient.username);
+
+  renderNewChatRecipients();
+}
+
+
+async function startNewChat(){
+
+  if(!newChatRecipient){
+    showToast("Pilih penerima chat terlebih dahulu.");
+    return;
+  }
+
+  const input = document.getElementById("newChatMessage");
+  const message = (input.value || "").trim();
+
+  if(!message){
+    showToast("Pesan pertama belum diisi.");
+    input.focus();
+    return;
+  }
+
+  try{
+
+    const result = await workerRequest({
+      action:"admin_lpk_start_chat",
+      admin_username:admin.username,
+      admin_zona:admin.zona,
+      recipient_username:newChatRecipient.username,
+      message:message
+    });
+
+    closeNewChat();
+    await loadBackendData();
+
+    const chatId = result.ref_id || result.id || "";
+    let chat = chats.find(c=>c.id===chatId);
+
+    if(!chat){
+      chat = chats.find(c=>
+        String(c.username || "") === String(newChatRecipient.username) ||
+        String(c.nama || "") === String(newChatRecipient.nama || "")
+      );
+    }
+
+    if(chat){
+      currentChatType = chat.type || currentChatType;
+      openChatRoom(chat.id);
+    }else{
+      renderChat();
+      showToast("Chat berhasil dibuat.");
+    }
+
+  }catch(error){
+
+    showToast(error.message || "Chat gagal dibuat.");
+
+  }
+
+}
+
+
 function renderMessages(){
 
   const box =
@@ -4014,17 +4575,18 @@ function renderNotifications(){
 
   const list=[];
 
+  if(notificationsData.length){
+    notificationsData.forEach(n=>{
+      list.push({
+        type:n.type || n.tipe || n.judul || "NOTIFIKASI",
+        text:n.text || n.pesan || n.message || n.judul || "Notifikasi baru",
+        time:n.time || n.waktu || n.tanggal || "",
+        unread:n.unread === true || String(n.status || "").toUpperCase() !== "DIBACA"
+      });
+    });
+  }
 
-  /*
-    NANTI DATA ASLI DARI BACKEND:
-
-    - pembayaran baru
-    - chat Direktur
-    - pesan baru
-    - dll
-
-  */
-
+  if(!list.length){
 
   payments
     .filter(p=>
@@ -4076,6 +4638,8 @@ function renderNotifications(){
       });
 
     });
+
+  }
 
 
   if(!list.length){
@@ -4303,6 +4867,13 @@ function escapeAttr(value){
 /* =========================================================
    CLOSE POPUP KETIKA KLIK DI LUAR
 ========================================================= */
+
+document.addEventListener("keydown",function(e){
+  if(e.key === "Escape"){
+    closeNewChat();
+  }
+});
+
 
 document.addEventListener(
   "click",
